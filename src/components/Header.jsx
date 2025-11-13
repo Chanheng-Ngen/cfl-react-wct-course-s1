@@ -52,7 +52,7 @@ export const Header = () => {
       </div>
 
       {/* Main Header */}
-      <header className="bg-blue-600 text-white sticky top-0 z-50">
+      <header className="bg-blue-700 text-white sticky top-0 z-50">
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
