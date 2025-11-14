@@ -44,7 +44,6 @@ export const Header = () => {
                   </select>
                 </div>
                 <button className="flex items-center gap-2 hover:text-blue-200 transition font-semibold">
-                  
                   <Link to="/login"><span className="text-xs mr-1">👤</span> Sign In</Link>
                 </button>
             </div>
@@ -57,9 +56,11 @@ export const Header = () => {
       <nav className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
+          <Link to="/">
           <div className="flex items-center gap-3">
             <img src={ cfl_logo } alt="CFL Logo" className="h-10 w-10"/>
           </div>
+          </Link>
 
           {/* Desktop Navigation */}
           <ul className="hidden lg:flex items-center gap-6">
