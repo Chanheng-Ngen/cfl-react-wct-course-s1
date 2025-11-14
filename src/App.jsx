@@ -1,11 +1,22 @@
- import HomePage from './pages/HomePage.jsx'
+import Home from './pages/Home.jsx'
+import Login from './pages/Login.jsx'
+import Register from './pages/Register.jsx'
+import ForgetPassword from './pages/ForgetPassword.jsx'
+import {BrowserRouter, Routes, Route} from 'react-router'
 
 function App() {
 
   return (
-    <>
-      <HomePage />
-    </>
+    <BrowserRouter>
+      <>
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+        </Routes>
+      </>
+    </BrowserRouter>
   )
 }
 

@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import './HomePage.css';
 import morodok_techo_stadium from '../assets/images/morodok_techo_stadium.jpg';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const HomePage = () => {
+const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [aboutSlide, setAboutSlide] = useState(0);
 
@@ -663,4 +662,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;

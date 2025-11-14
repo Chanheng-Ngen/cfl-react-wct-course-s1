@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
+import { Link } from 'react-router';
 import './Header.css';
 
 export const Header = () => {
@@ -43,8 +44,8 @@ export const Header = () => {
                   </select>
                 </div>
                 <button className="flex items-center gap-2 hover:text-blue-200 transition font-semibold">
-                  <span className="text-xs">👤</span>
-                  <span>Sign In</span>
+                  
+                  <Link to="/login"><span className="text-xs mr-1">👤</span> Sign In</Link>
                 </button>
             </div>
           </div>
