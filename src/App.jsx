@@ -3,7 +3,8 @@ import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import ForgetPassword from './pages/ForgetPassword.jsx'
 import UserProfile from './pages/UserProfile.jsx'
-import {BrowserRouter, Routes, Route} from 'react-router'
+import AdminDashboard from './pages/AdminDashboard.jsx'
+import { BrowserRouter, Routes, Route } from 'react-router'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user-profile" element={<UserProfile />} /> 
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </>
     </BrowserRouter>
