@@ -1,0 +1,137 @@
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import NewsImg1 from "../assets/images/cfl.jpg";
+
+
+const newsData = [
+  {
+    id: 1,
+    image: NewsImg1,
+    title: "Cambodian Development League Has Reached Week 5",
+    date: "12 Nov 2025 04:37",
+    author: "Admin",
+    description:
+      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
+  },
+  {
+    id: 2,
+    image: NewsImg1,
+    title: "The result of week 11: PKR and AKT at the top of the table",
+    date: "10 Nov 2025 03:49",
+    author: "Admin",
+    description:
+      "Week 11 of the Cambodian Premier League 2025/26 concluded with strong performances by PKR and AKT, who continue to lead the standings.",
+  },
+  {
+    id: 3,
+    image: NewsImg1,
+    title: "Cambodian Development League Has Reached Week 5",
+    date: "12 Nov 2025 04:37",
+    author: "Admin",
+    description:
+      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
+  },
+  {
+    id: 4,
+    image: NewsImg1,
+    title: "The result of week 11: PKR and AKT at the top of the table",
+    date: "10 Nov 2025 03:49",
+    author: "Admin",
+    description:
+      "Week 11 of the Cambodian Premier League 2025/26 concluded with strong performances by PKR and AKT, who continue to lead the standings.",
+  },
+  {
+    id: 5,
+    image: NewsImg1,
+    title: "Cambodian Development League Has Reached Week 5",
+    date: "12 Nov 2025 04:37",
+    author: "Admin",
+    description:
+      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
+  },
+  {
+    id: 6,
+    image: NewsImg1,
+    title: "The result of week 11: PKR and AKT at the top of the table",
+    date: "10 Nov 2025 03:49",
+    author: "Admin",
+    description:
+      "Week 11 of the Cambodian Premier League 2025/26 concluded with strong performances by PKR and AKT, who continue to lead the standings.",
+  },
+  {
+    id: 7,
+    image: NewsImg1,
+    title: "The result of week 11: PKR and AKT at the top of the table",
+    date: "10 Nov 2025 03:49",
+    author: "Admin",
+    description:
+      "Week 11 of the Cambodian Premier League 2025/26 concluded with strong performances by PKR and AKT, who continue to lead the standings.",
+  },
+  {
+    id: 8,
+    image: NewsImg1,
+    title: "Cambodian Development League Has Reached Week 5",
+    date: "12 Nov 2025 04:37",
+    author: "Admin",
+    description:
+      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
+  },
+  {
+    id: 9,
+    image: NewsImg1,
+    title: "The result of week 11: PKR and AKT at the top of the table",
+    date: "10 Nov 2025 03:49",
+    author: "Admin",
+    description:
+      "Week 11 of the Cambodian Premier League 2025/26 concluded with strong performances by PKR and AKT, who continue to lead the standings.",
+  },
+];
+
+const NewsPage = () => {
+  return (
+    <>
+    < Header />
+    <div className="w-full min-h-screen bg-white pt-6">
+      <div className="text-center py-6 w-full">
+        <h1 className="text-3xl font-extrabold text-gray-900 tracking-wide">
+          ALL POSTS
+        </h1>
+      </div>
+
+      <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-6 lg:px-8 pb-16">
+        {newsData.map((item) => (
+          <div
+            key={item.id}
+            className="w-full bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-2xl transition"
+          >
+            <img
+              src={item.image}
+              alt={item.title}
+              className="w-full h-56 sm:h-64 md:h-56 lg:h-60 object-cover"
+            />
+            <div className="p-4 sm:p-5">
+              <div className="flex items-center gap-3 text-gray-500 text-sm mb-2 flex-wrap">
+                <span>{item.author}</span>
+                <span>{item.date}</span>
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition">
+                {item.title}
+              </h2>
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3">{item.description}</p>
+              <a
+                href="#"
+                className="text-blue-600 text-sm font-medium hover:underline"
+              >
+                Continue Reading →
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+    <Footer />
+    </>
+  );
+};
+
+export default NewsPage;

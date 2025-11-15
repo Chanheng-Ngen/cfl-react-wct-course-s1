@@ -54,13 +54,6 @@ const UserProfile = () => {
       venue: 'National Olympic Stadium',
       image: morodok_techo_stadium
     },
-    {
-      id: 3,
-      type: 'merchandise',
-      title: 'Official CFL Jersey 2025',
-      price: '$49.99',
-      image: morodok_techo_stadium
-    }
   ]);
 
   // Handle Profile Update

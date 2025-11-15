@@ -4,6 +4,8 @@ import Register from './pages/Register.jsx'
 import ForgetPassword from './pages/ForgetPassword.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 import AdminDashboard from './pages/AdminDashboard.jsx'
+import Fixtures from './pages/FixturesPage.jsx'
+import News from './pages/NewsPage.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
 
 
@@ -18,6 +20,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user-profile" element={<UserProfile />} /> 
+          <Route path="/fixtures" element={<Fixtures />} />
+          <Route path="/news" element={<News />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
         </Routes>
       </>
@@ -25,4 +29,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
