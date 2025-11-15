@@ -1,4 +1,4 @@
-import Home from './pages/Home.jsx'
+import Landing from './pages/Landing.jsx'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import ForgetPassword from './pages/ForgetPassword.jsx'
@@ -15,7 +15,7 @@ function App() {
     <BrowserRouter>
       <>
         <Routes>
-          <Route index element={<Home />} />
+          <Route index element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forget-password" element={<ForgetPassword />} />
