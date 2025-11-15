@@ -1,6 +1,8 @@
 
 import Logo1 from "../assets/images/Logo1.png";
 import Logo2 from "../assets/images/Logo2.png";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 
 const fixturesData = [
@@ -78,6 +80,8 @@ const fixturesData = [
 
 const FixturesPage = () => {
   return (
+    <>
+    < Header />
     <div className="w-full min-h-screen bg-white pt-6 min-w-0">
 
       <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-center py-10 rounded-b-3xl shadow-md">
@@ -155,6 +159,8 @@ const FixturesPage = () => {
         ))}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

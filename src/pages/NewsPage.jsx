@@ -1,4 +1,5 @@
-import React from "react";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import NewsImg1 from "../assets/images/cfl.jpg";
 
 
@@ -88,6 +89,8 @@ const newsData = [
 
 const NewsPage = () => {
   return (
+    <>
+    < Header />
     <div className="w-full min-h-screen bg-white pt-6">
       <div className="text-center py-6 w-full">
         <h1 className="text-3xl font-extrabold text-gray-900 tracking-wide">
@@ -126,6 +129,8 @@ const NewsPage = () => {
         ))}
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
