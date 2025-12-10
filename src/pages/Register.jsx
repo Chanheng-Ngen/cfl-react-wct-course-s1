@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
+import { supabase } from '../supabase/supabaseClient';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -15,6 +17,8 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,22 +96,79 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      console.log('Register data:', formData);
+      setIsLoading(true);
+      setErrors({}); // Clear any previous errors
+      
+      try {
+        // Sign up with Supabase
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              full_name: formData.fullName,
+              phone_number: formData.phoneNumber,
+              date_of_birth: formData.dateOfBirth,
+            }
+          }
+        });
+
+        if (error) {
+          // Handle Supabase registration errors
+          setErrors({ 
+            submit: error.message || 'Failed to create account. Please try again.' 
+          });
+          setIsLoading(false);
+          return;
+        }
+
+        // Successful registration
+        console.log('Registration successful:', data);
+        setRegisterSuccess(true);
+        
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+          // Email confirmation required
+          setErrors({ 
+            submit: 'Please check your email to confirm your account before signing in.' 
+          });
+          setIsLoading(false);
+          
+          // Redirect to login after delay
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+          return;
+        }
+        
+        // If auto-logged in (no email confirmation required)
+        // Navigate to admin dashboard after short delay
+        setTimeout(() => {
+          navigate('/admin-dashboard');
+        }, 500);
+
+      } catch (error) {
+        console.error('Registration error:', error);
+        setErrors({ 
+          submit: 'An unexpected error occurred. Please try again.' 
+        });
+        setIsLoading(false);
+      }
       // Handle registration logic here
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <div className="max-w-2xl w-full animate-fadeInUp">
         {/* Register Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+          <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
             <div className="flex justify-center mb-4">
               <img src={cfl_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
             </div>
@@ -388,10 +449,65 @@ const Register = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                disabled={isLoading}
+                className={`w-full bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform ${
+                  isLoading 
+                    ? 'opacity-70 cursor-not-allowed' 
+                    : 'hover:from-blue-700 hover:to-blue-800 hover:scale-[1.02] active:scale-[0.98]'
+                }`}
               >
-                Create Account
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                  </span>
+                ) : registerSuccess ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Account Created! Redirecting...
+                  </span>
+                ) : (
+                  'Create Account'
+                )}
               </button>
+
+              {/* Error/Info Message */}
+              {errors.submit && (
+                <div className={`mt-4 p-3 border rounded-lg animate-fadeInUp ${
+                  errors.submit.includes('check your email') 
+                    ? 'bg-blue-50 border-blue-200' 
+                    : 'bg-red-50 border-red-200'
+                }`}>
+                  <p className={`text-sm text-center font-medium flex items-center justify-center gap-2 ${
+                    errors.submit.includes('check your email') 
+                      ? 'text-blue-800' 
+                      : 'text-red-800'
+                  }`}>
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      {errors.submit.includes('check your email') ? (
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      ) : (
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                      )}
+                    </svg>
+                    {errors.submit}
+                  </p>
+                </div>
+              )}
+
+              {/* Success Message */}
+              {registerSuccess && !errors.submit && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg animate-fadeInUp">
+                  <p className="text-sm text-green-800 text-center font-medium">
+                    Welcome! Taking you to your dashboard...
+                  </p>
+                </div>
+              )}
             </form>
 
             {/* Divider */}
