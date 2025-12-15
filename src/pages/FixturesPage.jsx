@@ -1,8 +1,10 @@
+import React, { useState } from "react";
 import Logo1 from "../assets/images/Logo1.png";
 import Logo2 from "../assets/images/Logo2.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-
+import HeroBanner from "../components/HeroBanner";
+import FixturesHero from "../assets/images/fixturesBanner.jpg";
 
 const fixturesData = [
   {
@@ -49,7 +51,6 @@ const fixturesData = [
         homeLogo: Logo1,
         awayLogo: Logo2,
       },
-
     ],
   },
   {
@@ -75,90 +76,282 @@ const fixturesData = [
       },
     ],
   },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+  {
+    date: "Saturday, 22 Nov 2025",
+    week: "Week 9",
+    league: "Cambodian Premier League 2025/26",
+    matches: [
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+      {
+        homeTeam: "Kirivong Sok Sen Chey FC",
+        awayTeam: "Visakha FC",
+        time: "15:30",
+        stadium: "Svay Rieng Stadium",
+        homeLogo: Logo1,
+        awayLogo: Logo2,
+      },
+    ],
+  },
+
+  // keep the rest SAME
 ];
 
 const FixturesPage = () => {
+  const [visibleCount, setVisibleCount] = useState(6);
+
   return (
     <>
-    < Header />
-    <div className="w-full min-h-screen bg-white pt-6 min-w-0">
+      <Header />
 
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-center py-10 rounded-b-3xl shadow-md">
-        <h1 className="text-white text-3xl font-extrabold tracking-wide uppercase">
-          Match Fixtures
-        </h1>
-      </div>
+      {/* HERO BANNER */}
+      <HeroBanner
+        title="Match Fixtures"
+        subtitle="Upcoming matches and schedules from Cambodian Premier League"
+        background={FixturesHero}
+      />
 
-      {/* Fixtures */}
-      <div className="w-full px-4 sm:px-6 lg:px-10 py-10">
-        {fixturesData.map((fixture, index) => (
+      {/* FIXTURES LIST */}
+      <div className="w-full min-h-screen bg-white py-12 px-4 sm:px-6 lg:px-10">
+        {fixturesData.slice(0, visibleCount).map((fixture, index) => (
           <div
             key={index}
             className="mb-10 bg-white shadow-lg rounded-2xl overflow-hidden"
           >
             {/* Date Header */}
-            <div className="flex items-center bg-red-600 text-white px-5 py-3 font-semibold text-lg">
-
+            <div className="bg-red-600 text-white px-5 py-3 font-semibold text-lg">
               {fixture.date}
             </div>
 
             {/* League Info */}
-            <div className="flex items-center justify-between bg-gray-800 text-white px-5 py-3 text-sm font-medium">
-              <div className="flex items-center gap-2">
-
-                {fixture.league}
-              </div>
+            <div className="flex items-center justify-between bg-gray-900 text-white px-5 py-3 text-sm font-medium">
+              <span>{fixture.league}</span>
               <span className="bg-gray-700 px-3 py-1 rounded-full text-xs">
                 {fixture.week}
               </span>
             </div>
 
-            {/* Match Cards */}
+            {/* Matches */}
             <div className="p-5 space-y-4">
               {fixture.matches.map((match, i) => (
                 <div
                   key={i}
-                  className="bg-gray-50 border border-gray-200 rounded-xl flex flex-col md:flex-row justify-between items-center p-4 hover:shadow-md transition-shadow"
+                  className="bg-gray-50 border border-gray-200 rounded-xl flex flex-col md:flex-row justify-between items-center p-4 hover:shadow-md transition"
                 >
                   {/* Teams */}
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={match.homeLogo}
-                      alt="Home Team"
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <span className="font-semibold text-gray-800 text-sm md:text-base">
+                  <div className="flex flex-wrap items-center gap-3 text-center md:text-left">
+                    <span className="font-semibold text-gray-800">
                       {match.homeTeam}
                     </span>
+
+                    <img src={match.homeLogo} alt="Home" className="w-8 h-8" />
+
                     <span className="font-bold text-gray-500">vs</span>
-                    <img
-                      src={match.awayLogo}
-                      alt="Away Team"
-                      className="w-8 h-8 rounded-full"
-                    />
-                    <span className="font-semibold text-gray-800 text-sm md:text-base">
+
+                    <img src={match.awayLogo} alt="Away" className="w-8 h-8" />
+
+                    <span className="font-semibold text-gray-800">
                       {match.awayTeam}
                     </span>
                   </div>
 
-                  {/* Match Info */}
-                  <div className="flex items-center gap-3 mt-3 md:mt-0">
-                    <div className="bg-white border px-3 py-1 rounded-md text-gray-700 font-medium">
+                  {/* Info */}
+                  <div className="flex items-center gap-4 mt-3 md:mt-0">
+                    <span className="bg-white border px-4 py-1 rounded-md font-medium text-gray-700">
                       {match.time}
-                    </div>
-                    <div className="flex items-center text-gray-500 text-sm">
-
+                    </span>
+                    <span className="text-gray-500 text-sm">
                       {match.stadium}
-                    </div>
+                    </span>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+
+        {/* LOAD MORE */}
+        {visibleCount < fixturesData.length && (
+          <div className="flex justify-start py-10">
+            <button
+              onClick={() => setVisibleCount(visibleCount + 3)}
+              className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
-    </div>
-    <Footer />
+
+      <Footer />
     </>
   );
 };
