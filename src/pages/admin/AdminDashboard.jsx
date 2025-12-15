@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { supabase } from '../../supabase/supabaseClient';
+import { auth } from '../../firebase/firebaseClient';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const AdminDashboard = () => {
 
@@ -18,34 +19,21 @@ const AdminDashboard = () => {
 
   // Check authentication on mount and get current user
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        navigate('/login');
-        return;
-      }
-      
-      setCurrentUser(session.user);
-    };
-
-    checkAuth();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
+    // Listen for auth state changes
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
         navigate('/login');
       } else {
-        setCurrentUser(session.user);
+        setCurrentUser(user);
       }
     });
 
-    return () => subscription.unsubscribe();
+    return () => unsubscribe();
   }, [navigate]);
 
   // Handle logout
   const handleLogout = async () => {
-    await supabase.auth.sigznOut();
+    await signOut(auth);
     navigate('/login');
   };
 

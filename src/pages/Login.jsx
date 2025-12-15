@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
-import { supabase } from '../supabase/supabaseClient';
+import { auth, db } from '../firebase/firebaseClient';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -14,6 +17,16 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
+
+  // Check for verification message from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      setVerificationMessage(location.state.message);
+      // Clear the message from location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -57,26 +70,54 @@ const Login = () => {
       setErrors({}); // Clear any previous errors
       
       try {
-        // Sign in with Supabase
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
+        // Sign in with Firebase
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
 
-        if (error) {
-          // Handle Supabase authentication errors
+        // Check if email is verified
+        if (!userCredential.user.emailVerified) {
           setErrors({ 
-            submit: error.message || 'Failed to sign in. Please check your credentials.' 
+            submit: 'Please verify your email before logging in. Check your inbox for the verification link.' 
           });
+          // Sign out the user
+          await auth.signOut();
           setIsLoading(false);
           return;
         }
 
+        // Check if user data exists in Firestore
+        try {
+          const userDocRef = doc(db, 'users', userCredential.user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          // If user data doesn't exist in Firestore, create it (first verified login)
+          if (!userDoc.exists()) {
+            await setDoc(userDocRef, {
+              email: userCredential.user.email,
+              displayName: userCredential.user.displayName || '',
+              emailVerified: true,
+              createdAt: new Date().toISOString(),
+              lastLogin: new Date().toISOString()
+            });
+          } else {
+            // Update last login time
+            await setDoc(userDocRef, {
+              lastLogin: new Date().toISOString()
+            }, { merge: true });
+          }
+        } catch (firestoreError) {
+          // If Firestore fails (offline, permission denied, etc.), continue with login
+          console.warn('Firestore operation failed, continuing with login:', firestoreError);
+        }
+
         // Successful login
-        console.log('Login successful:', data);
+        console.log('Login successful:', userCredential.user);
         setLoginSuccess(true);
         
-        // Store user session info (optional - Supabase handles this automatically)
+        // Store remember me preference
         if (rememberMe) {
           localStorage.setItem('rememberMe', 'true');
         }
@@ -88,9 +129,25 @@ const Login = () => {
 
       } catch (error) {
         console.error('Login error:', error);
-        setErrors({ 
-          submit: 'An unexpected error occurred. Please try again.' 
-        });
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        
+        let errorMessage = 'An unexpected error occurred. Please try again.';
+        
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMessage = 'Invalid email or password.';
+        } else if (error.code === 'auth/too-many-requests') {
+          errorMessage = 'Too many failed attempts. Please try again later.';
+        } else if (error.code === 'auth/network-request-failed') {
+          errorMessage = 'Network error. Please check your connection.';
+        } else if (error.code?.includes('firestore') || error.code?.includes('permission-denied')) {
+          errorMessage = 'Database error. Please check your Firestore security rules.';
+        } else if (error.message) {
+          // Show the actual error message for debugging
+          errorMessage = `Error: ${error.message}`;
+        }
+        
+        setErrors({ submit: errorMessage });
         setIsLoading(false);
       }
     }
@@ -99,6 +156,29 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
       <div className="max-w-md w-full animate-fadeInUp">
+        {/* Verification Message */}
+        {verificationMessage && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fadeInUp">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm text-blue-800 font-medium">{verificationMessage}</p>
+              </div>
+              <button 
+                onClick={() => setVerificationMessage('')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+        
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
