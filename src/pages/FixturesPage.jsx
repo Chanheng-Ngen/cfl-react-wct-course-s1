@@ -4,7 +4,7 @@ import Logo2 from "../assets/images/Logo2.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
-import FixturesHero from "../assets/images/fixturesBanner.jpg";
+import FixturesHero from "../assets/images/FixturesBanner.jpg";
 
 const fixturesData = [
   {
