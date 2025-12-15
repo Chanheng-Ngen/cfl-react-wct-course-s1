@@ -124,7 +124,7 @@ const Login = () => {
         
         // Navigate to admin dashboard after short delay
         setTimeout(() => {
-          navigate('/admin-dashboard');
+          navigate('/');
         }, 500);
 
       } catch (error) {
