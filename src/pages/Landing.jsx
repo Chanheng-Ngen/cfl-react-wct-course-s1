@@ -1,11 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import ContentLoader from 'react-content-loader';
 import morodok_techo_stadium from '../assets/images/morodok_techo_stadium.jpg';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import logo1 from '../assets/images/Logo1.png'
+import logo2 from '../assets/images/Logo2.png'
 
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [aboutSlide, setAboutSlide] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Simulate loading data
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); 
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const heroBanner = {
     badge: 'NEXT MATCH',
@@ -21,8 +34,8 @@ const Home = () => {
     {
       id: 1,
       league: 'Bundesliga',
-      team1: { name: 'Bayern Munich', abbr: 'BAY', color: 'bg-blue-600' },
-      team2: { name: 'Borussia Dortmund', abbr: 'BVB', color: 'bg-red-600' },
+      team1: { name: 'Bayern Munich', logo: logo1 },
+      team2: { name: 'Borussia Dortmund', logo: logo2 },
       date: 'Nov 20, 2025',
       time: '7:30 PM',
       venue: 'Allianz Arena',
@@ -31,8 +44,8 @@ const Home = () => {
     {
       id: 2,
       league: 'Cambodia League',
-      team1: { name: 'Phnom Penh Crown', abbr: 'PPC', color: 'bg-blue-700' },
-      team2: { name: 'Angkor Tiger', abbr: 'ATG', color: 'bg-orange-600' },
+      team1: { name: 'Phnom Penh Crown', logo: logo1 },
+      team2: { name: 'Angkor Tiger', logo: logo2 },
       date: 'Nov 21, 2025',
       time: '6:00 PM',
       venue: 'Morodok Techo Stadium',
@@ -41,8 +54,8 @@ const Home = () => {
     {
       id: 3,
       league: 'Cambodia League',
-      team1: { name: 'Visakha FC', abbr: 'VIS', color: 'bg-green-600' },
-      team2: { name: 'Boeung Ket', abbr: 'BKT', color: 'bg-purple-600' },
+      team1: { name: 'Visakha FC', logo: logo1 },
+      team2: { name: 'Boeung Ket', logo: logo2 },
       date: 'Nov 22, 2025',
       time: '5:30 PM',
       venue: 'National Olympic Stadium',
@@ -51,8 +64,8 @@ const Home = () => {
     {
       id: 4,
       league: 'Premier League',
-      team1: { name: 'Manchester United', abbr: 'MUN', color: 'bg-red-700' },
-      team2: { name: 'Liverpool', abbr: 'LIV', color: 'bg-red-500' },
+      team1: { name: 'Manchester United', logo: logo1},
+      team2: { name: 'Liverpool', logo: logo2 },
       date: 'Nov 23, 2025',
       time: '8:00 PM',
       venue: 'Old Trafford',
@@ -61,8 +74,8 @@ const Home = () => {
     {
       id: 5,
       league: 'Cambodia League',
-      team1: { name: 'Preah Khan Reach', abbr: 'PKR', color: 'bg-yellow-600' },
-      team2: { name: 'National Police', abbr: 'NPL', color: 'bg-indigo-600' },
+      team1: { name: 'Preah Khan Reach', logo: logo1 },
+      team2: { name: 'National Police', logo: logo2 },
       date: 'Nov 24, 2025',
       time: '4:00 PM',
       venue: 'RSN Stadium',
@@ -71,8 +84,8 @@ const Home = () => {
     {
       id: 6,
       league: 'La Liga',
-      team1: { name: 'Real Madrid', abbr: 'RMA', color: 'bg-white text-gray-800 border-2 border-gray-300' },
-      team2: { name: 'Barcelona', abbr: 'FCB', color: 'bg-blue-800' },
+      team1: { name: 'Real Madrid', logo: logo1 },
+      team2: { name: 'Barcelona', logo: logo2 },
       date: 'Nov 25, 2025',
       time: '9:00 PM',
       venue: 'Santiago Bernabéu',
@@ -223,6 +236,158 @@ const Home = () => {
     setCurrentSlide((prev) => (prev >= upcomingMatches.length - 3 ? 0 : prev + 1));
   };
 
+  // Skeleton Components using react-content-loader
+  const HeroSkeleton = () => (
+    <section className="hero-banner relative h-[77vh] bg-gray-200">
+      <div className="absolute inset-0 flex items-center px-4 md:px-20 z-10 justify-center">
+        <div className="container px-4">
+          <div className="hero-content max-w-2xl">
+            <ContentLoader 
+              speed={2}
+              width={600}
+              height={400}
+              viewBox="0 0 600 400"
+              backgroundColor="#d1d5db"
+              foregroundColor="#9ca3af"
+            >
+              <rect x="0" y="0" rx="8" ry="8" width="130" height="32" />
+              <rect x="0" y="50" rx="8" ry="8" width="600" height="64" />
+              <rect x="0" y="130" rx="8" ry="8" width="450" height="96" />
+              <rect x="0" y="250" rx="4" ry="4" width="160" height="24" />
+              <rect x="180" y="250" rx="4" ry="4" width="130" height="24" />
+              <rect x="0" y="300" rx="8" ry="8" width="130" height="48" />
+            </ContentLoader>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+
+  const MatchCardSkeleton = () => (
+    <div className="bg-white rounded-2xl shadow-lg p-6">
+      <ContentLoader 
+        speed={2}
+        width={450}
+        height={250}
+        viewBox="0 0 350 250"
+        backgroundColor="#e5e7eb"
+        foregroundColor="#d1d5db"
+      >
+        <rect x="125" y="0" rx="4" ry="4" width="100" height="16" />
+        <circle cx="50" cy="80" r="40" />
+        <rect x="120" y="70" rx="4" ry="4" width="50" height="24" />
+        <rect x="180" y="70" rx="4" ry="4" width="50" height="24" />
+        <circle cx="310" cy="80" r="40" />
+        <rect x="110" y="150" rx="4" ry="4" width="130" height="16" />
+        <rect x="95" y="180" rx="4" ry="4" width="160" height="16" />
+         <rect x="82" y="210" rx="4" ry="4" width="190" height="16" />
+      </ContentLoader>
+    </div>
+  );
+
+  const NewsSkeleton = () => (
+    <div className="bg-red-5 rounded-2xl shadow-lg overflow-hidden">
+      <ContentLoader 
+        speed={2}
+        width={500}
+        height={350}
+        viewBox="0 0 500 350"
+        backgroundColor="#e5e7eb"
+        foregroundColor="#d1d5db"
+      >
+        <rect x="0" y="0" rx="0" ry="0" width="500" height="192" />
+        <rect x="20" y="210" rx="4" ry="4" width="100" height="16" />
+        <rect x="20" y="240" rx="4" ry="4" width="260" height="20" />
+        <rect x="20" y="270" rx="4" ry="4" width="200" height="16" />
+        <rect x="20" y="300" rx="4" ry="4" width="80" height="16" />
+      </ContentLoader>
+    </div>
+  );
+  const ListSkeleton = () => (
+    <div className="bg-red-5 rounded-2xl shadow-lg overflow-hidden">
+      <ContentLoader 
+        speed={2}
+        width={500}
+        height={700}
+        viewBox="0 0 500 700"
+        backgroundColor="#e5e7eb"
+        foregroundColor="#d1d5db"
+      >
+        <rect x="36" y="36" rx="4" ry="4" width="220" height="45" />
+        <rect x="36" y="120" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="200" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="280" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="360" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="440" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="520" rx="4" ry="4" width="420" height="55" />
+        <rect x="36" y="600" rx="4" ry="4" width="420" height="55" />
+      </ContentLoader>
+    </div>
+  );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <HeroSkeleton />
+        
+        {/* Upcoming Matches Skeleton */}
+        <section className="py-16 px-4 md:px-20 bg-gray-50">
+          <div className="container mx-auto px-4 max-w-7x">
+            <div className="flex justify-satart mb-8">
+              <ContentLoader 
+                speed={2}
+                width={256}
+                height={40}
+                viewBox="0 0 256 40"
+                backgroundColor="#e5e7eb"
+                foregroundColor="#d1d5db"
+              >
+                <rect x="0" y="0" rx="8" ry="8" width="256" height="40" />
+              </ContentLoader>  
+            </div>
+            <div className="flex justify-between gap-5">
+              <MatchCardSkeleton />
+              <MatchCardSkeleton />
+              <MatchCardSkeleton />
+            </div>
+          </div>
+        </section>
+
+        {/* News Skeleton */}
+        <section className="py-16 px-4 md:px-20 bg-white">
+          <div className="container mx-auto">
+            <div className="flex justify-start mb-8">
+              <ContentLoader 
+                speed={2}
+                width={192}
+                height={40}
+                viewBox="0 0 192 40"
+                backgroundColor="#e5e7eb"
+                foregroundColor="#d1d5db"
+              >
+                <rect x="0" y="0" rx="8" ry="8" width="192" height="40" />
+              </ContentLoader>
+            </div>
+            <div className="flex jsutify-between gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+                <NewsSkeleton />
+                <NewsSkeleton />
+                <NewsSkeleton />
+                <NewsSkeleton />
+              </div>
+              <div >
+                <ListSkeleton />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -270,7 +435,7 @@ const Home = () => {
 
       {/* Upcoming Matches Section */}
       <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto px-4 max-w-7x">
           {/* Section Header */}
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl md:text-3xl font-bold text-gray-800">
@@ -319,8 +484,8 @@ const Home = () => {
                       <div className="flex items-center justify-between gap-6">
                         {/* Team 1 */}
                         <div className="flex-1 flex flex-col items-center gap-3">
-                          <div className={`w-20 h-20 ${match.team1.color} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
-                            {match.team1.abbr}
+                          <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xl shadow`}>
+                            <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
                           </div>
                           <span className="text-sm font-semibold text-gray-800 text-center">
                             {match.team1.name}
@@ -334,8 +499,8 @@ const Home = () => {
 
                         {/* Team 2 */}
                         <div className="flex-1 flex flex-col items-center gap-3">
-                          <div className={`w-20 h-20 ${match.team2.color} rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg`}>
-                            {match.team2.abbr}
+                          <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xl shadow`}>
+                            <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
                           </div>
                           <span className="text-sm font-semibold text-gray-800 text-center">
                             {match.team2.name}
@@ -396,7 +561,7 @@ const Home = () => {
       </section>
       {/* Latest News & League Standings Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto px-4 max-w-7x">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Latest News */}
             <div className="lg:col-span-2">
@@ -490,7 +655,7 @@ const Home = () => {
 
       {/* Video Highlights & Season Stats Section */}
       <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto px-4 max-w-7x">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Video Highlights */}
             <div className="lg:col-span-2">
@@ -588,7 +753,7 @@ const Home = () => {
 
       {/* About Us Section */}
       <section className="py-16 bg-white">
-        <div className="container mx-auto px-4 max-w-7xl">
+        <div className="container mx-auto px-4 max-w-7x">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">About Us</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">

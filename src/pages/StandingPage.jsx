@@ -1,4 +1,6 @@
 import React from 'react';
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer';
 
 const App = () => {
   const standings = [
@@ -28,6 +30,8 @@ const App = () => {
   };
 
   return (
+    <>
+        <Header />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -157,6 +161,8 @@ const App = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

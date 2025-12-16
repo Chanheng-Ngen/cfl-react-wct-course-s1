@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
+import { auth } from '../firebase/firebaseClient';
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -15,6 +18,9 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -92,22 +98,80 @@ const Register = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      console.log('Register data:', formData);
-      // Handle registration logic here
+      setIsLoading(true);
+      setErrors({}); // Clear any previous errors
+      
+      try {
+        // Create user with Firebase Authentication (this validates the email)
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+
+        // Update user profile with display name
+        await updateProfile(userCredential.user, {
+          displayName: formData.fullName
+        });
+
+        // Send email verification and wait for it to complete
+        await sendEmailVerification(userCredential.user, {
+          url: `${window.location.origin}/login`,
+          handleCodeInApp: false
+        });
+
+        // Note: User data will be stored in Firestore only after email verification
+        // The account exists in Firebase Auth but not in Firestore until verified
+
+        // Successful registration and verification email sent
+        console.log('Registration successful. Verification email sent to:', formData.email);
+        setRegisterSuccess(true);
+        setVerificationEmailSent(true);
+        
+        // Navigate immediately to login page after verification email is sent
+        navigate('/login', { 
+          state: { 
+            message: `Verification email sent to ${formData.email}.` 
+          } 
+        });
+
+      } catch (error) {
+        console.error('Registration error:', error);
+        
+        // Handle Firebase-specific errors
+        let errorMessage = 'An unexpected error occurred. Please try again.';
+        
+        if (error.code === 'auth/email-already-in-use') {
+          errorMessage = 'This email is already registered. Please sign in instead.';
+        } else if (error.code === 'auth/invalid-email') {
+          errorMessage = 'The email address is not valid. Please enter a valid email.';
+        } else if (error.code === 'auth/weak-password') {
+          errorMessage = 'Password is too weak. Please choose a stronger password.';
+        } else if (error.code === 'auth/network-request-failed') {
+          errorMessage = 'Network error. Please check your internet connection.';
+        } else if (error.code === 'auth/operation-not-allowed') {
+          errorMessage = 'Email/password accounts are not enabled. Please contact support.';
+        } else if (error.message?.includes('email')) {
+          errorMessage = 'Failed to send verification email. The email address may not exist or is unreachable.';
+        }
+        
+        setErrors({ submit: errorMessage });
+        setIsLoading(false);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-2xl w-full">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <div className="max-w-2xl w-full animate-fadeInUp">
         {/* Register Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+          <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
             <div className="flex justify-center mb-4">
               <img src={cfl_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
             </div>
@@ -241,7 +305,7 @@ const Register = () => {
                       errors.dateOfBirth ? 'border-red-500' : 'border-gray-300'
                     } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                   />
-                </div>
+                </div>from
                 {errors.dateOfBirth && (
                   <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -388,10 +452,66 @@ const Register = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                disabled={isLoading}
+                className={`w-full bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform ${
+                  isLoading 
+                    ? 'opacity-70 cursor-not-allowed' 
+                    : 'hover:from-blue-700 hover:to-blue-800 hover:scale-[1.02] active:scale-[0.98]'
+                }`}
               >
-                Create Account
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating Account...
+                  </span>
+                ) : registerSuccess ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Account Created! Check Your Email
+                  </span>
+                ) : (
+                  'Create Account'
+                )}
               </button>
+
+              {/* Error Message */}
+              {errors.submit && (
+                <div className="mt-4 p-3 border rounded-lg animate-fadeInUp bg-red-50 border-red-200">
+                  <p className="text-sm text-center font-medium flex items-center justify-center gap-2 text-red-800">
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    {errors.submit}
+                  </p>
+                </div>
+              )}
+
+              {/* Success Message with Email Verification */}
+              {registerSuccess && verificationEmailSent && !errors.submit && (
+                <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg animate-fadeInUp">
+                  <div className="flex items-start gap-3">
+                    <svg className="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    <div className="flex-1">
+                      <h3 className="text-sm font-semibold text-green-800 mb-1">
+                        Account Created Successfully!
+                      </h3>
+                      <p className="text-sm text-green-700 mb-2">
+                        A verification email has been sent to <strong>{formData.email}</strong>
+                      </p>
+                      <p className="text-xs text-green-600">
+                        Please check your inbox and click the verification link before logging in.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </form>
 
             {/* Divider */}

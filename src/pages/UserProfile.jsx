@@ -131,7 +131,6 @@ const UserProfile = () => {
   return (
     <div className={`min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'} transition-colors duration-300`}>
       <Header darkMode={darkMode} />
-
       <div className="container mx-auto px-4 py-8 max-w-8xl">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Sidebar */}
