@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
-import { Link } from 'react-router';
+import { Link, NavLink} from 'react-router';
 import './Header.css';
 
 export const Header = () => {
@@ -8,15 +8,15 @@ export const Header = () => {
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
 
   const navItems = [
-    { name: 'Homepage', href: '#homepage' },
-    { name: 'News', href: '#news' },
-    { name: 'Club', href: '#club' },
-    { name: 'Matching', href: '#matching' },
-    { name: 'Result', href: '#result' },
-    { name: 'Video', href: '#video' },
-    { name: 'Stats', href: '#stats' },
-    { name: 'Standing', href: '#standing' },
-    { name: 'About Us', href: '#about' }
+    { name: 'Homepage', href: '/' },
+    { name: 'News', href: '/news' },
+    { name: 'Club', href: '/club' },
+    { name: 'Matching', href: '/fixtures' },
+    { name: 'Result', href: '/results' },
+    { name: 'Video', href: '/videos' },
+    { name: 'Stats', href: '/stats' },
+    { name: 'Standing', href: '/standing' },
+    { name: 'About Us', href: '/about' }
   ];
 
   const languages = ['EN', 'KH'];
@@ -66,13 +66,17 @@ export const Header = () => {
           <ul className="hidden lg:flex items-center gap-6">
             {navItems.map((item, index) => (
               <li key={index}>
-                <a 
-                  href={item.href} 
-                  className="hover:text-blue-200 transition font-semibold text-[16px] relative nav-link"
+                <NavLink
+                  to={item.href}
+                  end={item.href === '/'}
+                  className={({ isActive }) =>
+                    `hover:text-blue-400 transition font-semibold text-[16px] relative nav-link
+                    ${isActive ? "active" : ""}`
+                  }
                 >
                   {item.name}
-                </a>
-              </li>
+                </NavLink>
+            </li>
             ))}
             <li>
               <button className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-blue-50 transition shadow-md">
@@ -96,13 +100,16 @@ export const Header = () => {
           <ul className="lg:hidden mt-4 space-y-3 pb-4 border-t border-blue-500 pt-4">
             {navItems.map((item, index) => (
               <li key={index}>
-                <a 
-                  href={item.href} 
-                  className="block hover:text-blue-200 transition font-semibold py-2"
-                  onClick={() => setIsMenuOpen(false)}
+                <NavLink
+                  to={item.href}
+                  end={item.href === '/'}
+                  className={({ isActive }) =>
+                      `hover:text-blue-400 transition font-semibold text-[16px] relative nav-link
+                      ${isActive ? "active" : ""}`
+                  }
                 >
                   {item.name}
-                </a>
+                </NavLink>
               </li>
             ))}
             <li>
