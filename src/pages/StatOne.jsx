@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { Link } from 'react-router';
 
 const PlayerStats = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -80,6 +83,8 @@ const PlayerStats = () => {
   );
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
@@ -104,7 +109,7 @@ const PlayerStats = () => {
           >
             <ChevronLeft className="w-5 h-5 text-gray-600" />
           </button>
-          
+          <Link to = "/stat-two">
           <div className="flex gap-2">
             {[1, 2, 3].map((page) => (
               <button
@@ -120,7 +125,7 @@ const PlayerStats = () => {
               </button>
             ))}
           </div>
-
+          </Link>
           <button 
             onClick={() => setCurrentPage(Math.min(3, currentPage + 1))}
             className="w-10 h-10 rounded-full bg-blue-500 shadow-sm flex items-center justify-center hover:bg-blue-600 transition-colors"
@@ -130,6 +135,8 @@ const PlayerStats = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

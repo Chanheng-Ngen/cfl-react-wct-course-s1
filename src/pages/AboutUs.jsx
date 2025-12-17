@@ -1,5 +1,7 @@
 import React from 'react';
 import { CheckCircle, Trophy, Users, Calendar, MapPin, Star, Target, TrendingUp, Heart } from 'lucide-react';
+import Header from '../components/Header.jsx';
+import Footer from '../components/Footer';
 
 const CambodiaFootballLeague = () => {
   const stats = [
@@ -49,6 +51,8 @@ const CambodiaFootballLeague = () => {
   ];
 
   return (
+    <>
+        <Header />
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white">
@@ -216,7 +220,7 @@ const CambodiaFootballLeague = () => {
 
         {/* CTA Section */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-12 text-center text-white shadow-2xl mb-16">
-          <h2 className="text-3xl font-bold mb-4">Join the Football Community</h2>
+          <h2 className="text-3xl font-bold mb-4">Join CFL Community</h2>
           <p className="text-lg text-blue-100 mb-8 max-w-2xl mx-auto">
             Follow your favorite team, stay updated with the latest news, and be part of the growing Cambodia Football League family.
           </p>
@@ -231,6 +235,8 @@ const CambodiaFootballLeague = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

@@ -1,5 +1,8 @@
 import React from 'react';
 import { ArrowLeft, ArrowUpRight, Trophy } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+
 
 const App = () => {
   const formation = {
@@ -107,6 +110,8 @@ const App = () => {
   );
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Back Button */}
@@ -250,6 +255,8 @@ const App = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

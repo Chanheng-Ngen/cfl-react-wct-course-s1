@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { ChevronRight, ChevronLeft } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
+import { Link } from 'react-router';
 
 const PlayerStats = () => {
   const [currentPage, setCurrentPage] = useState(3);
@@ -53,6 +56,8 @@ const PlayerStats = () => {
   );
 
   return (
+    <>
+      <Header />
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 p-8">
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
@@ -97,6 +102,8 @@ const PlayerStats = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

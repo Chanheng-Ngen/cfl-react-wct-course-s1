@@ -12,6 +12,13 @@ import Club from '../pages/Club.jsx'
 import StatOne from '../pages/StatOne.jsx'
 import StandingPage from '../pages/StandingPage.jsx'
 import AboutUs from '../pages/AboutUs.jsx'
+import ClubDetails from '../pages/ClubDetails.jsx'
+import LastStarting  from '../pages/LastStarting.jsx'
+import CoachPlayers from '../pages/CoachPlayers.jsx'
+import LegendPlayers from '../pages/LegendPlayers.jsx'
+import TableDetails from '../pages/TableDetails.jsx'
+import StatTwo from '../pages/StatTwo.jsx'
+import StatThree from '../pages/StatThree.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
 
 
@@ -34,6 +41,13 @@ export function RoutesApp() {
           <Route path="/stat-one" element={<StatOne />} />
           <Route path="/standing" element={<StandingPage />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/club-details" element={<ClubDetails />} />
+          <Route path="/last-starting" element={<LastStarting  />} />
+          <Route path="/coach-and-squad" element={<CoachPlayers />} />
+          <Route path="/legend-players" element={<LegendPlayers />} />
+          <Route path="/table-standings" element={<TableDetails />} />
+          <Route path="/stat-two" element={<StatTwo />} />
+          <Route path="/stat-three" element={<StatThree />} />
         </Routes>
       </>
     </BrowserRouter>

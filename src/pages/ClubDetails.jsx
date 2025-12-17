@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, MapPin, ChevronRight, ArrowLeft } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
+import { Link } from 'react-router';
 
 const App = () => {
   return (
@@ -69,9 +70,11 @@ const App = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Last Starting 11</h2>
+                <Link to = "/last-starting">
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
+                </Link>
               </div>
               <div className="bg-gray-50 rounded-lg p-5">
                 <div className="flex items-center justify-between">
@@ -99,9 +102,11 @@ const App = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Manager & Squad</h2>
+                <Link to = "/coach-and-squad">
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
+                </Link>
               </div>
               
               <div className="mb-6">
@@ -144,9 +149,11 @@ const App = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Club Legends</h2>
+                <Link to = "/legend-players">
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
+                </Link>
               </div>
               <div className="space-y-4">
                 {[
@@ -218,7 +225,11 @@ const App = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Table</h2>
-                <ChevronRight className="w-5 h-5 text-gray-400" />
+              <Link to = "/table-standings">
+                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
+                  See all <ChevronRight className="w-4 h-4" />
+                  </button>
+              </Link>
               </div>
               <div className="text-center py-4">
                 <div className="mb-3">

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer';
+import { Link } from 'react-router';
 import { Trophy, MapPin, Calendar } from 'lucide-react';
 
 const ClubCard = ({ name, logo, established, championships, stadium, capacity }) => (
@@ -34,10 +35,12 @@ const ClubCard = ({ name, logo, established, championships, stadium, capacity })
     <div className="text-sm text-gray-500 mb-4">
       Capacity: {capacity.toLocaleString()}
     </div>
-    
+    <Link to ="/club-details">
     <button className="w-full text-blue-700 hover:text-blue-800 text-sm font-medium hover:underline text-left">
       View Club Details →
     </button>
+    </Link>
+
   </div>
 );
 
@@ -72,7 +75,7 @@ const App = () => {
             <div className="text-sm text-gray-600">Total Clubs</div>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="text-4xl font-bold text-blue-700 mb-2">54</div>
+            <div className="text-4xl font-bold text-blue-700 mb-2">25</div>
             <div className="text-sm text-gray-600">Championships</div>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
@@ -80,7 +83,7 @@ const App = () => {
             <div className="text-sm text-gray-600">Club Legends</div>
           </div>
           <div className="bg-white rounded-lg shadow-md p-6 text-center">
-            <div className="text-4xl font-bold text-blue-700 mb-2">11</div>
+            <div className="text-4xl font-bold text-blue-700 mb-2">9</div>
             <div className="text-sm text-gray-600">Stadiums</div>
           </div>
         </div>

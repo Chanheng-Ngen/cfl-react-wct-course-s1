@@ -1,5 +1,7 @@
 import React from 'react';
 import { ArrowLeft, Trophy } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const App = () => {
   const legends = [
@@ -16,6 +18,8 @@ const App = () => {
   const championships = ['2023', '2021', '2019', '2018', '2015', '2013', '2011', '2009', '2008', '2007'];
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gray-50 pb-8">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10">
@@ -93,6 +97,8 @@ const App = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

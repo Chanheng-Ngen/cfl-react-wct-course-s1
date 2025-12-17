@@ -1,5 +1,7 @@
 import React from 'react';
 import { ArrowLeft } from 'lucide-react';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const App = () => {
   const standings = [
@@ -23,6 +25,8 @@ const App = () => {
   };
 
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
@@ -126,6 +130,8 @@ const App = () => {
         </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 
