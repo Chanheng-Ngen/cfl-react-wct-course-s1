@@ -340,7 +340,7 @@ const FixturesPage = () => {
 
         {/* LOAD MORE */}
         {visibleCount < fixturesData.length && (
-          <div className="flex justify-start py-10">
+          <div className="flex justify-start pb-20">
             <button
               onClick={() => setVisibleCount(visibleCount + 3)}
               className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"

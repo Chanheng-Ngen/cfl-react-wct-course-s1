@@ -3,6 +3,8 @@ import HomeLogo from "../assets/images/Svr_logo.png";
 import AwayLogo from "../assets/images/Johor.png";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import HeroBanner from "../components/HeroBanner";
+import ResultHero from "../assets/images/ResultBanner1.jpg"
 
 const resultsData = [
   {
@@ -113,15 +115,18 @@ const ResultsPage = () => {
   return (
     <>
       <Header />
-      <div className="w-full min-h-screen bg-white pb-20">
-        {/* Header Title */}
-        <div className="text-center py-10">
-          <h1 className="text-3xl font-extrabold text-gray-900 tracking-wide uppercase">
-            Match Results
-          </h1>
-        </div>
 
-        <div className="max-w-6xl mx-auto px-4 mb-10">
+      {/* HERO BANNER */}
+      <HeroBanner
+        title="Latest News"
+        subtitle="Official updates, stories, and announcements from Cambodia Football League"
+        background={ResultHero}
+      />
+
+      <div className="w-full min-h-screen bg-white pb-20">
+       
+
+        <div className="max-w-6xl mx-auto px-4 mb-10 pt-10">
           <select className="border border-gray-300 px-4 py-3 rounded-lg w-full sm:w-72 shadow-sm">
             <option>Asean Club Championship Shopee Cup</option>
           </select>
@@ -183,7 +188,7 @@ const ResultsPage = () => {
             </div>
           ))}
           {visibleCount < resultsData.length && (
-            <div className="w-full flex justify-start items-center pb-20">
+            <div className="w-full flex justify-start items-center mt-10 pb-20">
               <button
                 onClick={() => setVisibleCount(visibleCount + 5)}
                 className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"

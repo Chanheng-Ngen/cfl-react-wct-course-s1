@@ -4,8 +4,94 @@ import Footer from "../components/Footer";
 import Video1 from "../assets/video/Yamal.mp4";
 import Thumb1 from "../assets/images/thumbnail1.png";
 import Thumb2 from "../assets/images/thumbnail2.png";
+import HeroBanner from "../components/HeroBanner";
+import VideoHero from "../assets/images/VideoBanner1.jpg";
 
 const videosData = [
+  {
+    id: 1,
+    title: "Nagaworld FC vs Svay Rieng FC | WEEK 12 Highlights",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "05:32",
+  },
+  {
+    id: 2,
+    title: "Top Goals of the Week | CPL",
+    videoUrl: Video1,
+    thumbnail: Thumb2,
+    duration: "04:18",
+  },
+  {
+    id: 3,
+    title: "Best Saves Compilation | CPL",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "06:45",
+  },
+  {
+    id: 4,
+    title: "Best Goals of the Month | CPL",
+    videoUrl: Video1,
+    thumbnail: Thumb2,
+    duration: "07:10",
+  },
+  {
+    id: 5,
+    title: "Amazing Goalkeeper Saves",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "04:55",
+  },
+  {
+    id: 6,
+    title: "Match Highlights Week 13",
+    videoUrl: Video1,
+    thumbnail: Thumb2,
+    duration: "06:02",
+  },
+  {
+    id: 7,
+    title: "Top Assists Compilation",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "03:48",
+  },
+  {
+    id: 8,
+    title: "Amazing Goalkeeper Saves",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "04:55",
+  },
+  {
+    id: 9,
+    title: "Match Highlights Week 13",
+    videoUrl: Video1,
+    thumbnail: Thumb2,
+    duration: "06:02",
+  },
+  {
+    id: 10,
+    title: "Top Assists Compilation",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "03:48",
+  },
+  {
+    id: 11,
+    title: "Match Highlights Week 13",
+    videoUrl: Video1,
+    thumbnail: Thumb2,
+    duration: "06:02",
+  },
+  {
+    id: 12,
+    title: "Top Assists Compilation",
+    videoUrl: Video1,
+    thumbnail: Thumb1,
+    duration: "03:48",
+  },
   {
     id: 1,
     title: "Nagaworld FC vs Svay Rieng FC | WEEK 12 Highlights",
@@ -94,22 +180,22 @@ const videosData = [
 
 const VideoHighlightsPro = () => {
   const [activeVideo, setActiveVideo] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(9);
+  const [visibleCount, setVisibleCount] = useState(12);
 
   return (
     <>
       <Header />
 
-      <div className="min-h-screen bg-white pb-20">
-        {/* Title */}
-        <div className="text-center py-10">
-          <h1 className="text-3xl font-extrabold uppercase tracking-wide">
-            Video Highlights
-          </h1>
-        </div>
+      {/* HERO BANNER */}
+      <HeroBanner
+        title="Latest News"
+        subtitle="Official updates, stories, and announcements from Cambodia Football League"
+        background={VideoHero}
+      />
 
-        {/* Video Grid */}
-        <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Video Grid */}
+      <div className="w-full min-h-screen bg-white pt-10">
+        <div className="max-w-8xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {videosData.slice(0, visibleCount).map((video) => (
             <div
               key={video.id}
@@ -148,10 +234,10 @@ const VideoHighlightsPro = () => {
 
         {/* LOAD MORE BUTTON (LIKE NEWS PAGE) */}
         {visibleCount < videosData.length && (
-          <div className="flex justify-center mt-14">
+          <div className="flex justify-center mt-14 pb-20">
             <button
-              onClick={() => setVisibleCount(visibleCount + 3)}
-              className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
+              onClick={() => setVisibleCount(visibleCount + 4)}
+              className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
             >
               Load More
             </button>
