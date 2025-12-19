@@ -20,9 +20,9 @@ export const Header = () => {
     { name: 'Matching', href: '/fixtures' },
     { name: 'Result', href: '/results' },
     { name: 'Video', href: '/videos' },
-    { name: 'Stats', href: '/stats' },
+    { name: 'Stats', href: '/stat-one' },
     { name: 'Standing', href: '/standing' },
-    { name: 'About Us', href: '/about' }
+    { name: 'About Us', href: '/about-us' }
   ];
 
   const languages = ['EN', 'KH'];
