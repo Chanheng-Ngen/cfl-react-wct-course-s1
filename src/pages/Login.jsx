@@ -1,8 +1,13 @@
-import { useState } from 'react';
-import { Link } from 'react-router';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
+import { auth, db } from '../firebase/firebaseClient';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -10,6 +15,18 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [verificationMessage, setVerificationMessage] = useState('');
+
+  // Check for verification message from registration
+  useEffect(() => {
+    if (location.state?.message) {
+      setVerificationMessage(location.state.message);
+      // Clear the message from location state
+      window.history.replaceState({}, document.title);
+    }
+  }, [location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,23 +62,127 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      console.log('Login data:', formData);
-      console.log('Remember me:', rememberMe);
-      // Handle login logic here
+      setIsLoading(true);
+      setErrors({}); // Clear any previous errors
+      
+      try {
+        // Sign in with Firebase
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          formData.email,
+          formData.password
+        );
+
+        // Check if email is verified
+        if (!userCredential.user.emailVerified) {
+          setErrors({ 
+            submit: 'Please verify your email before logging in. Check your inbox for the verification link.' 
+          });
+          // Sign out the user
+          await auth.signOut();
+          setIsLoading(false);
+          return;
+        }
+
+        // Check if user data exists in Firestore
+        try {
+          const userDocRef = doc(db, 'users', userCredential.user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          // If user data doesn't exist in Firestore, create it (first verified login)
+          if (!userDoc.exists()) {
+            await setDoc(userDocRef, {
+              email: userCredential.user.email,
+              displayName: userCredential.user.displayName || '',
+              emailVerified: true,
+              createdAt: new Date().toISOString(),
+              lastLogin: new Date().toISOString()
+            });
+          } else {
+            // Update last login time
+            await setDoc(userDocRef, {
+              lastLogin: new Date().toISOString()
+            }, { merge: true });
+          }
+        } catch (firestoreError) {
+          // If Firestore fails (offline, permission denied, etc.), continue with login
+          console.warn('Firestore operation failed, continuing with login:', firestoreError);
+        }
+
+        // Successful login
+        console.log('Login successful:', userCredential.user);
+        setLoginSuccess(true);
+        
+        // Store remember me preference
+        if (rememberMe) {
+          localStorage.setItem('rememberMe', 'true');
+        }
+        
+        // Navigate to admin dashboard after short delay
+        setTimeout(() => {
+          navigate('/');
+        }, 500);
+
+      } catch (error) {
+        console.error('Login error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        
+        let errorMessage = 'An unexpected error occurred. Please try again.';
+        
+        if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          errorMessage = 'Invalid email or password.';
+        } else if (error.code === 'auth/too-many-requests') {
+          errorMessage = 'Too many failed attempts. Please try again later.';
+        } else if (error.code === 'auth/network-request-failed') {
+          errorMessage = 'Network error. Please check your connection.';
+        } else if (error.code?.includes('firestore') || error.code?.includes('permission-denied')) {
+          errorMessage = 'Database error. Please check your Firestore security rules.';
+        } else if (error.message) {
+          // Show the actual error message for debugging
+          errorMessage = `Error: ${error.message}`;
+        }
+        
+        setErrors({ submit: errorMessage });
+        setIsLoading(false);
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
+      <div className="max-w-md w-full animate-fadeInUp">
+        {/* Verification Message */}
+        {verificationMessage && (
+          <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fadeInUp">
+            <div className="flex items-start gap-3">
+              <svg className="w-5 h-5 text-blue-600 mt-0.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+              </svg>
+              <div className="flex-1">
+                <p className="text-sm text-blue-800 font-medium">{verificationMessage}</p>
+              </div>
+              <button 
+                onClick={() => setVerificationMessage('')}
+                className="text-blue-600 hover:text-blue-800"
+              >
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        )}
+        
         {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+          <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
             <div className="flex justify-center mb-4">
               <img src={cfl_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
             </div>
@@ -178,10 +299,53 @@ const Login = () => {
               {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98]"
+                disabled={isLoading}
+                className={`w-full bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform ${
+                  isLoading 
+                    ? 'opacity-70 cursor-not-allowed' 
+                    : 'hover:from-blue-700 hover:to-blue-800 hover:scale-[1.02] active:scale-[0.98]'
+                }`}
               >
-                Sign In
+                {isLoading ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Signing In...
+                  </span>
+                ) : loginSuccess ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Success! Redirecting...
+                  </span>
+                ) : (
+                  'Sign In'
+                )}
               </button>
+
+              {/* Error Message */}
+              {errors.submit && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg animate-fadeInUp">
+                  <p className="text-sm text-red-800 text-center font-medium flex items-center justify-center gap-2">
+                    <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    {errors.submit}
+                  </p>
+                </div>
+              )}
+
+              {/* Success Message */}
+              {loginSuccess && (
+                <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg animate-fadeInUp">
+                  <p className="text-sm text-green-800 text-center font-medium">
+                    Welcome back! Taking you to your dashboard...
+                  </p>
+                </div>
+              )}
             </form>
 
             {/* Divider */}

@@ -1,25 +1,66 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import cfl_logo from '../assets/images/cfl_logo.jpg';
-import { Link } from 'react-router';
+import { Link, NavLink, useNavigate } from 'react-router';
+import { auth } from '../firebase/firebaseClient';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import './Header.css';
 
 export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('EN');
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
+  const navigate = useNavigate();
 
   const navItems = [
-    { name: 'Homepage', href: '#homepage' },
-    { name: 'News', href: '#news' },
-    { name: 'Club', href: '#club' },
-    { name: 'Matching', href: '#matching' },
-    { name: 'Result', href: '#result' },
-    { name: 'Video', href: '#video' },
-    { name: 'Stats', href: '#stats' },
-    { name: 'Standing', href: '#standing' },
-    { name: 'About Us', href: '#about' }
+    { name: 'Homepage', href: '/' },
+    { name: 'News', href: '/news' },
+    { name: 'Club', href: '/club' },
+    { name: 'Matching', href: '/fixtures' },
+    { name: 'Result', href: '/results' },
+    { name: 'Video', href: '/videos' },
+    { name: 'Stats', href: '/stats' },
+    { name: 'Standing', href: '/standing' },
+    { name: 'About Us', href: '/about' }
   ];
 
   const languages = ['EN', 'KH'];
+
+  // Check authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+      } else {
+        setCurrentUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Close user menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setShowUserMenu(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   return (
     <>
@@ -43,9 +84,87 @@ export const Header = () => {
                     ))}
                   </select>
                 </div>
-                <button className="flex items-center gap-2 hover:text-blue-200 transition font-semibold">
-                  <Link to="/login"><span className="text-xs mr-1">👤</span> Sign In</Link>
-                </button>
+
+                {/* User Menu - Show name when logged in */}
+                {currentUser ? (
+                  <div className="relative" ref={userMenuRef}>
+                    <button 
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className="flex items-center gap-2 hover:text-blue-200 transition font-semibold"
+                    >
+                      <span className="text-xs mr-1">👤</span>
+                      <span className="max-w-[150px] truncate">
+                        {currentUser.displayName || currentUser.email?.split('@')[0]}
+                      </span>
+                      <svg 
+                        className={`w-4 h-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} 
+                        fill="none" 
+                        stroke="currentColor" 
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {/* Dropdown Menu */}
+                    {showUserMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-55">
+                        <Link 
+                          to="/user-profile" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            My Profile
+                          </span>
+                        </Link>
+                        <Link 
+                          to="/admin-dashboard" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            Dashboard
+                          </span>
+                        </Link>
+                        <Link 
+                          to="/" 
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 transition"
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+                            </svg>
+                            Home
+                          </span>
+                        </Link>
+                        <hr className="my-2" />
+                        <button 
+                          onClick={handleLogout}
+                          className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                        >
+                          <span className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                            </svg>
+                            Logout
+                          </span>
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button className="flex items-center gap-2 hover:text-blue-200 transition font-semibold">
+                    <Link to="/login"><span className="text-xs mr-1">👤</span> Sign In</Link>
+                  </button>
+                )}
             </div>
           </div>
         </div>
@@ -66,13 +185,17 @@ export const Header = () => {
           <ul className="hidden lg:flex items-center gap-6">
             {navItems.map((item, index) => (
               <li key={index}>
-                <a 
-                  href={item.href} 
-                  className="hover:text-blue-200 transition font-semibold text-[16px] relative nav-link"
+                <NavLink
+                  to={item.href}
+                  end={item.href === '/'}
+                  className={({ isActive }) =>
+                    `hover:text-blue-400 transition font-semibold text-[16px] relative nav-link
+                    ${isActive ? "active" : ""}`
+                  }
                 >
                   {item.name}
-                </a>
-              </li>
+                </NavLink>
+            </li>
             ))}
             <li>
               <button className="bg-white text-blue-600 px-6 py-2 rounded-lg font-bold hover:bg-blue-50 transition shadow-md">
@@ -96,13 +219,17 @@ export const Header = () => {
           <ul className="lg:hidden mt-4 space-y-3 pb-4 border-t border-blue-500 pt-4">
             {navItems.map((item, index) => (
               <li key={index}>
-                <a 
-                  href={item.href} 
-                  className="block hover:text-blue-200 transition font-semibold py-2"
+                <NavLink
+                  to={item.href}
+                  end={item.href === '/'}
+                  className={({ isActive }) =>
+                      `block hover:text-blue-400 transition font-semibold py-2
+                      ${isActive ? "text-yellow-300 font-bold" : ""}`
+                  }
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.name}
-                </a>
+                </NavLink>
               </li>
             ))}
             <li>

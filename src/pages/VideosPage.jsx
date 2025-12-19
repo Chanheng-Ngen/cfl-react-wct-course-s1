@@ -188,7 +188,7 @@ const VideoHighlightsPro = () => {
 
       {/* HERO BANNER */}
       <HeroBanner
-        title="Latest News"
+        title=" Video Highlights"
         subtitle="Official updates, stories, and announcements from Cambodia Football League"
         background={VideoHero}
       />
@@ -232,7 +232,7 @@ const VideoHighlightsPro = () => {
           ))}
         </div>
 
-        {/* LOAD MORE BUTTON (LIKE NEWS PAGE) */}
+        {/* LOAD MORE BUTTON */}
         {visibleCount < videosData.length && (
           <div className="flex justify-center mt-14 pb-20">
             <button
