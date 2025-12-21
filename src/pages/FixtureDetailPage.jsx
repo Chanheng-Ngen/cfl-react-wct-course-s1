@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Logo1 from "../assets/images/Logo1.png";

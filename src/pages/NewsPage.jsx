@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
 import NewsImg1 from "../assets/images/cfl.jpg";
 import NewsHero from "../assets/images/NewsBanner.jpg";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const newsData = [
   {

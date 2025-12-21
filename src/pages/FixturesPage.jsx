@@ -1,12 +1,11 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
 import FixturesHero from "../assets/images/FixturesBanner.jpg";
 import Logo1 from "../assets/images/Logo1.png";
 import Logo2 from "../assets/images/Logo2.png";
-import { Link, useParams } from "react-router-dom";
 
 const fixturesData = [
   {

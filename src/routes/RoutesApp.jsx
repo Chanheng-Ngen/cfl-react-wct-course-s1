@@ -10,7 +10,7 @@ import Results from'../pages/ResultsPage.jsx'
 import Videos from '../pages/VideosPage.jsx'
 import NewsDetailPage from "../pages/NewsDetailPage.jsx";
 import FixturesDetailPage from "../pages/FixtureDetailPage.jsx";
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router'
 
 
 export function RoutesApp() {
@@ -24,7 +24,7 @@ export function RoutesApp() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user-profile" element={<UserProfile />} /> 
           <Route path="/fixtures" element={<Fixtures />} />
-         <Route path="/fixtures/:id" element={<FixturesDetailPage />} />
+          <Route path="/fixtures/:id" element={<FixturesDetailPage />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/videos" element={<Videos />} />

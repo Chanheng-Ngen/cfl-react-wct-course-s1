@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import NewsImg1 from "../assets/images/cfl.jpg";
