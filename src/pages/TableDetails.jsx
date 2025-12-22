@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
+import { Link } from 'react-router';
 const App = () => {
   const standings = [
     { pos: 1, club: 'Arsenal', logo: 'ARS', color: 'bg-red-600', pl: 16, w: 11, d: 3, l: 2, gf: 30, ga: 10, gd: 20, pts: 36, form: ['W', 'W', 'W', 'W', 'W'], next: 'EVE', nextColor: 'bg-blue-600' },
@@ -28,12 +28,14 @@ const App = () => {
     <>
     <Header />
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
+      <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="mb-6">
+          <Link to = "/club-details">
           <button className="mb-4">
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
+          </Link>
           <div>
             <h1 className="text-lg font-semibold text-gray-900">Cambodia Football League - Standings</h1>
             <p className="text-sm text-gray-600 mt-1">Season 2024/25</p>
@@ -42,75 +44,91 @@ const App = () => {
 
         {/* Table */}
         <div className="bg-white rounded-lg shadow-sm overflow-x-auto">
-          {/* Table Header */}
-          <div className="grid grid-cols-[50px_200px_50px_50px_50px_50px_60px_60px_60px_60px_160px_60px] gap-2 px-4 py-3 bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-600">
-            <div className="text-center">Pos</div>
-            <div>Team</div>
-            <div className="text-center">Pl</div>
-            <div className="text-center">W</div>
-            <div className="text-center">D</div>
-            <div className="text-center">L</div>
-            <div className="text-center">GF</div>
-            <div className="text-center">GA</div>
-            <div className="text-center">GD</div>
-            <div className="text-center">Pts</div>
-            <div className="text-center">Form</div>
-            <div className="text-center">Next</div>
-          </div>
+          <table className="min-w-full table-fixed">
+            <colgroup>
+              <col style={{ width: '50px' }} />
+              <col style={{ width: '200px' }} />
+              <col style={{ width: '50px' }} />
+              <col style={{ width: '50px' }} />
+              <col style={{ width: '50px' }} />
+              <col style={{ width: '50px' }} />
+              <col style={{ width: '60px' }} />
+              <col style={{ width: '60px' }} />
+              <col style={{ width: '60px' }} />
+              <col style={{ width: '60px' }} />
+              <col style={{ width: '160px' }} />
+              <col style={{ width: '60px' }} />
+            </colgroup>
 
-          {/* Table Body */}
-          {standings.map((team, idx) => (
-            <div
-              key={idx}
-              className={`grid grid-cols-[50px_200px_50px_50px_50px_50px_60px_60px_60px_60px_160px_60px] gap-2 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                team.highlight ? 'bg-blue-50' : ''
-              }`}
-            >
-              {/* Position */}
-              <div className="flex items-center justify-center">
-                <span className="text-sm font-semibold text-gray-900">{team.pos}</span>
-              </div>
+            <thead className="bg-gray-50 border-b border-gray-200 text-xs font-medium text-gray-600">
+              <tr>
+                <th className="py-3 text-center">Pos</th>
+                <th className="py-3 text-left">Team</th>
+                <th className="py-3 text-center">Pl</th>
+                <th className="py-3 text-center">W</th>
+                <th className="py-3 text-center">D</th>
+                <th className="py-3 text-center">L</th>
+                <th className="py-3 text-center">GF</th>
+                <th className="py-3 text-center">GA</th>
+                <th className="py-3 text-center">GD</th>
+                <th className="py-3 text-center">Pts</th>
+                <th className="py-3 text-center">Form</th>
+                <th className="py-3 text-center">Next</th>
+              </tr>
+            </thead>
 
-              {/* Team */}
-              <div className="flex items-center gap-2">
-                <div className={`w-7 h-7 ${team.color} rounded-full flex items-center justify-center flex-shrink-0`}>
-                  <span className="text-white text-xs font-bold">{team.logo.substring(0, 2)}</span>
-                </div>
-                <span className="text-sm font-medium text-gray-900">{team.club}</span>
-              </div>
+            <tbody className="divide-y divide-gray-100">
+              {standings.map((team, idx) => (
+                <tr
+                  key={idx}
+                  className={`${team.highlight ? 'bg-blue-50' : ''} hover:bg-gray-50 transition-colors`}
+                >
+                  <td className="py-3 text-center">
+                    <span className="text-sm font-semibold text-gray-900">{team.pos}</span>
+                  </td>
 
-              {/* Stats */}
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.pl}</div>
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.w}</div>
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.d}</div>
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.l}</div>
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.gf}</div>
-              <div className="flex items-center justify-center text-sm text-gray-700">{team.ga}</div>
-              <div className="flex items-center justify-center text-sm font-medium text-gray-900">
-                {team.gd > 0 ? `+${team.gd}` : team.gd}
-              </div>
-              <div className="flex items-center justify-center text-sm font-bold text-gray-900">{team.pts}</div>
+                  <td className="py-3">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-7 h-7 ${team.color} rounded-full flex items-center justify-center flex-shrink-0`}>
+                        <span className="text-white text-xs font-bold">{team.logo.substring(0, 2)}</span>
+                      </div>
+                      <span className="text-sm font-medium text-gray-900">{team.club}</span>
+                    </div>
+                  </td>
 
-              {/* Form */}
-              <div className="flex items-center justify-center gap-1">
-                {team.form.map((result, i) => (
-                  <div
-                    key={i}
-                    className={`w-6 h-6 ${getFormColor(result)} rounded-full flex items-center justify-center text-white text-xs font-bold`}
-                  >
-                    {result}
-                  </div>
-                ))}
-              </div>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.pl}</td>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.w}</td>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.d}</td>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.l}</td>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.gf}</td>
+                  <td className="py-3 text-center text-sm text-gray-700">{team.ga}</td>
+                  <td className="py-3 text-center text-sm font-medium text-gray-900">
+                    {team.gd > 0 ? `+${team.gd}` : team.gd}
+                  </td>
+                  <td className="py-3 text-center text-sm font-bold text-gray-900">{team.pts}</td>
 
-              {/* Next */}
-              <div className="flex items-center justify-center">
-                <div className={`w-8 h-8 ${team.nextColor} rounded-full flex items-center justify-center`}>
-                  <span className="text-white text-xs font-bold">{team.next.substring(0, 2)}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+                  <td className="py-3 text-center">
+                    <div className="flex items-center justify-center gap-1">
+                      {team.form.map((result, i) => (
+                        <div
+                          key={i}
+                          className={`w-6 h-6 ${getFormColor(result)} rounded-full flex items-center justify-center text-white text-xs font-bold`}
+                        >
+                          {result}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+
+                  <td className="py-3 text-center">
+                    <div className={`w-8 h-8 ${team.nextColor} rounded-full flex items-center justify-center mx-auto`}>
+                      <span className="text-white text-xs font-bold">{team.next.substring(0, 2)}</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         {/* Legend */}
