@@ -1,47 +1,41 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
-import morodok_techo_stadium from '../assets/images/morodok_techo_stadium.jpg';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import logo1 from '../assets/images/Logo1.png'
-import logo2 from '../assets/images/Logo2.png'
+import { heroBanner, upcomingMatches , aboutData, videoHighlights, seasonStats, topScorers, latestNews, leagueStandings } from '../services/MockData';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination'
 
 const Home = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [aboutSlide, setAboutSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [upcomingMatches, setUpcomingMatches] = useState([]);
-  const [apiError, setApiError] = useState(null);
+  const [fixtures, setFixtures] = useState([]);
+  const swiperRef = useRef(null);
 
-  // Fetch matches from API
+  // Fetch fixtures 
   useEffect(() => {
-    const fetchMatches = async () => {
+    const fetchFixtures = async () => {
       try {
         setIsLoading(true);
-
         const fromDate = '2021-05-18';
         const toDate = '2021-05-18';
-        
-        console.log('🔍 Fetching matches from', fromDate, 'to', toDate);
-        
-        // Call API using the service
-        const data = await footballApi.getFixtures(fromDate, toDate);
-        
-        console.log('✅ Received data:', data.result[0]);
-
-        if (data && data.result && data.result.length > 0) {
-          // Transform API data to match component structure
-          const transformedMatches = data.result.slice(0, 6).map((match, index) => ({
+        const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
+        console.log('Fixtures data:', getFixturesData.result);
+        if (getFixturesData && getFixturesData.result && getFixturesData.result.length > 0) {
+          const transformedMatches = getFixturesData.result.slice(0, 6).map((match, index) => ({
             id: match.event_key || index + 1,
             league: match.league_name || 'Unknown League',
             team1: {
               name: match.event_home_team || 'Home Team',
-              logo: match.home_team_logo || logo1
+              logo: match.home_team_logo || upcomingMatches[0].home_team.logo
             },
             team2: {
               name: match.event_away_team || 'Away Team',
-              logo: match.away_team_logo || logo2
+              logo: match.away_team_logo || upcomingMatches[0].away_team.logo
             },
             date: match.event_date ? new Date(match.event_date).toLocaleDateString('en-US', {
               month: 'short',
@@ -52,250 +46,31 @@ const Home = () => {
             venue: match.event_stadium || 'Stadium TBD',
             matchNumber: `Match ${index + 1} of 6`
           }));
-
-          console.log('✅ Transformed matches:', transformedMatches);
-          setUpcomingMatches(transformedMatches);
-          setApiError(null);
-        } else {
-          // No matches found, use mock data
-          console.log('⚠️ No matches found, using mock data');
+          setFixtures(transformedMatches);
+        }
+        else {
+          console.log('No matches found, using mock data');
           throw new Error('No matches found');
         }
       } catch (error) {
-        console.error('❌ Error fetching matches:', error);
-        setApiError('Unable to load live matches. Showing sample data.');
-        
-        // Fallback to mock data
-        setUpcomingMatches([
-          {
-            id: 1,
-            league: 'Bundesliga',
-            team1: { name: 'Bayern Munich', logo: logo1 },
-            team2: { name: 'Borussia Dortmund', logo: logo2 },
-            date: 'Nov 20, 2025',
-            time: '7:30 PM',
-            venue: 'Allianz Arena',
-            matchNumber: 'Match 1 of 6'
-          },
-          {
-            id: 2,
-            league: 'Cambodia League',
-            team1: { name: 'Phnom Penh Crown', logo: logo1 },
-            team2: { name: 'Angkor Tiger', logo: logo2 },
-            date: 'Nov 21, 2025',
-            time: '6:00 PM',
-            venue: 'Morodok Techo Stadium',
-            matchNumber: 'Match 2 of 6'
-          },
-          {
-            id: 3,
-            league: 'Cambodia League',
-            team1: { name: 'Visakha FC', logo: logo1 },
-            team2: { name: 'Boeung Ket', logo: logo2 },
-            date: 'Nov 22, 2025',
-            time: '5:30 PM',
-            venue: 'National Olympic Stadium',
-            matchNumber: 'Match 3 of 6'
-          },
-          {
-            id: 4,
-            league: 'Premier League',
-            team1: { name: 'Manchester United', logo: logo1},
-            team2: { name: 'Liverpool', logo: logo2 },
-            date: 'Nov 23, 2025',
-            time: '8:00 PM',
-            venue: 'Old Trafford',
-            matchNumber: 'Match 4 of 6'
-          },
-          {
-            id: 5,
-            league: 'Cambodia League',
-            team1: { name: 'Preah Khan Reach', logo: logo1 },
-            team2: { name: 'National Police', logo: logo2 },
-            date: 'Nov 24, 2025',
-            time: '4:00 PM',
-            venue: 'RSN Stadium',
-            matchNumber: 'Match 5 of 6'
-          },
-          {
-            id: 6,
-            league: 'La Liga',
-            team1: { name: 'Real Madrid', logo: logo1 },
-            team2: { name: 'Barcelona', logo: logo2 },
-            date: 'Nov 25, 2025',
-            time: '9:00 PM',
-            venue: 'Santiago Bernabéu',
-            matchNumber: 'Match 6 of 6'
-          }
-        ]);
+        console.error('Error fetching matches:', error);
+        //mock data
+        setFixtures(upcomingMatches);
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchMatches();
+    fetchFixtures();
   }, []);
 
-  const heroBanner = {
-    badge: 'NEXT MATCH',
-    title: 'Champions League Final',
-    description: "Witness the ultimate showdown as two titans clash for European glory. Don't miss the most anticipated match of the season!",
-    matchInfo: [
-      { icon: 'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z', text: 'Saturday, Nov 16, 2025' },
-      { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', text: '8:00 PM' }
-    ],
-  };
-
-  // About Us Data
-  const aboutData = [
-    {
-      id: 1,
-      icon: '🏆',
-      title: 'Our Legacy',
-      description: "With over 50 years of excellence, we've built a legacy of championship victories and unforgettable moments. Our trophy cabinet speaks volumes about our commitment to success.",
-      stat: 'Championships',
-      statValue: '28'
-    },
-    {
-      id: 2,
-      icon: '⚽',
-      title: 'Our Philosophy',
-      description: "We believe in playing beautiful, attacking football that entertains fans worldwide. Our commitment to developing young talent and playing with passion defines who we are.",
-      stat: 'Youth Players',
-      statValue: '150+'
-    },
-    {
-      id: 3,
-      icon: '🌍',
-      title: 'Global Impact',
-      description: "From local communities to international stages, our influence extends far beyond the pitch. We're proud to inspire millions of fans across the globe.",
-      stat: 'Global Fans',
-      statValue: '500M+'
-    },
-    {
-      id: 4,
-      icon: '💪',
-      title: 'Community First',
-      description: "Our commitment to giving back drives everything we do. Through various initiatives, we support education, health, and sports development in communities worldwide.",
-      stat: 'Programs',
-      statValue: '50+'
-    }
-  ];
-
-  // Video Highlights Data
-  const videoHighlights = [
-    {
-      id: 1,
-      title: 'Best Goals of the Month',
-      thumbnail: morodok_techo_stadium,
-      duration: '8:45',
-      views: '2.3M views'
-    },
-    {
-      id: 2,
-      title: 'Champions League Highlights',
-      thumbnail: morodok_techo_stadium,
-      duration: '12:30',
-      views: '4.1M views'
-    },
-    {
-      id: 3,
-      title: 'Amazing Skills & Tricks',
-      thumbnail: morodok_techo_stadium,
-      duration: '6:15',
-      views: '1.8M views'
-    },
-    {
-      id: 4,
-      title: 'Last Match Full Highlights',
-      thumbnail: morodok_techo_stadium,
-      duration: '10:22',
-      views: '3.5M views'
-    }
-  ];
-
-  // Season Stats Data
-  const seasonStats = [
-    { icon: '🎯', label: 'Goals Scored', value: '89', change: '+12', positive: true },
-    { icon: '🛡️', label: 'Clean Sheets', value: '24', change: '+5', positive: true },
-    { icon: '📊', label: 'Win Rate', value: '73%', change: '+8%', positive: true },
-    { icon: '👥', label: 'Squad Players', value: '28', change: '+2', positive: true }
-  ];
-
-  // Top Scorers Data
-  const topScorers = [
-    { rank: 1, name: 'Marcus Sterling', position: 'Forward', goals: 18, assists: 7 },
-    { rank: 2, name: 'James Rodriguez', position: 'Midfielder', goals: 14, assists: 12 },
-    { rank: 3, name: 'David Williams', position: 'Forward', goals: 11, assists: 5 }
-  ];
-
-  // Latest News Data
-  const latestNews = [
-    {
-      id: 1,
-      category: 'Match Report',
-      categoryColor: 'bg-blue-600',
-      title: 'Historic Victory: Team Secures Championship Title',
-      description: 'An incredible performance leads to a decisive win in the final match of the season.',
-      thumbnail: morodok_techo_stadium,
-      timeAgo: '2 hours ago'
-    },
-    {
-      id: 2,
-      category: 'Transfer News',
-      categoryColor: 'bg-blue-600',
-      title: 'Star Player Signs New Long-Term Contract',
-      description: 'Club announces extension keeping key player at the team through 2028.',
-      thumbnail: morodok_techo_stadium,
-      timeAgo: '5 hours ago'
-    },
-    {
-      id: 3,
-      category: 'Academy',
-      categoryColor: 'bg-blue-600',
-      title: 'Youth Academy Produces Future Stars',
-      description: 'Talented youngsters making waves in the development squad ahead of first team opportunities.',
-      thumbnail: morodok_techo_stadium,
-      timeAgo: '1 day ago'
-    },
-    {
-      id: 4,
-      category: 'Interview',
-      categoryColor: 'bg-blue-600',
-      title: 'Manager Discusses Tactical Evolution',
-      description: "Head coach shares insights on the team's playing style and future strategy.",
-      thumbnail: morodok_techo_stadium,
-      timeAgo: '1 day ago'
-    }
-  ];
-
-  // League Standings Data
-  const leagueStandings = [
-    { rank: 1, team: 'Manchester City', played: 12, points: 31, trend: 'up' },
-    { rank: 2, team: 'Arsenal', played: 12, points: 29, trend: 'same' },
-    { rank: 3, team: 'Liverpool', played: 12, points: 27, trend: 'up' },
-    { rank: 4, team: 'Aston Villa', played: 12, points: 26, trend: 'down' },
-    { rank: 5, team: 'Tottenham', played: 12, points: 24, trend: 'up' },
-    { rank: 6, team: 'Chelsea', played: 12, points: 22, trend: 'same' },
-    { rank: 7, team: 'Newcastle', played: 12, points: 21, trend: 'down' },
-    { rank: 8, team: 'Brighton', played: 12, points: 19, trend: 'up' }
-  ];
-
-  const handlePrevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? upcomingMatches.length - 3 : prev - 1));
-  };
-
-  const handleNextSlide = () => {
-    setCurrentSlide((prev) => (prev >= upcomingMatches.length - 3 ? 0 : prev + 1));
-  };
-
-  // Skeleton Components using react-content-loader
+  // Skeleton 
   const HeroSkeleton = () => (
     <section className="hero-banner relative h-[77vh] bg-gray-200">
       <div className="absolute inset-0 flex items-center px-4 md:px-20 z-10 justify-center">
         <div className="container px-4">
           <div className="hero-content max-w-2xl">
-            <ContentLoader 
+            <ContentLoader
               speed={2}
               width={600}
               height={400}
@@ -318,7 +93,7 @@ const Home = () => {
 
   const MatchCardSkeleton = () => (
     <div className="bg-white rounded-2xl shadow-lg p-6">
-      <ContentLoader 
+      <ContentLoader
         speed={2}
         width={450}
         height={250}
@@ -333,14 +108,14 @@ const Home = () => {
         <circle cx="310" cy="80" r="40" />
         <rect x="110" y="150" rx="4" ry="4" width="130" height="16" />
         <rect x="95" y="180" rx="4" ry="4" width="160" height="16" />
-         <rect x="82" y="210" rx="4" ry="4" width="190" height="16" />
+        <rect x="82" y="210" rx="4" ry="4" width="190" height="16" />
       </ContentLoader>
     </div>
   );
 
   const NewsSkeleton = () => (
     <div className="bg-red-5 rounded-2xl shadow-lg overflow-hidden">
-      <ContentLoader 
+      <ContentLoader
         speed={2}
         width={500}
         height={350}
@@ -358,7 +133,7 @@ const Home = () => {
   );
   const ListSkeleton = () => (
     <div className="bg-red-5 rounded-2xl shadow-lg overflow-hidden">
-      <ContentLoader 
+      <ContentLoader
         speed={2}
         width={500}
         height={700}
@@ -383,12 +158,12 @@ const Home = () => {
       <div className="min-h-screen bg-gray-50">
         <Header />
         <HeroSkeleton />
-        
+
         {/* Upcoming Matches Skeleton */}
         <section className="py-16 px-4 md:px-20 bg-gray-50">
           <div className="container mx-auto px-4 max-w-7x">
             <div className="flex justify-satart mb-8">
-              <ContentLoader 
+              <ContentLoader
                 speed={2}
                 width={256}
                 height={40}
@@ -397,7 +172,7 @@ const Home = () => {
                 foregroundColor="#d1d5db"
               >
                 <rect x="0" y="0" rx="8" ry="8" width="256" height="40" />
-              </ContentLoader>  
+              </ContentLoader>
             </div>
             <div className="flex justify-between gap-5">
               <MatchCardSkeleton />
@@ -411,7 +186,7 @@ const Home = () => {
         <section className="py-16 px-4 md:px-20 bg-white">
           <div className="container mx-auto">
             <div className="flex justify-start mb-8">
-              <ContentLoader 
+              <ContentLoader
                 speed={2}
                 width={192}
                 height={40}
@@ -444,19 +219,10 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       <Header />
-      
-      {/* API Error Notice */}
-      {apiError && (
-        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
-          <p className="font-bold">Notice</p>
-          <p>{apiError}</p>
-        </div>
-      )}
-      
       {/* Hero Banner Section */}
       <section className="hero-banner relative h-[77vh]">
         <div className="absolute z-0 w-full h-full object-cover">
-          <img src={morodok_techo_stadium} alt="Morodok Techo Stadium" className='w-full h-full object-cover'/>
+          <img src={heroBanner.backgroundImage} alt="Morodok Techo Stadium" className='w-full h-full object-cover' />
         </div>
         <div className="hero-overlay absolute inset-0 flex items-center px-4 md:px-20 bg-gradient-to-br from-black to-gray-[5] z-10 justify-center">
           <div className="container px-4">
@@ -464,15 +230,15 @@ const Home = () => {
               <div className="inline-block bg-transparent border border-blue-500 text-white px-5 py-2 rounded-lg text-sm font-semibold tracking-wider mb-5 uppercase">
                 {heroBanner.badge}
               </div>
-              
+
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-5 leading-tight drop-shadow-lg">
                 {heroBanner.title}
               </h1>
-              
+
               <p className="text-base md:text-lg leading-relaxed mb-8 opacity-95 max-w-xl">
                 {heroBanner.description}
               </p>
-              
+
               <div className="flex flex-wrap gap-6 md:gap-8 mb-9">
                 {heroBanner.matchInfo.map((info, index) => (
                   <div key={index} className="flex items-center gap-3">
@@ -491,31 +257,29 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div> 
+        </div>
       </section>
 
-      {/* Upcoming Matches Section - Now using API data */}
+      {/* Upcoming Matches  */}
       <section className="py-16 bg-gray-100">
-        <div className="container mx-auto px-4 max-w-7x">
-          {/* Section Header */}
+        <div className="container mx-auto px-4">
+          {/*  Header */}
           <div className="flex items-center justify-between mb-12">
             <h2 className="text-3xl md:text-3xl font-bold text-gray-800">
               Upcoming Matches
             </h2>
             <div className="flex gap-2">
-              <button 
-                onClick={handlePrevSlide}
-                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={currentSlide === 0}
+              <button
+                onClick={() => swiperRef.current?.slidePrev()}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
               >
                 <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
-              <button 
-                onClick={handleNextSlide}
-                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={currentSlide >= upcomingMatches.length - 3}
+              <button
+                onClick={() => swiperRef.current?.slideNext()}
+                className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
               >
                 <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -529,100 +293,100 @@ const Home = () => {
               <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
             </div>
           ) : (
-            <div className="overflow-hidden">
-              <div 
-                className="flex transition-transform duration-500 ease-in-out gap-6"
-                style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
-              >
-                {upcomingMatches.map((match) => (
-                  <div key={match.id} className="min-w-[calc(33.333%-1rem)] flex-shrink-0 shadow-md">
-                    <div className="bg-white h-full overflow-hidden rounded-[8px]">
-                      {/* League Badge */}
-                      <div className="flex justify-center pt-6 pb-4">
-                        <span className="inline-block bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
-                          {match.league}
-                        </span>
-                      </div>
+            <Swiper
+              modules={[Navigation, Pagination, Autoplay]}
+              spaceBetween={24}
+              slidesPerView={1}
+              breakpoints={{
+                640: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+              }}
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              loop={fixtures.length > 3}
+              onSwiper={(swiper) => (swiperRef.current = swiper)}
+            >
+              {fixtures.map((match) => (
+                <SwiperSlide key={match.id}>
+                  <div className="bg-white h-full overflow-hidden rounded-[8px] shadow-md">
+                    {/* League Badge */}
+                    <div className="flex justify-center pt-6 pb-4">
+                      <span className="inline-block bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
+                        {match.league}
+                      </span>
+                    </div>
 
-                      {/* Teams Section */}
-                      <div className="px-6 py-8">
-                        <div className="flex items-center justify-between gap-6">
-                          {/* Team 1 */}
-                          <div className="flex-1 flex flex-col items-center gap-3">
-                            <div className={`w-20 h-20 flex items-center justify-center`}>
-                              <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-800 text-center">
-                              {match.team1.name}
-                            </span>
+                    {/* Teams Section */}
+                    <div className="px-6 py-8">
+                      <div className="flex items-center justify-between gap-6">
+                        {/* Team 1 */}
+                        <div className="flex-1 flex flex-col items-center gap-3">
+                          <div className="w-20 h-20 flex items-center justify-center">
+                            <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
                           </div>
-
-                          {/* VS */}
-                          <div className="text-gray-400 font-bold text-lg">
-                            VS
-                          </div>
-
-                          {/* Team 2 */}
-                          <div className="flex-1 flex flex-col items-center gap-3">
-                            <div className={`w-20 h-20 flex items-center justify-center`}>
-                              <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
-                            </div>
-                            <span className="text-sm font-semibold text-gray-800 text-center">
-                              {match.team2.name}
-                            </span>
-                          </div>
+                          <span className="text-sm font-semibold text-gray-800 text-center">
+                            {match.team1.name}
+                          </span>
                         </div>
-                      </div>
 
-                      {/* Match Info */}
-                      <div className="border-t border-gray-100 px-6 py-4 bg-gray-50">
-                        <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
-                          <div className="flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <span>{match.date}</span>
-                          </div>
-                          <span>•</span>
-                          <div className="flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>{match.time}</span>
-                          </div>
+                        {/* VS */}
+                        <div className="text-gray-400 font-bold text-lg">
+                          VS
                         </div>
-                        <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                          </svg>
-                          <span>{match.venue}</span>
-                        </div>
-                      </div>
 
-                      {/* Match Number */}
-                      <div className="px-6 py-3 text-center text-xs text-gray-500 bg-gray-50 border-t border-gray-100">
-                        {match.matchNumber}
+                        {/* Team 2 */}
+                        <div className="flex-1 flex flex-col items-center gap-3">
+                          <div className="w-20 h-20 flex items-center justify-center">
+                            <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
+                          </div>
+                          <span className="text-sm font-semibold text-gray-800 text-center">
+                            {match.team2.name}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
-          {/* Slide Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
-            {Array.from({ length: Math.max(1, upcomingMatches.length - 2) }).map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  currentSlide === index ? 'bg-blue-600 w-8' : 'bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+                    {/* Match Info */}
+                    <div className="border-t border-gray-100 px-6 py-4 bg-gray-50">
+                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <span>{match.date}</span>
+                        </div>
+                        <span>•</span>
+                        <div className="flex items-center gap-2">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <span>{match.time}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>{match.venue}</span>
+                      </div>
+                    </div>
+
+                    {/* Match Number */}
+                    <div className="px-6 py-3 text-center text-xs text-gray-500 bg-gray-50 border-t border-gray-100">
+                      {match.matchNumber}
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          )}
         </div>
       </section>
       {/* Latest News & League Standings Section */}
@@ -830,7 +594,7 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             {/* Stadium Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
-              <img src={morodok_techo_stadium} alt="Stadium" className="w-full h-[400px] object-cover" />
+              <img src={heroBanner.backgroundImage} alt="Stadium" className="w-full h-[400px] object-cover" />
               <div className="absolute bottom-6 left-6 bg-blue-600 text-white px-6 py-3 rounded-lg">
                 <div className="text-sm font-semibold">Championships</div>
                 <div className="text-3xl font-bold">{aboutData[aboutSlide].statValue}</div>
@@ -856,9 +620,8 @@ const Home = () => {
                   <button
                     key={index}
                     onClick={() => setAboutSlide(index)}
-                    className={`h-2 rounded-full transition-all ${
-                      aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
-                    }`}
+                    className={`h-2 rounded-full transition-all ${aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
+                      }`}
                   />
                 ))}
               </div>
@@ -886,8 +649,8 @@ const Home = () => {
           </div>
         </div>
       </section>
-      
-      
+
+
       <Footer />
     </div>
   );
