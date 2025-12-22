@@ -184,12 +184,12 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <ul className="hidden lg:flex items-center gap-6">
             {navItems.map((item, index) => (
-              <li key={index}>
+              <li key={index} >
                 <NavLink
                   to={item.href}
                   end={item.href === '/'}
                   className={({ isActive }) =>
-                    `hover:text-blue-400 transition font-semibold text-[16px] relative nav-link
+                    `hover:text-blue-400 transition font-semibold text-[16px] relative nav-link 
                     ${isActive ? "active" : ""}`
                   }
                 >
@@ -223,8 +223,8 @@ export const Header = () => {
                   to={item.href}
                   end={item.href === '/'}
                   className={({ isActive }) =>
-                      `block hover:text-blue-400 transition font-semibold py-2
-                      ${isActive ? "text-yellow-300 font-bold" : ""}`
+                      `block hover:text-blue-400 transition font-semibold py-2 nav-link
+                      ${isActive ? "active" : ""}`
                   }
                   onClick={() => setIsMenuOpen(false)}
                 >

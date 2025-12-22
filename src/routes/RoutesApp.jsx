@@ -20,12 +20,13 @@ import TableDetails from '../pages/TableDetails.jsx'
 import StatTwo from '../pages/StatTwo.jsx'
 import StatThree from '../pages/StatThree.jsx'
 import { BrowserRouter, Routes, Route } from 'react-router'
+import TitleHandler from '../components/TitleHandler'
 
 
 export function RoutesApp() {
   return (
     <BrowserRouter>
-      <>
+      <TitleHandler>
         <Routes>
           <Route index element={<Landing />} />
           <Route path="/login" element={<Login />} />
@@ -49,7 +50,7 @@ export function RoutesApp() {
           <Route path="/stat-two" element={<StatTwo />} />
           <Route path="/stat-three" element={<StatThree />} />
         </Routes>
-      </>
+      </TitleHandler>
     </BrowserRouter>
   )
 };

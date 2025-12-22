@@ -3,7 +3,7 @@ import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { heroBanner, upcomingMatches , aboutData, videoHighlights, seasonStats, topScorers, latestNews, leagueStandings } from '../services/MockData';
+import { heroBanner, upcomingMatches , aboutData, videoHighlights, seasonStats, topScorers, latestNews, leagueStandings } from '../services/mockData';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';

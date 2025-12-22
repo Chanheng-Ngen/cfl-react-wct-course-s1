@@ -1,4 +1,4 @@
-/* Footer Animations */
+
 .footer-link {
   position: relative;
   transition: all 0.3s ease;
@@ -19,12 +19,10 @@
   width: 100%;
 }
 
-/* Newsletter Input Animation */
 input[type="email"]:focus {
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
-/* Social Media Hover Effects */
 .social-icon {
   transition: transform 0.3s ease;
 }
@@ -33,7 +31,6 @@ input[type="email"]:focus {
   transform: translateY(-5px);
 }
 
-/* Sponsor Section */
 .sponsor-logo {
   filter: grayscale(100%);
   transition: all 0.3s ease;
@@ -44,7 +41,6 @@ input[type="email"]:focus {
   transform: scale(1.1);
 }
 
-/* Pulse Animation for Heart */
 @keyframes pulse {
   0%, 100% {
     transform: scale(1);
@@ -54,7 +50,6 @@ input[type="email"]:focus {
   }
 }
 
-/* Smooth Scroll */
 html {
   scroll-behavior: smooth;
 }
