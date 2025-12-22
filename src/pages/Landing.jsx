@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
 import morodok_techo_stadium from '../assets/images/morodok_techo_stadium.jpg';
 import Header from '../components/Header';
@@ -10,14 +11,129 @@ const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [aboutSlide, setAboutSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [upcomingMatches, setUpcomingMatches] = useState([]);
+  const [apiError, setApiError] = useState(null);
 
-  // Simulate loading data
+  // Fetch matches from API
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500); 
+    const fetchMatches = async () => {
+      try {
+        setIsLoading(true);
 
-    return () => clearTimeout(timer);
+        const fromDate = '2021-05-18';
+        const toDate = '2021-05-18';
+        
+        console.log('🔍 Fetching matches from', fromDate, 'to', toDate);
+        
+        // Call API using the service
+        const data = await footballApi.getFixtures(fromDate, toDate);
+        
+        console.log('✅ Received data:', data.result[0]);
+
+        if (data && data.result && data.result.length > 0) {
+          // Transform API data to match component structure
+          const transformedMatches = data.result.slice(0, 6).map((match, index) => ({
+            id: match.event_key || index + 1,
+            league: match.league_name || 'Unknown League',
+            team1: {
+              name: match.event_home_team || 'Home Team',
+              logo: match.home_team_logo || logo1
+            },
+            team2: {
+              name: match.event_away_team || 'Away Team',
+              logo: match.away_team_logo || logo2
+            },
+            date: match.event_date ? new Date(match.event_date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            }) : 'TBD',
+            time: match.event_time || 'TBD',
+            venue: match.event_stadium || 'Stadium TBD',
+            matchNumber: `Match ${index + 1} of 6`
+          }));
+
+          console.log('✅ Transformed matches:', transformedMatches);
+          setUpcomingMatches(transformedMatches);
+          setApiError(null);
+        } else {
+          // No matches found, use mock data
+          console.log('⚠️ No matches found, using mock data');
+          throw new Error('No matches found');
+        }
+      } catch (error) {
+        console.error('❌ Error fetching matches:', error);
+        setApiError('Unable to load live matches. Showing sample data.');
+        
+        // Fallback to mock data
+        setUpcomingMatches([
+          {
+            id: 1,
+            league: 'Bundesliga',
+            team1: { name: 'Bayern Munich', logo: logo1 },
+            team2: { name: 'Borussia Dortmund', logo: logo2 },
+            date: 'Nov 20, 2025',
+            time: '7:30 PM',
+            venue: 'Allianz Arena',
+            matchNumber: 'Match 1 of 6'
+          },
+          {
+            id: 2,
+            league: 'Cambodia League',
+            team1: { name: 'Phnom Penh Crown', logo: logo1 },
+            team2: { name: 'Angkor Tiger', logo: logo2 },
+            date: 'Nov 21, 2025',
+            time: '6:00 PM',
+            venue: 'Morodok Techo Stadium',
+            matchNumber: 'Match 2 of 6'
+          },
+          {
+            id: 3,
+            league: 'Cambodia League',
+            team1: { name: 'Visakha FC', logo: logo1 },
+            team2: { name: 'Boeung Ket', logo: logo2 },
+            date: 'Nov 22, 2025',
+            time: '5:30 PM',
+            venue: 'National Olympic Stadium',
+            matchNumber: 'Match 3 of 6'
+          },
+          {
+            id: 4,
+            league: 'Premier League',
+            team1: { name: 'Manchester United', logo: logo1},
+            team2: { name: 'Liverpool', logo: logo2 },
+            date: 'Nov 23, 2025',
+            time: '8:00 PM',
+            venue: 'Old Trafford',
+            matchNumber: 'Match 4 of 6'
+          },
+          {
+            id: 5,
+            league: 'Cambodia League',
+            team1: { name: 'Preah Khan Reach', logo: logo1 },
+            team2: { name: 'National Police', logo: logo2 },
+            date: 'Nov 24, 2025',
+            time: '4:00 PM',
+            venue: 'RSN Stadium',
+            matchNumber: 'Match 5 of 6'
+          },
+          {
+            id: 6,
+            league: 'La Liga',
+            team1: { name: 'Real Madrid', logo: logo1 },
+            team2: { name: 'Barcelona', logo: logo2 },
+            date: 'Nov 25, 2025',
+            time: '9:00 PM',
+            venue: 'Santiago Bernabéu',
+            matchNumber: 'Match 6 of 6'
+          }
+        ]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMatches();
   }, []);
 
   const heroBanner = {
@@ -29,69 +145,6 @@ const Home = () => {
       { icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', text: '8:00 PM' }
     ],
   };
-
-  const upcomingMatches = [
-    {
-      id: 1,
-      league: 'Bundesliga',
-      team1: { name: 'Bayern Munich', logo: logo1 },
-      team2: { name: 'Borussia Dortmund', logo: logo2 },
-      date: 'Nov 20, 2025',
-      time: '7:30 PM',
-      venue: 'Allianz Arena',
-      matchNumber: 'Match 1 of 6'
-    },
-    {
-      id: 2,
-      league: 'Cambodia League',
-      team1: { name: 'Phnom Penh Crown', logo: logo1 },
-      team2: { name: 'Angkor Tiger', logo: logo2 },
-      date: 'Nov 21, 2025',
-      time: '6:00 PM',
-      venue: 'Morodok Techo Stadium',
-      matchNumber: 'Match 2 of 6'
-    },
-    {
-      id: 3,
-      league: 'Cambodia League',
-      team1: { name: 'Visakha FC', logo: logo1 },
-      team2: { name: 'Boeung Ket', logo: logo2 },
-      date: 'Nov 22, 2025',
-      time: '5:30 PM',
-      venue: 'National Olympic Stadium',
-      matchNumber: 'Match 3 of 6'
-    },
-    {
-      id: 4,
-      league: 'Premier League',
-      team1: { name: 'Manchester United', logo: logo1},
-      team2: { name: 'Liverpool', logo: logo2 },
-      date: 'Nov 23, 2025',
-      time: '8:00 PM',
-      venue: 'Old Trafford',
-      matchNumber: 'Match 4 of 6'
-    },
-    {
-      id: 5,
-      league: 'Cambodia League',
-      team1: { name: 'Preah Khan Reach', logo: logo1 },
-      team2: { name: 'National Police', logo: logo2 },
-      date: 'Nov 24, 2025',
-      time: '4:00 PM',
-      venue: 'RSN Stadium',
-      matchNumber: 'Match 5 of 6'
-    },
-    {
-      id: 6,
-      league: 'La Liga',
-      team1: { name: 'Real Madrid', logo: logo1 },
-      team2: { name: 'Barcelona', logo: logo2 },
-      date: 'Nov 25, 2025',
-      time: '9:00 PM',
-      venue: 'Santiago Bernabéu',
-      matchNumber: 'Match 6 of 6'
-    }
-  ];
 
   // About Us Data
   const aboutData = [
@@ -392,6 +445,14 @@ const Home = () => {
     <div className="min-h-screen">
       <Header />
       
+      {/* API Error Notice */}
+      {apiError && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4" role="alert">
+          <p className="font-bold">Notice</p>
+          <p>{apiError}</p>
+        </div>
+      )}
+      
       {/* Hero Banner Section */}
       <section className="hero-banner relative h-[77vh]">
         <div className="absolute z-0 w-full h-full object-cover">
@@ -433,7 +494,7 @@ const Home = () => {
         </div> 
       </section>
 
-      {/* Upcoming Matches Section */}
+      {/* Upcoming Matches Section - Now using API data */}
       <section className="py-16 bg-gray-100">
         <div className="container mx-auto px-4 max-w-7x">
           {/* Section Header */}
@@ -463,87 +524,92 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Matches Slider */}
-          <div className="overflow-hidden">
-            <div 
-              className="flex transition-transform duration-500 ease-in-out gap-6"
-              style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
-            >
-              {upcomingMatches.map((match) => (
-                <div key={match.id} className="min-w-[calc(33.333%-1rem)] flex-shrink-0 shadow-md">
-                  <div className="bg-white h-full overflow-hidden rounded-[8px]">
-                    {/* League Badge */}
-                    <div className="flex justify-center pt-6 pb-4">
-                      <span className="inline-block bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
-                        {match.league}
-                      </span>
-                    </div>
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+            </div>
+          ) : (
+            <div className="overflow-hidden">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out gap-6"
+                style={{ transform: `translateX(-${currentSlide * (100 / 3)}%)` }}
+              >
+                {upcomingMatches.map((match) => (
+                  <div key={match.id} className="min-w-[calc(33.333%-1rem)] flex-shrink-0 shadow-md">
+                    <div className="bg-white h-full overflow-hidden rounded-[8px]">
+                      {/* League Badge */}
+                      <div className="flex justify-center pt-6 pb-4">
+                        <span className="inline-block bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-semibold">
+                          {match.league}
+                        </span>
+                      </div>
 
-                    {/* Teams Section */}
-                    <div className="px-6 py-8">
-                      <div className="flex items-center justify-between gap-6">
-                        {/* Team 1 */}
-                        <div className="flex-1 flex flex-col items-center gap-3">
-                          <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xl shadow`}>
-                            <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
+                      {/* Teams Section */}
+                      <div className="px-6 py-8">
+                        <div className="flex items-center justify-between gap-6">
+                          {/* Team 1 */}
+                          <div className="flex-1 flex flex-col items-center gap-3">
+                            <div className={`w-20 h-20 flex items-center justify-center`}>
+                              <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-800 text-center">
+                              {match.team1.name}
+                            </span>
                           </div>
-                          <span className="text-sm font-semibold text-gray-800 text-center">
-                            {match.team1.name}
-                          </span>
-                        </div>
 
-                        {/* VS */}
-                        <div className="text-gray-400 font-bold text-lg">
-                          VS
-                        </div>
-
-                        {/* Team 2 */}
-                        <div className="flex-1 flex flex-col items-center gap-3">
-                          <div className={`w-20 h-20 rounded-full flex items-center justify-center text-white font-bold text-xl shadow`}>
-                            <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
+                          {/* VS */}
+                          <div className="text-gray-400 font-bold text-lg">
+                            VS
                           </div>
-                          <span className="text-sm font-semibold text-gray-800 text-center">
-                            {match.team2.name}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Match Info */}
-                    <div className="border-t border-gray-100 px-6 py-4 bg-gray-50">
-                      <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                          </svg>
-                          <span>{match.date}</span>
-                        </div>
-                        <span>•</span>
-                        <div className="flex items-center gap-2">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          <span>{match.time}</span>
+                          {/* Team 2 */}
+                          <div className="flex-1 flex flex-col items-center gap-3">
+                            <div className={`w-20 h-20 flex items-center justify-center`}>
+                              <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
+                            </div>
+                            <span className="text-sm font-semibold text-gray-800 text-center">
+                              {match.team2.name}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        <span>{match.venue}</span>
-                      </div>
-                    </div>
 
-                    {/* Match Number */}
-                    <div className="px-6 py-3 text-center text-xs text-gray-500 bg-gray-50 border-t border-gray-100">
-                      {match.matchNumber}
+                      {/* Match Info */}
+                      <div className="border-t border-gray-100 px-6 py-4 bg-gray-50">
+                        <div className="flex items-center justify-center gap-4 text-sm text-gray-600 mb-2">
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span>{match.date}</span>
+                          </div>
+                          <span>•</span>
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>{match.time}</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <span>{match.venue}</span>
+                        </div>
+                      </div>
+
+                      {/* Match Number */}
+                      <div className="px-6 py-3 text-center text-xs text-gray-500 bg-gray-50 border-t border-gray-100">
+                        {match.matchNumber}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Slide Indicators */}
           <div className="flex justify-center gap-2 mt-8">
