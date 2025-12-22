@@ -2,6 +2,7 @@ import React from 'react';
 import { ArrowLeft, Trophy } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { Link } from 'react-router';
 
 const App = () => {
   const legends = [
@@ -20,13 +21,15 @@ const App = () => {
   return (
     <>
     <Header />
-    <div className="min-h-screen bg-gray-50 pb-8">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 px-6 py-4 sticky top-0 z-10">
+      <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
+        <Link to = "/club-details">
         <button className="w-8 h-8 flex items-center justify-center mb-4">
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </button>
-        <div className="flex items-center gap-3">
+        </Link>
+        <div className="flex items-center gap-5">
           <div className="w-12 h-12 bg-red-700 rounded-lg flex items-center justify-center shadow">
             <span className="text-white text-sm font-bold">MU</span>
           </div>
@@ -34,7 +37,7 @@ const App = () => {
         </div>
       </div>
 
-      <div className="max-w-4xl mx-auto px-6 py-6">
+      <div className="container mx-auto px-4 py-6">
         {/* All Legendary Players */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">

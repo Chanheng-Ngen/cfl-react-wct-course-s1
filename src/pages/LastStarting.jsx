@@ -2,7 +2,7 @@ import React from 'react';
 import { ArrowLeft, ArrowUpRight, Trophy } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-
+import { Link } from 'react-router';
 
 const App = () => {
   const formation = {
@@ -113,11 +113,13 @@ const App = () => {
     <>
     <Header />
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 p-6">
-      <div className="max-w-6xl mx-auto">
+      <div className="container mx-auto">
         {/* Back Button */}
+        <Link to ="/club-details">
         <button className="mb-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
+        </Link>
 
         {/* Match Result Header */}
         <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-2xl p-8 mb-8 relative overflow-hidden">

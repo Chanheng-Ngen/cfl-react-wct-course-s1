@@ -10,11 +10,14 @@ const App = () => {
     <Header />
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative h-48 bg-gradient-to-r from-blue-800 via-blue-700 to-cyan-600">
-        <button className="absolute top-6 left-6 z-20 w-10 h-10 bg-blue-900/40 hover:bg-blue-900/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
-          <ArrowLeft className="w-5 h-5" />
-        </button>
-        <div className="relative z-10 flex items-center h-full px-8">
+      <div className=" h-48 bg-gradient-to-br from-black mb-8">
+           
+        <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
+          <Link to = "/club">
+          <button className="mt-5 w-10 h-10 bg-blue-900/40 hover:bg-blue-900/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
+            <ArrowLeft className="w-5 h-5" />
+          </button>
+          </Link>
           <div className="flex items-center gap-5">
             <div className="w-20 h-20 bg-red-700 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
               <span className="text-white text-3xl font-bold">MU</span>
@@ -37,7 +40,7 @@ const App = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-6">
+      <div className="container mx-auto px-4 py-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">

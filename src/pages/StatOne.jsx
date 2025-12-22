@@ -86,7 +86,7 @@ const PlayerStats = () => {
     <>
     <Header />
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-50 p-8">
-      <div className="max-w-7xl mx-auto">
+      <div className="container mx-auto">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Player Statistics 2024/25</h1>
           <p className="text-gray-600">Cambodian Football League</p>
