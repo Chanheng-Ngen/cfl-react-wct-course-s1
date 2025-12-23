@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY;  
+const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY;
 const BASE_URL = 'https://apiv2.allsportsapi.com/football/';
 
 export const footballApi = {
@@ -14,4 +14,26 @@ export const footballApi = {
       throw error;
     }
   },
+  getStandings: async (leagueId) => {
+    try {
+      const url = `${BASE_URL}?met=Standings&leagueId=${leagueId}&APIkey=${API_KEY}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Standings Error:', error);
+      console.error('Error details:', error.response?.data);
+      throw error;
+    }
+  },
+  getTopScorers: async (leagueId) => {
+    try {
+      const url = `${BASE_URL}?met=Topscorers&leagueId=${leagueId}&APIkey=${API_KEY}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Top Scorers Error:', error);
+      console.error('Error details:', error.response?.data);
+      throw error;
+    }
+  }
 };

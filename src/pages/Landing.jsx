@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router';
 import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { heroBanner, upcomingMatches , aboutData, videoHighlights, seasonStats, topScorers, latestNews, leagueStandings } from '../services/mockData';
+import { heroBanner, upcomingMatches , aboutData, videoHighlights, topScorers, latestNews, leagueStandings } from '../services/mockData';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -14,6 +15,8 @@ const Home = () => {
   const [aboutSlide, setAboutSlide] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [fixtures, setFixtures] = useState([]);
+  const [standings, setStandings] = useState([]);
+  const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
 
   // Fetch fixtures 
@@ -21,41 +24,78 @@ const Home = () => {
     const fetchFixtures = async () => {
       try {
         setIsLoading(true);
-        const fromDate = '2021-05-18';
-        const toDate = '2021-05-18';
+        const fromDate = '2025-12-12';
+        const toDate = '2025-12-21';
+        const standingLeagueId = 207; 
+        // fetch 
         const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
-        console.log('Fixtures data:', getFixturesData.result);
-        if (getFixturesData && getFixturesData.result && getFixturesData.result.length > 0) {
+        const getStandingsData = await footballApi.getStandings(standingLeagueId);
+        const getTopScorersData = await footballApi.getTopScorers(standingLeagueId);
+        // debug
+        console.log('Fixtures data:', getFixturesData);
+        console.log('Standings data:', getStandingsData);
+        console.log('Top Scorers data:', getTopScorersData);
+
+        if (getFixturesData && getFixturesData.result.length > 0) {
           const transformedMatches = getFixturesData.result.slice(0, 6).map((match, index) => ({
             id: match.event_key || index + 1,
-            league: match.league_name || 'Unknown League',
+            league: match.league_name,
             team1: {
-              name: match.event_home_team || 'Home Team',
-              logo: match.home_team_logo || upcomingMatches[0].home_team.logo
+              name: match.event_home_team,
+              logo: match.home_team_logo
             },
             team2: {
-              name: match.event_away_team || 'Away Team',
-              logo: match.away_team_logo || upcomingMatches[0].away_team.logo
+              name: match.event_away_team,
+              logo: match.away_team_logo,
             },
             date: match.event_date ? new Date(match.event_date).toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
               year: 'numeric'
             }) : 'TBD',
-            time: match.event_time || 'TBD',
-            venue: match.event_stadium || 'Stadium TBD',
+            time: match.event_time,
+            venue: match.event_stadium,
             matchNumber: `Match ${index + 1} of 6`
           }));
           setFixtures(transformedMatches);
         }
         else {
-          console.log('No matches found, using mock data');
-          throw new Error('No matches found');
+          throw new Error('Not found fixtures data');
+        }
+        if(getStandingsData && getStandingsData.result.total.length > 0) {
+          const transformStandings = getStandingsData.result.total.slice(0, 8).map((team, index) => ({
+            id: team.standing_team_id || index + 1,
+            rank: team.standing_place,
+            team: team.standing_team,
+            played: team.standing_P,
+            points: team.standing_PTS,
+            team_logo: team.team_logo,
+            trend: team.standing_GD > 0 ? 'up' : team.standing_GD < 0 ? 'down' : 'same'
+          }));
+          setStandings(transformStandings);
+        }
+        else {
+          throw new Error('Not found standings data');
+        }
+        if(getTopScorersData && getTopScorersData.result.length > 0) {
+          const transformTopScorers = getTopScorersData.result.slice(0, 7).map((player, index) => ({
+            id: index + 1,
+            rank: player.player_place,
+            name: player.player_name,
+            team: player.team_name,
+            goals: player.goals,
+            assists: player.assists ? player.assists : 0
+          }));
+          setTopScorerList(transformTopScorers);
+        }
+        else {
+          throw new Error('Not found top scorers data');
         }
       } catch (error) {
-        console.error('Error fetching matches:', error);
+        console.error('Error fetching:', error);
         //mock data
         setFixtures(upcomingMatches);
+        setStandings(leagueStandings);
       } finally {
         setIsLoading(false);
       }
@@ -440,13 +480,16 @@ const Home = () => {
                 </div>
 
                 <div className="space-y-2">
-                  {leagueStandings.map((team) => (
-                    <div key={team.rank} className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-white/20 transition">
+                  {(standings.length > 0 ? standings : leagueStandings).map((team) => (
+                    <div key={team.id} className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm hover:bg-white/20 transition">
                       <div className="flex items-center gap-3 flex-1">
                         <div className="w-6 text-center font-bold">{team.rank}</div>
-                        <div className="flex-1">
-                          <div className="font-semibold">{team.team}</div>
-                          <div className="text-xs opacity-75">{team.played} played</div>
+                        <div className="flex-1 flex items-center gap-3">
+                          <img className='w-8' src={team.team_logo} alt={team.team} />
+                          <div>
+                            <div className="font-semibold">{team.team}</div>
+                            <div className="text-xs opacity-75">{team.played} played</div>
+                          </div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -473,10 +516,11 @@ const Home = () => {
                     </div>
                   ))}
                 </div>
-
-                <button className="w-full mt-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-100 transition">
-                  View Full Table
+                <Link to='/standing'>
+                <button className="w-full mt-6 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition">
+                  View Full Standing
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -529,44 +573,18 @@ const Home = () => {
                 ))}
               </div>
             </div>
-
-            {/* Season Stats & Top Scorers */}
-            <div className="space-y-6">
-              {/* Season Stats */}
+            {/* Top Scorers */}
               <div className="bg-blue-800 rounded-xl p-6 text-white">
-                <h3 className="text-xl font-bold mb-6">Season Stats</h3>
-                <div className="space-y-4">
-                  {seasonStats.map((stat, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-white/10 rounded-lg backdrop-blur-sm">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center text-xl">
-                          {stat.icon}
-                        </div>
-                        <div>
-                          <div className="text-sm opacity-90">{stat.label}</div>
-                          <div className="text-xl font-bold">{stat.value}</div>
-                        </div>
-                      </div>
-                      <span className={`text-sm font-semibold ${stat.positive ? 'text-green-300' : 'text-red-300'}`}>
-                        {stat.change}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Top Scorers */}
-              <div className="bg-gray-800 rounded-xl p-6 text-white">
                 <h3 className="text-xl font-bold mb-6">Top Scorers</h3>
                 <div className="space-y-4">
-                  {topScorers.map((player) => (
-                    <div key={player.rank} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                      <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold">
+                  {(topScorerList.length > 0 ? topScorerList : topScorers).map((player) => (
+                    <div key={player.id} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                      <div className="text-white font-bold w-6 text-center">
                         {player.rank}
                       </div>
                       <div className="flex-1">
                         <div className="font-semibold">{player.name}</div>
-                        <div className="text-sm text-gray-400">{player.position}</div>
+                        <div className="text-sm text-gray-400">{player.team}</div>
                       </div>
                       <div className="text-right">
                         <div className="font-bold text-lg">{player.goals} goals</div>
@@ -575,8 +593,12 @@ const Home = () => {
                     </div>
                   ))}
                 </div>
+                <Link to='/'>
+                <button className="w-full mt-6 py-3 border  text-white font-semibold rounded-lg hover:bg-gray-700 hover:border-none transition">
+                  View Full Top List
+                </button>
+                </Link>
               </div>
-            </div>
           </div>
         </div>
       </section>

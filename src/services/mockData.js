@@ -146,19 +146,11 @@ const videoHighlights = [
     }
 ];
 
-// Season Stats 
-const seasonStats = [
-    { icon: '🎯', label: 'Goals Scored', value: '89', change: '+12', positive: true },
-    { icon: '🛡️', label: 'Clean Sheets', value: '24', change: '+5', positive: true },
-    { icon: '📊', label: 'Win Rate', value: '73%', change: '+8%', positive: true },
-    { icon: '👥', label: 'Squad Players', value: '28', change: '+2', positive: true }
-];
-
 // Top Scorers 
 const topScorers = [
-    { rank: 1, name: 'Marcus Sterling', position: 'Forward', goals: 18, assists: 7 },
-    { rank: 2, name: 'James Rodriguez', position: 'Midfielder', goals: 14, assists: 12 },
-    { rank: 3, name: 'David Williams', position: 'Forward', goals: 11, assists: 5 }
+    { rank: 1, name: 'Marcus Sterling', team: 'Forward', goals: 18, assists: 7 },
+    { rank: 2, name: 'James Rodriguez', team: 'Midfielder', goals: 14, assists: 12 },
+    { rank: 3, name: 'David Williams', team: 'Forward', goals: 11, assists: 5 }
 ];
 
 // Latest News 
@@ -203,13 +195,13 @@ const latestNews = [
 
 // League Standings 
 const leagueStandings = [
-    { rank: 1, team: 'Manchester City', played: 12, points: 31, trend: 'up' },
-    { rank: 2, team: 'Arsenal', played: 12, points: 29, trend: 'same' },
-    { rank: 3, team: 'Liverpool', played: 12, points: 27, trend: 'up' },
-    { rank: 4, team: 'Aston Villa', played: 12, points: 26, trend: 'down' },
-    { rank: 5, team: 'Tottenham', played: 12, points: 24, trend: 'up' },
-    { rank: 6, team: 'Chelsea', played: 12, points: 22, trend: 'same' },
-    { rank: 7, team: 'Newcastle', played: 12, points: 21, trend: 'down' },
-    { rank: 8, team: 'Brighton', played: 12, points: 19, trend: 'up' }
+    { rank: 1, team: 'Manchester City', played: 12, points: 31, team_logo: home_team_logo, trend: 'up' },
+    { rank: 2, team: 'Arsenal', played: 12, points: 29, team_logo: home_team_logo, trend: 'same' },
+    { rank: 3, team: 'Liverpool', played: 12, points: 27, team_logo: home_team_logo, trend: 'up' },
+    { rank: 4, team: 'Aston Villa', played: 12, points: 26, team_logo: home_team_logo, trend: 'down' },
+    { rank: 5, team: 'Tottenham', played: 12, points: 24, team_logo: home_team_logo, trend: 'up' },
+    { rank: 6, team: 'Chelsea', played: 12, points: 22, team_logo: home_team_logo, trend: 'same' },
+    { rank: 7, team: 'Newcastle', played: 12, points: 21, team_logo: home_team_logo, trend: 'down' },
+    { rank: 8, team: 'Brighton', played: 12, points: 19, team_logo: home_team_logo, trend: 'up' }
 ];
-export { heroBanner, aboutData, videoHighlights, seasonStats, topScorers, latestNews, leagueStandings, upcomingMatches };
+export { heroBanner, aboutData, videoHighlights, topScorers, latestNews, leagueStandings, upcomingMatches };
