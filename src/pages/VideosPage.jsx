@@ -194,7 +194,8 @@ const VideoHighlightsPro = () => {
       />
 
       {/* Video Grid */}
-      <div className="w-full min-h-screen bg-white pt-10">
+      <div className="w-full min-h-screen bg-white pt-16">
+        <div className="container mx-auto px-4 pb-16">
         <div className="max-w-8xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {videosData.slice(0, visibleCount).map((video) => (
             <div
@@ -234,7 +235,7 @@ const VideoHighlightsPro = () => {
 
         {/* LOAD MORE BUTTON */}
         {visibleCount < videosData.length && (
-          <div className="flex justify-center mt-14 pb-20">
+          <div className="flex justify-center mt-14 pb-16">
             <button
               onClick={() => setVisibleCount(visibleCount + 4)}
               className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
@@ -265,6 +266,7 @@ const VideoHighlightsPro = () => {
           </div>
         </div>
       )}
+      </div>
 
       <Footer />
     </>

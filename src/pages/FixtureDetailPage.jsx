@@ -46,14 +46,8 @@ const FixtureDetailPage = () => {
     <>
       <Header />
 
-      <div className="max-w-5xl mx-auto px-4 py-12">
-        <Link
-          to="/fixtures"
-          className="text-blue-600 font-medium mb-6 hover:underline"
-        >
-          ← Back to Fixtures
-        </Link>
-
+     <div className="container mx-auto px-4 pb-16">
+      
         {/* MATCH HEADER */}
         <div className="bg-gray-900 text-white rounded-xl p-8 mt-10">
           <div className="flex flex-col md:flex-row items-center justify-between">

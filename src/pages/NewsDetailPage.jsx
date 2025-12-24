@@ -57,15 +57,7 @@ const NewsDetailPage = () => {
       <Header />
 
       {/* CONTENT */}
-      <div className="max-w-4xl mx-auto px-4 py-16">
-        {/* Back button */}
-        <Link
-          to="/news"
-          className="inline-block mb-6 text-blue-600 font-medium hover:underline"
-        >
-          ← Back to News
-        </Link>
-
+      <div className="container mx-auto px-4 pt-16 pb-16">
         {/* Title */}
         <h1 className="text-3xl font-extrabold text-gray-900 mb-4">
           {news.title}

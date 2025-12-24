@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 import HomeLogo from "../assets/images/Svr_logo.png";
 import AwayLogo from "../assets/images/Johor.png";
 import Header from "../components/Header";
@@ -37,7 +38,7 @@ const resultsData = [
     homeLogo: HomeLogo,
     awayLogo: AwayLogo,
   },
-   {
+  {
     id: 4,
     homeTeam: "Preah Khan Reach Svay Rieng FC",
     awayTeam: "Johor Darul Ta'zim FC",
@@ -67,7 +68,7 @@ const resultsData = [
     homeLogo: HomeLogo,
     awayLogo: AwayLogo,
   },
-   {
+  {
     id: 7,
     homeTeam: "Preah Khan Reach Svay Rieng FC",
     awayTeam: "Johor Darul Ta'zim FC",
@@ -102,6 +103,7 @@ const resultsData = [
 const ResultsPage = () => {
   const [visibleCount, setVisibleCount] = useState(6);
   const [openMatchId, setOpenMatchId] = useState(null);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -123,15 +125,11 @@ const ResultsPage = () => {
         </div>
 
         {/* RESULTS LIST */}
-        <div className="max-w-6xl mx-auto px-4 space-y-5">
+        <div className="container mx-auto px-4 pb-16 space-y-6">
           {resultsData.slice(0, visibleCount).map((match) => (
             <div
               key={match.id}
-              onClick={() =>
-                setOpenMatchId(
-                  openMatchId === match.id ? null : match.id
-                )
-              }
+              onClick={() => navigate(`/results/${match.id}`)}
               className="bg-blue-50 hover:bg-blue-100 transition rounded-xl shadow cursor-pointer"
             >
               {/* MAIN ROW */}
@@ -159,49 +157,12 @@ const ResultsPage = () => {
                   </span>
                 </div>
               </div>
-
-              {/* EXPANDED DETAILS */}
-              {openMatchId === match.id && (
-                <div className="bg-white border-t px-6 lg:px-10 py-6 animate-fadeIn">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Match Date
-                      </p>
-                      <p>{match.date}</p>
-                    </div>
-
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Stadium
-                      </p>
-                      <p>{match.stadium}</p>
-                    </div>
-
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Competition
-                      </p>
-                      <p>Asean Club Championship Shopee Cup</p>
-                    </div>
-
-                    <div>
-                      <p className="font-semibold text-gray-900 mb-1">
-                        Status
-                      </p>
-                      <p className="text-green-600 font-semibold">
-                        Full Time
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
 
           {/* LOAD MORE */}
           {visibleCount < resultsData.length && (
-            <div className="flex justify-start pt-10">
+            <div className="flex justify-center mt-14 pb-20">
               <button
                 onClick={() => setVisibleCount(visibleCount + 5)}
                 className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"

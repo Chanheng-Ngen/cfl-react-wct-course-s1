@@ -114,42 +114,43 @@ const NewsPage = () => {
       />
 
       {/* NEWS LIST */}
-      <div className="w-full min-h-screen bg-white pt-10">
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 px-4 sm:px-6 lg:px-8 pb-16">
-          {newsData.slice(0, visibleCount).map((item) => (
-            <div
-              key={item.id}
-              className="w-full bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-2xl transition"
-            >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-56 sm:h-64 md:h-56 lg:h-60 object-cover"
-              />
-              <div className="p-4 sm:p-5">
-                <div className="flex items-center gap-3 text-gray-500 text-sm mb-2 flex-wrap">
-                  <span>{item.author}</span>
-                  <span>{item.date}</span>
+      <div className="bg-white pt-16 min-h-screen">
+        <div className="container mx-auto px-4 pb-16">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {newsData.slice(0, visibleCount).map((item) => (
+              <div
+                key={item.id}
+                className="w-full bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-2xl transition"
+              >
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-56 sm:h-64 md:h-56 lg:h-60 object-cover"
+                />
+                <div className="p-4 sm:p-5">
+                  <div className="flex items-center gap-3 text-gray-500 text-sm mb-2 flex-wrap">
+                    <span>{item.author}</span>
+                    <span>{item.date}</span>
+                  </div>
+                  <h2 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition">
+                    {item.title}
+                  </h2>
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                    {item.description}
+                  </p>
+                  <Link
+                    to={`/news/${item.id}`}
+                    className="text-blue-600 text-sm font-medium hover:underline"
+                  >
+                    Continue Reading →
+                  </Link>
                 </div>
-                <h2 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition">
-                  {item.title}
-                </h2>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-3">
-                  {item.description}
-                </p>
-                <Link
-                  to={`/news/${item.id}`}
-                  className="text-blue-600 text-sm font-medium hover:underline"
-                >
-                  Continue Reading →
-                </Link>
               </div>
-            </div>
-          ))}
-
+            ))}
+          </div>
           {/* LOAD MORE BUTTON */}
           {visibleCount < newsData.length && (
-            <div className="w-full flex justify-start pb-20">
+            <div className="flex justify-center mt-14 pb-16">
               <button
                 onClick={() => setVisibleCount(visibleCount + 3)}
                 className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
@@ -160,7 +161,6 @@ const NewsPage = () => {
           )}
         </div>
       </div>
-
       <Footer />
     </>
   );
