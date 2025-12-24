@@ -26,7 +26,7 @@ const Home = () => {
         setIsLoading(true);
         const fromDate = '2025-12-12';
         const toDate = '2025-12-21';
-        const standingLeagueId = 493; //khmer league id 493
+        const standingLeagueId = 207; //khmer league id 493
         const topScorersLeagueId = 207;
         // fetch 
         const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
