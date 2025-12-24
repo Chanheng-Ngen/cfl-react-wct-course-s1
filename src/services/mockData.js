@@ -1,5 +1,3 @@
-// Mock data for landing page 
-// Hero banner 
 import morodok_techo_stadium from '../assets/images/morodok_techo_stadium.jpg';
 import home_team_logo from '../assets/images/Logo1.png';
 import away_team_logo from '../assets/images/Logo2.png';
@@ -118,31 +116,83 @@ const aboutData = [
 const videoHighlights = [
     {
         id: 1,
-        title: 'Best Goals of the Month',
-        thumbnail: morodok_techo_stadium,
-        duration: '8:45',
-        views: '2.3M views'
+        title: 'Cambodia Premier League Best Goals December 2024',
+        thumbnail: 'https://img.youtube.com/vi/35CgcnoH9tE/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/35CgcnoH9tE?si=UPIO7GQvNcSEHKXG',
+        duration: '12:45',
+        views: '523K views'
     },
     {
         id: 2,
-        title: 'Champions League Highlights',
-        thumbnail: morodok_techo_stadium,
-        duration: '12:30',
-        views: '4.1M views'
+        title: 'Preah Khan Reach vs Phnom Penh Crown Full Highlights',
+        thumbnail: 'https://img.youtube.com/vi/vmhi8pajk1Y/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/vmhi8pajk1Y?si=ESP3GuKbd0ATh5QQ',
+        duration: '15:20',
+        views: '892K views'
     },
     {
         id: 3,
-        title: 'Amazing Skills & Tricks',
-        thumbnail: morodok_techo_stadium,
-        duration: '6:15',
-        views: '1.8M views'
+        title: 'Top 10 Skills & Tricks in Cambodian League',
+        thumbnail: 'https://img.youtube.com/vi/Ocjwu845yMA/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/Ocjwu845yMA?si=Wwldw2DtbYIKaqls',
+        duration: '8:30',
+        views: '1.2M views'
     },
     {
         id: 4,
-        title: 'Last Match Full Highlights',
-        thumbnail: morodok_techo_stadium,
-        duration: '10:22',
-        views: '3.5M views'
+        title: 'Best Saves of the Season - CPL Goalkeepers',
+        thumbnail: 'https://img.youtube.com/vi/3f9vW2XlgXY/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/3f9vW2XlgXY?si=hmmOxCh9Ukwi203P',
+        duration: '9:40',
+        views: '445K views'
+    },
+    {
+        id: 5,
+        title: 'Visakha FC Amazing Comeback Victory',
+        thumbnail: 'https://img.youtube.com/vi/zicdchV8BOE/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/zicdchV8BOE?si=qbx1K-FcdSv0QoO2',
+        duration: '11:15',
+        views: '675K views'
+    },
+    {
+        id: 6,
+        title: 'Angkor Tiger FC Championship Celebration',
+        thumbnail: 'https://img.youtube.com/vi/PzltIjuRkyE/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/PzltIjuRkyE?si=yLO8pSoYWIQepKm6',
+        duration: '14:50',
+        views: '1.8M views'
+    },
+    {
+        id: 7,
+        title: 'AFC Cup - Cambodia Teams Best Moments',
+        thumbnail: 'https://img.youtube.com/vi/UGqUhgSjjnY/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/UGqUhgSjjnY?si=Mpw2cho1p--bXCe8',
+        duration: '16:25',
+        views: '2.1M views'
+    },
+    {
+        id: 8,
+        title: 'Young Star Player - Season Highlights',
+        thumbnail: 'https://img.youtube.com/vi/unIe6UyH66U/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/unIe6UyH66U?si=j8BgdSTrvGfjzy8o',
+        duration: '10:05',
+        views: '956K views'
+    },
+    {
+        id: 9,
+        title: 'Derby Match Atmosphere - Fans Best Moments',
+        thumbnail: 'https://img.youtube.com/vi/lH4QHVXnSok/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/lH4QHVXnSok?si=uJRBo-zFwRLiAl2_',
+        duration: '7:55',
+        views: '1.5M views'
+    },
+    {
+        id: 10,
+        title: 'Behind the Scenes - Training & Preparation',
+        thumbnail: 'https://img.youtube.com/vi/s7Ul-X9TBIs/maxresdefault.jpg',
+        videoUrl: 'https://youtu.be/s7Ul-X9TBIs?si=S7LoAPcM42hESikt',
+        duration: '13:30',
+        views: '720K views'
     }
 ];
 
@@ -157,39 +207,66 @@ const topScorers = [
 const latestNews = [
     {
         id: 1,
-        category: 'Match Report',
-        categoryColor: 'bg-blue-600',
-        title: 'Historic Victory: Team Secures Championship Title',
-        description: 'An incredible performance leads to a decisive win in the final match of the season.',
-        thumbnail: morodok_techo_stadium,
+        title: 'Preah Khan Reach Dominates in Championship Showdown',
+        description: 'PKR delivers a stunning 3-0 victory against Phnom Penh Crown in a crucial Cambodian Premier League match. The home side dominated possession from start to finish, with standout performances from their attacking trio. This victory solidifies their position at the top of the table and keeps their championship dreams alive heading into the final stretch of the season.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/694a0adf58ea7.jpg',
         timeAgo: '2 hours ago'
     },
     {
         id: 2,
-        category: 'Transfer News',
-        categoryColor: 'bg-blue-600',
-        title: 'Star Player Signs New Long-Term Contract',
-        description: 'Club announces extension keeping key player at the team through 2028.',
-        thumbnail: morodok_techo_stadium,
+        title: 'Angkor Tiger Signs International Star Player from Thailand',
+        description: 'Cambodian club makes history with a record-breaking transfer signing from the Thai League. The newly acquired midfielder brings years of international experience and is expected to strengthen the squad significantly. Club officials expressed excitement about this landmark signing, which demonstrates their ambition to compete at the highest level in Southeast Asian football competitions.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/694a0adfba976.jpg',
         timeAgo: '5 hours ago'
     },
     {
         id: 3,
-        category: 'Academy',
-        categoryColor: 'bg-blue-600',
-        title: 'Youth Academy Produces Future Stars',
-        description: 'Talented youngsters making waves in the development squad ahead of first team opportunities.',
-        thumbnail: morodok_techo_stadium,
-        timeAgo: '1 day ago'
+        title: 'Visakha FC Youth Academy Graduates Shine on National Stage',
+        description: 'Three talented young players from Visakha FC academy have earned their first call-up to the Cambodia national team after impressive performances in recent league matches. The academy continues to prove its reputation as one of the finest youth development programs in Southeast Asia, producing technically skilled players who are ready for the highest level of competition.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/694a0adfba61e.jpg',
+        timeAgo: '8 hours ago'
     },
     {
         id: 4,
-        category: 'Interview',
-        categoryColor: 'bg-blue-600',
-        title: 'Manager Discusses Tactical Evolution',
-        description: "Head coach shares insights on the team's playing style and future strategy.",
-        thumbnail: morodok_techo_stadium,
+        title: 'Boeung Ket Manager Reveals Championship Strategy',
+        description: 'In an exclusive press conference, the head coach discussed his tactical approach for the upcoming crucial matches in the intense title race. He emphasized the importance of maintaining defensive solidity while exploiting opponents\' weaknesses through quick counter-attacks. The manager also praised his squad\'s mental strength and determination to bring silverware back to the club.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/694a0adf27cf4.jpg',
+        timeAgo: '12 hours ago'
+    },
+    {
+        id: 5,
+        title: 'Morodok Techo Stadium Hosts Historic Derby Match',
+        description: 'A record-breaking attendance of 60,000 passionate fans witnessed one of the most intense derby matches in Cambodian football history at the newly renovated Morodok Techo National Stadium. The atmosphere was electric throughout the 90 minutes, with both sets of supporters creating an unforgettable spectacle. The match ended in a thrilling 2-2 draw with goals coming in the final 15 minutes.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/6948b52271453.jpg',
         timeAgo: '1 day ago'
+    },
+    {
+        id: 6,
+        title: 'Cambodia League Teams Excel in AFC Cup Competition',
+        description: 'Preah Khan Reach and Visakha FC have both successfully advanced to the knockout stages of the AFC Cup with impressive group stage performances that have put Cambodian football on the regional map. Their tactical discipline and clinical finishing have earned praise from football analysts across Asia, marking a new era for Cambodian clubs in international competitions.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/6948ba22a39bf.jpg',
+        timeAgo: '1 day ago'
+    },
+    {
+        id: 7,
+        title: 'Rising Star Breaks Goal Scoring Record in Debut Season',
+        description: 'At just 19 years old, the talented forward has become the youngest player in Cambodian Premier League history to score 15 goals in a single season. His remarkable combination of pace, technical skill, and composure in front of goal has attracted attention from scouts across Southeast Asia. The young sensation credits his success to the support of his teammates and coaches.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/692f0257aad4d.jpg',
+        timeAgo: '2 days ago'
+    },
+    {
+        id: 8,
+        title: 'Dramatic Last-Minute Winner Stuns Thousands of Fans',
+        description: 'NagaWorld FC secured an incredible comeback victory with a stunning injury-time goal that sent their supporters into wild celebrations. Trailing 2-1 with minutes remaining, the team showed tremendous character to equalize in the 88th minute before scoring the winner in the 94th minute. This victory keeps their hopes alive for a top-four finish and continental qualification.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/692eaf77df7e1.JPG',
+        timeAgo: '2 days ago'
+    },
+    {
+        id: 9,
+        title: 'Football Clubs Unite for Grassroots Development Initiative',
+        description: 'All Cambodian Premier League teams have joined forces to launch a comprehensive grassroots development program aimed at promoting youth football across Cambodia. The initiative will establish training centers in rural provinces, provide coaching education, and create opportunities for talented young players from all backgrounds. This collaborative effort demonstrates the league\'s commitment to building a sustainable future for Cambodian football.',
+        thumbnail: 'https://cpl.sgp1.cdn.digitaloceanspaces.com/posts/2/6915613a0b5c2.jpg',
+        timeAgo: '3 days ago'
     }
 ];
 

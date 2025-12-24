@@ -439,22 +439,19 @@ const Home = () => {
             <div className="lg:col-span-2">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-bold text-gray-800">Latest News</h2>
-                <a href="#" className="text-blue-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                <Link to="/news" className="text-blue-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
                   View All
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {latestNews.map((news) => (
+                {latestNews.slice(0, 4).map((news) => (
                   <div key={news.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer">
                     <div className="relative">
                       <img src={news.thumbnail} alt={news.title} className="w-full h-48 object-cover" />
-                      <span className={`absolute top-3 left-3 ${news.categoryColor} text-white px-3 py-1 rounded-full text-xs font-semibold`}>
-                        {news.category}
-                      </span>
                     </div>
                     <div className="p-5">
                       <h3 className="font-bold text-gray-800 mb-2 line-clamp-2">{news.title}</h3>
@@ -546,7 +543,7 @@ const Home = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {videoHighlights.map((video) => (
+                {videoHighlights.slice(0, 4).map((video) => (
                   <div key={video.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group cursor-pointer">
                     <div className="relative">
                       <img src={video.thumbnail} alt={video.title} className="w-full h-48 object-cover" />
@@ -619,7 +616,7 @@ const Home = () => {
             {/* Stadium Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
               <img src={heroBanner.backgroundImage} alt="Stadium" className="w-full h-[400px] object-cover" />
-              <div className="absolute bottom-6 left-6 bg-blue-600 text-white px-6 py-3 rounded-lg">
+              <div className="absolute bottom-6 left-6 bg-blue-600/90 text-white px-6 py-3 rounded-lg">
                 <div className="text-sm font-semibold">Championships</div>
                 <div className="text-3xl font-bold">{aboutData[aboutSlide].statValue}</div>
               </div>
@@ -632,7 +629,7 @@ const Home = () => {
                 spaceBetween={30}
                 slidesPerView={1}
                 autoplay={{
-                  delay: 5000,
+                  delay: 3000,
                   disableOnInteraction: false,
                 }}
                 onSwiper={(swiper) => (aboutSwiperRef.current = swiper)}
