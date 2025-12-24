@@ -171,7 +171,7 @@ export const Header = () => {
 
       {/* Main Header */}
       <header className="bg-blue-700 text-white sticky top-0 z-50">
-      <nav className="container mx-auto px-4 py-4">
+      <nav className="container mx-auto px-4 py-2">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/">

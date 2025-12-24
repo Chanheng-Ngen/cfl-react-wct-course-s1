@@ -284,95 +284,296 @@ const leagueStandings = [
 
 // Clubs
 const clubs = [
-    {
-        team_name: 'Preah Khan Reach Svay Rieng FC',
-        team_logo: 'PKR',
-        est: '2015',
-        stadium: 'Svay Rieng Stadium',
-        capacity: '5,000',
-        championships: 3
-    },
-    {
-        team_name: 'Angkor Tiger FC',
-        team_logo: 'ATF',
-        est: '2009',
-        stadium: 'RSN Stadium',
-        capacity: '5,000',
-        championships: 2
-    },
-    {
-        team_name: 'Phnom Penh Crown FC',
-        team_logo: 'PPC',
-        est: '2001',
-        stadium: 'Olympic Stadium',
-        capacity: '50,000',
-        championships: 4
-    },
-    {
-        team_name: 'Boeung Ket FC',
-        team_logo: 'BKF',
-        est: '2002',
-        stadium: 'Army Stadium',
-        capacity: '5,000',
-        championships: 1
-    },
-    {
-        team_name: 'NagaWorld FC',
-        team_logo: 'NWF',
-        est: '2009',
-        stadium: 'Olympic Stadium',
-        capacity: '50,000',
-        championships: 0
-    },
-    {
-        team_name: 'Royal Cambodian Armed Forces FC',
-        team_logo: 'RAF',
-        est: '2000',
-        stadium: 'Army Stadium',
-        capacity: '5,000',
-        championships: 1
-    },
-    {
-        team_name: 'Visakha FC',
-        team_logo: 'VIS',
-        est: '2016',
-        stadium: 'Prince Stadium',
-        capacity: '5,000',
-        championships: 2
-    },
-    {
-        name: 'Kirivong Sok Sen Chey FC',
-        team_logo: 'KSC',
-        est: '2007',
-        stadium: 'Takhmao Stadium',
-        capacity: '3,000',
-        championships: 0
-    },
-    {
-        team_name: 'MDI Kampong Dewa FC',
-        team_logo: 'MDI',
-        est: '2019',
-        stadium: 'Prince Stadium',
-        capacity: '5,000',
-        championships: 0
-    },
-    {
-        team_name: 'Asia Pacific FC',
-        team_logo: 'APF',
-        est: '2018',
-        stadium: 'Kampong Speu Stadium',
-        capacity: '3,000',
-        championships: 0
-    },
-    {
-        team_name: 'Soltilo Angkor FC',
-        team_logo: 'SAF',
-        est: '2017',
-        stadium: 'Siem Reap Stadium',
-        capacity: '10,000',
-        championships: 0
-    }
+  {
+    id: 1,
+    team_name: 'Cambodian Club 1',
+    team_logo: 'CC1',
+    est: '2003',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 2
+  },
+  {
+    id: 2,
+    team_name: 'Cambodian Club 2',
+    team_logo: 'CC2',
+    est: '2011',
+    stadium: 'Olympic Stadium',
+    capacity: '50,000',
+    championships: 4
+  },
+  {
+    id: 3,
+    team_name: 'Cambodian Club 3',
+    team_logo: 'CC3',
+    est: '2018',
+    stadium: 'Army Stadium',
+    capacity: '5,000',
+    championships: 1
+  },
+  {
+    id: 4,
+    team_name: 'Cambodian Club 4',
+    team_logo: 'CC4',
+    est: '2007',
+    stadium: 'Svay Rieng Stadium',
+    capacity: '5,000',
+    championships: 3
+  },
+  {
+    id: 5,
+    team_name: 'Cambodian Club 5',
+    team_logo: 'CC5',
+    est: '2015',
+    stadium: 'RSN Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
+  {
+    id: 6,
+    team_name: 'Cambodian Club 6',
+    team_logo: 'CC6',
+    est: '2001',
+    stadium: 'Siem Reap Stadium',
+    capacity: '10,000',
+    championships: 1
+  },
+  {
+    id: 7,
+    team_name: 'Cambodian Club 7',
+    team_logo: 'CC7',
+    est: '2019',
+    stadium: 'Takhmao Stadium',
+    capacity: '3,000',
+    championships: 0
+  },
+  {
+    id: 8,
+    team_name: 'Cambodian Club 8',
+    team_logo: 'CC8',
+    est: '2010',
+    stadium: 'Kampong Speu Stadium',
+    capacity: '3,000',
+    championships: 2
+  },
+  {
+    id: 9,
+    team_name: 'Cambodian Club 9',
+    team_logo: 'CC9',
+    est: '2005',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 5
+  },
+  {
+    id: 10,
+    team_name: 'Cambodian Club 10',
+    team_logo: 'CC10',
+    est: '2016',
+    stadium: 'Olympic Stadium',
+    capacity: '50,000',
+    championships: 3
+  },
+  {
+    id: 11,
+    team_name: 'Cambodian Club 11',
+    team_logo: 'CC11',
+    est: '2009',
+    stadium: 'Army Stadium',
+    capacity: '5,000',
+    championships: 1
+  },
+  {
+    id: 12,
+    team_name: 'Cambodian Club 12',
+    team_logo: 'CC12',
+    est: '2012',
+    stadium: 'Svay Rieng Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
+  {
+    id: 13,
+    team_name: 'Cambodian Club 13',
+    team_logo: 'CC13',
+    est: '2004',
+    stadium: 'RSN Stadium',
+    capacity: '5,000',
+    championships: 2
+  },
+  {
+    id: 14,
+    team_name: 'Cambodian Club 14',
+    team_logo: 'CC14',
+    est: '2017',
+    stadium: 'Siem Reap Stadium',
+    capacity: '10,000',
+    championships: 1
+  },
+  {
+    id: 15,
+    team_name: 'Cambodian Club 15',
+    team_logo: 'CC15',
+    est: '2020',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
+  {
+    id: 16,
+    team_name: 'Cambodian Club 16',
+    team_logo: 'CC16',
+    est: '2008',
+    stadium: 'Olympic Stadium',
+    capacity: '50,000',
+    championships: 4
+  },
+  {
+    id: 17,
+    team_name: 'Cambodian Club 17',
+    team_logo: 'CC17',
+    est: '2006',
+    stadium: 'Army Stadium',
+    capacity: '5,000',
+    championships: 2
+  },
+  {
+    id: 18,
+    team_name: 'Cambodian Club 18',
+    team_logo: 'CC18',
+    est: '2014',
+    stadium: 'Takhmao Stadium',
+    capacity: '3,000',
+    championships: 0
+  },
+  {
+    id: 19,
+    team_name: 'Cambodian Club 19',
+    team_logo: 'CC19',
+    est: '2002',
+    stadium: 'Kampong Speu Stadium',
+    capacity: '3,000',
+    championships: 1
+  },
+  {
+    id: 20,
+    team_name: 'Cambodian Club 20',
+    team_logo: 'CC20',
+    est: '2013',
+    stadium: 'Svay Rieng Stadium',
+    capacity: '5,000',
+    championships: 3
+  },
+  {
+    id: 21,
+    team_name: 'Cambodian Club 21',
+    team_logo: 'CC21',
+    est: '2018',
+    stadium: 'RSN Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
+  {
+    id: 22,
+    team_name: 'Cambodian Club 22',
+    team_logo: 'CC22',
+    est: '2000',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 5
+  },
+  {
+    id: 23,
+    team_name: 'Cambodian Club 23',
+    team_logo: 'CC23',
+    est: '2007',
+    stadium: 'Siem Reap Stadium',
+    capacity: '10,000',
+    championships: 1
+  },
+  {
+    id: 24,
+    team_name: 'Cambodian Club 24',
+    team_logo: 'CC24',
+    est: '2011',
+    stadium: 'Olympic Stadium',
+    capacity: '50,000',
+    championships: 2
+  },
+  {
+    id: 25,
+    team_name: 'Cambodian Club 25',
+    team_logo: 'CC25',
+    est: '2019',
+    stadium: 'Army Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
+  {
+    id: 26,
+    team_name: 'Cambodian Club 26',
+    team_logo: 'CC26',
+    est: '2005',
+    stadium: 'Svay Rieng Stadium',
+    capacity: '5,000',
+    championships: 3
+  },
+  {
+    id: 27,
+    team_name: 'Cambodian Club 27',
+    team_logo: 'CC27',
+    est: '2016',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 2
+  },
+  {
+    id: 28,
+    team_name: 'Cambodian Club 1',
+    team_logo: 'CC1',
+    est: '2003',
+    stadium: 'Prince Stadium',
+    capacity: '5,000',
+    championships: 2
+  },
+  {
+    id: 29,
+    team_name: 'Cambodian Club 2',
+    team_logo: 'CC2',
+    est: '2011',
+    stadium: 'Olympic Stadium',
+    capacity: '50,000',
+    championships: 4
+  },
+  {
+    id: 30,
+    team_name: 'Cambodian Club 3',
+    team_logo: 'CC3',
+    est: '2018',
+    stadium: 'Army Stadium',
+    capacity: '5,000',
+    championships: 1
+  },
+  {
+    id: 31,
+    team_name: 'Cambodian Club 4',
+    team_logo: 'CC4',
+    est: '2007',
+    stadium: 'Svay Rieng Stadium',
+    capacity: '5,000',
+    championships: 3
+  },
+  {
+    id: 32,
+    team_name: 'Cambodian Club 5',
+    team_logo: 'CC5',
+    est: '2015',
+    stadium: 'RSN Stadium',
+    capacity: '5,000',
+    championships: 0
+  },
 ];
+
 
 export { 
     heroBanner,

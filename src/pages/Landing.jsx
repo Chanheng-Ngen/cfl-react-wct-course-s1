@@ -18,25 +18,24 @@ const Home = () => {
   const [standings, setStandings] = useState([]);
   const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
-  const aboutSwiperRef = useRef(null); // Add this ref for About section
+  const aboutSwiperRef = useRef(null); 
 
-  // Fetch fixtures 
   useEffect(() => {
     const landingFetch = async () => {
       try {
         setIsLoading(true);
         const fromDate = '2025-12-12';
         const toDate = '2025-12-21';
-        const standingLeagueId = 207; //khmer league id 493
-        const topScorersLeagueId = 207;
+        const standingLeagueId = 152; //khmer league id 493
+        const topScorersLeagueId = 152;
         // fetch 
         const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
         const getStandingsData = await footballApi.getStandings(standingLeagueId);
         const getTopScorersData = await footballApi.getTopScorers(topScorersLeagueId);
         // debug
-        console.log('Fixtures data:', getFixturesData);
-        console.log('Standings data:', getStandingsData);
-        console.log('Top Scorers data:', getTopScorersData);
+        // console.log('Fixtures data:', getFixturesData);
+        // console.log('Standings data:', getStandingsData);
+        // console.log('Top Scorers data:', getTopScorersData);
 
         if (getFixturesData && getFixturesData.result.length > 0) {
           const transformedMatches = getFixturesData.result.slice(0, 6).map((match, index) => ({
