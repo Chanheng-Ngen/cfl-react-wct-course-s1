@@ -204,4 +204,105 @@ const leagueStandings = [
     { rank: 7, team: 'Newcastle', played: 12, points: 21, team_logo: home_team_logo, trend: 'down' },
     { rank: 8, team: 'Brighton', played: 12, points: 19, team_logo: home_team_logo, trend: 'up' }
 ];
-export { heroBanner, aboutData, videoHighlights, topScorers, latestNews, leagueStandings, upcomingMatches };
+
+// Clubs
+const clubs = [
+    {
+        team_name: 'Preah Khan Reach Svay Rieng FC',
+        team_logo: 'PKR',
+        est: '2015',
+        stadium: 'Svay Rieng Stadium',
+        capacity: '5,000',
+        championships: 3
+    },
+    {
+        team_name: 'Angkor Tiger FC',
+        team_logo: 'ATF',
+        est: '2009',
+        stadium: 'RSN Stadium',
+        capacity: '5,000',
+        championships: 2
+    },
+    {
+        team_name: 'Phnom Penh Crown FC',
+        team_logo: 'PPC',
+        est: '2001',
+        stadium: 'Olympic Stadium',
+        capacity: '50,000',
+        championships: 4
+    },
+    {
+        team_name: 'Boeung Ket FC',
+        team_logo: 'BKF',
+        est: '2002',
+        stadium: 'Army Stadium',
+        capacity: '5,000',
+        championships: 1
+    },
+    {
+        team_name: 'NagaWorld FC',
+        team_logo: 'NWF',
+        est: '2009',
+        stadium: 'Olympic Stadium',
+        capacity: '50,000',
+        championships: 0
+    },
+    {
+        team_name: 'Royal Cambodian Armed Forces FC',
+        team_logo: 'RAF',
+        est: '2000',
+        stadium: 'Army Stadium',
+        capacity: '5,000',
+        championships: 1
+    },
+    {
+        team_name: 'Visakha FC',
+        team_logo: 'VIS',
+        est: '2016',
+        stadium: 'Prince Stadium',
+        capacity: '5,000',
+        championships: 2
+    },
+    {
+        name: 'Kirivong Sok Sen Chey FC',
+        team_logo: 'KSC',
+        est: '2007',
+        stadium: 'Takhmao Stadium',
+        capacity: '3,000',
+        championships: 0
+    },
+    {
+        team_name: 'MDI Kampong Dewa FC',
+        team_logo: 'MDI',
+        est: '2019',
+        stadium: 'Prince Stadium',
+        capacity: '5,000',
+        championships: 0
+    },
+    {
+        team_name: 'Asia Pacific FC',
+        team_logo: 'APF',
+        est: '2018',
+        stadium: 'Kampong Speu Stadium',
+        capacity: '3,000',
+        championships: 0
+    },
+    {
+        team_name: 'Soltilo Angkor FC',
+        team_logo: 'SAF',
+        est: '2017',
+        stadium: 'Siem Reap Stadium',
+        capacity: '10,000',
+        championships: 0
+    }
+];
+
+export { 
+    heroBanner,
+    aboutData, 
+    videoHighlights, 
+    topScorers, 
+    latestNews, 
+    leagueStandings, 
+    upcomingMatches,
+    clubs };

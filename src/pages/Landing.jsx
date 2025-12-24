@@ -21,16 +21,17 @@ const Home = () => {
 
   // Fetch fixtures 
   useEffect(() => {
-    const fetchFixtures = async () => {
+    const landingFetch = async () => {
       try {
         setIsLoading(true);
         const fromDate = '2025-12-12';
         const toDate = '2025-12-21';
-        const standingLeagueId = 207; 
+        const standingLeagueId = 493; //khmer league id 493
+        const topScorersLeagueId = 207;
         // fetch 
         const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
         const getStandingsData = await footballApi.getStandings(standingLeagueId);
-        const getTopScorersData = await footballApi.getTopScorers(standingLeagueId);
+        const getTopScorersData = await footballApi.getTopScorers(topScorersLeagueId);
         // debug
         console.log('Fixtures data:', getFixturesData);
         console.log('Standings data:', getStandingsData);
@@ -101,7 +102,7 @@ const Home = () => {
       }
     };
 
-    fetchFixtures();
+    landingFetch();
   }, []);
 
   // Skeleton 

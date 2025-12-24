@@ -35,5 +35,16 @@ export const footballApi = {
       console.error('Error details:', error.response?.data);
       throw error;
     }
+  },
+  getTeams: async (teamId) => {
+    try {
+      const url = `${BASE_URL}?met=Teams&teamId=${teamId}&APIkey=${API_KEY}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Teams Error:', error);
+      console.error('Error details:', error.response?.data);
+      throw error;
+    }
   }
 };
