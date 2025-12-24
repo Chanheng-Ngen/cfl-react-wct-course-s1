@@ -18,6 +18,7 @@ const Home = () => {
   const [standings, setStandings] = useState([]);
   const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
+  const aboutSwiperRef = useRef(null); // Add this ref for About section
 
   // Fetch fixtures 
   useEffect(() => {
@@ -624,27 +625,49 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Content */}
+            {/* Content with Swiper */}
             <div className="space-y-6">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl">
-                  {aboutData[aboutSlide].icon}
-                </div>
-                <h3 className="text-2xl font-bold text-gray-800">{aboutData[aboutSlide].title}</h3>
-              </div>
+              <Swiper
+                modules={[Navigation, Pagination, Autoplay]}
+                spaceBetween={30}
+                slidesPerView={1}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false,
+                }}
+                onSwiper={(swiper) => (aboutSwiperRef.current = swiper)}
+                onSlideChange={(swiper) => setAboutSlide(swiper.activeIndex)}
+              >
+                {aboutData.map((item, index) => (
+                  <SwiperSlide key={index}>
+                    <div className="space-y-6">
+                      <div className="flex items-center gap-4 mb-6">
+                        <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-3xl">
+                          {item.icon}
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-800">{item.title}</h3>
+                      </div>
 
-              <p className="text-gray-600 leading-relaxed text-lg">
-                {aboutData[aboutSlide].description}
-              </p>
+                      <p className="text-gray-600 leading-relaxed text-lg">
+                        {item.description}
+                      </p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
 
               {/* Navigation Dots */}
               <div className="flex gap-3 pt-4">
                 {aboutData.map((_, index) => (
                   <button
                     key={index}
-                    onClick={() => setAboutSlide(index)}
-                    className={`h-2 rounded-full transition-all ${aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
-                      }`}
+                    onClick={() => {
+                      setAboutSlide(index);
+                      aboutSwiperRef.current?.slideTo(index);
+                    }}
+                    className={`h-2 rounded-full transition-all ${
+                      aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
+                    }`}
                   />
                 ))}
               </div>
@@ -652,7 +675,7 @@ const Home = () => {
               {/* Navigation Arrows */}
               <div className="flex gap-3 pt-4">
                 <button
-                  onClick={() => setAboutSlide((prev) => (prev === 0 ? aboutData.length - 1 : prev - 1))}
+                  onClick={() => aboutSwiperRef.current?.slidePrev()}
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
                 >
                   <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -660,7 +683,7 @@ const Home = () => {
                   </svg>
                 </button>
                 <button
-                  onClick={() => setAboutSlide((prev) => (prev === aboutData.length - 1 ? 0 : prev + 1))}
+                  onClick={() => aboutSwiperRef.current?.slideNext()}
                   className="p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
                 >
                   <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
