@@ -9,6 +9,7 @@ import FixturesDetailPage from '../pages/FixtureDetailPage.jsx'
 import NewsDetailPage from '../pages/NewsDetailPage.jsx'
 import News from '../pages/NewsPage.jsx'
 import Results from'../pages/ResultsPage.jsx'
+import ResultDetailPage from "../pages/ResultDetailPage";
 import Videos from '../pages/VideosPage.jsx'
 import Club from '../pages/Club.jsx'
 import StatOne from '../pages/StatOne.jsx'
@@ -38,9 +39,10 @@ export function RoutesApp() {
           <Route path="/fixtures" element={<Fixtures />} />
           <Route path="/fixtures/:id" element={<FixturesDetailPage />} />
           <Route path="/news" element={<News />} />
-          <Route path="/news/:id" element={<NewsDetailPage />} />
+          <Route path="/news/:id" element={<NewsDetailPage />} />        
           <Route path="/videos" element={<Videos />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/results/:id" element={<ResultDetailPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/club" element={<Club />} />
           <Route path="/stat-one" element={<StatOne />} />

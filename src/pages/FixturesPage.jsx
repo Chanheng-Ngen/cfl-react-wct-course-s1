@@ -134,7 +134,7 @@ const FixturesPage = () => {
         background={FixturesHero}
       />
 
-      <div className="max-w-6xl mx-auto px-4 py-12 space-y-6">
+      <div className="container mx-auto px-4 pt-16 pb-16 space-y-6">
         {fixturesData.slice(0, visibleCount).map((match) => (
           <div
             key={match.id}
@@ -199,7 +199,7 @@ const FixturesPage = () => {
         ))}
         {/* LOAD MORE BUTTON */}
         {visibleCount < fixturesData.length && (
-          <div className="w-full flex justify-start pb-20">
+          <div className="flex justify-center mt-14 pb-20">
             <button
               onClick={() => setVisibleCount(visibleCount + 3)}
               className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
