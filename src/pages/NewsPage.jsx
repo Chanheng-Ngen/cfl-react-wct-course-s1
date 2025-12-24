@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
 import NewsImg1 from "../assets/images/cfl.jpg";
 import NewsHero from "../assets/images/NewsBanner.jpg";
+import { Link } from "react-router";
 
 const newsData = [
   {
@@ -16,7 +17,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 2,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -25,7 +26,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 3,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -34,7 +35,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 4,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -43,7 +44,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 5,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -52,7 +53,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 6,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -61,7 +62,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 7,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -70,7 +71,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 8,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -79,7 +80,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 9,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -88,7 +89,7 @@ const newsData = [
       "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
   },
   {
-    id: 1,
+    id: 10,
     image: NewsImg1,
     title: "Cambodian Development League Has Reached Week 5",
     date: "12 Nov 2025 04:37",
@@ -136,17 +137,17 @@ const NewsPage = () => {
                 <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                   {item.description}
                 </p>
-                <a
-                  href="#"
+                <Link
+                  to={`/news/${item.id}`}
                   className="text-blue-600 text-sm font-medium hover:underline"
                 >
                   Continue Reading →
-                </a>
+                </Link>
               </div>
             </div>
           ))}
 
-          {/* LOAD MORE BUTTON (LEFT, LIKE YOU WANT) */}
+          {/* LOAD MORE BUTTON */}
           {visibleCount < newsData.length && (
             <div className="w-full flex justify-start pb-20">
               <button

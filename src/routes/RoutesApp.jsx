@@ -5,6 +5,8 @@ import ForgetPassword from '../pages/ForgetPassword.jsx'
 import UserProfile from '../pages/UserProfile.jsx'
 import AdminDashboard from '../pages/admin/AdminDashboard.jsx'
 import Fixtures from '../pages/FixturesPage.jsx'
+import FixturesDetailPage from '../pages/FixtureDetailPage.jsx'
+import NewsDetailPage from '../pages/NewsDetailPage.jsx'
 import News from '../pages/NewsPage.jsx'
 import Results from'../pages/ResultsPage.jsx'
 import Videos from '../pages/VideosPage.jsx'
@@ -34,7 +36,9 @@ export function RoutesApp() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user-profile" element={<UserProfile />} /> 
           <Route path="/fixtures" element={<Fixtures />} />
+          <Route path="/fixtures/:id" element={<FixturesDetailPage />} />
           <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetailPage />} />
           <Route path="/videos" element={<Videos />} />
           <Route path="/results" element={<Results />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
