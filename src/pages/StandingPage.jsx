@@ -1,21 +1,58 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { footballApi } from '../services/API';
+
+const StandingRowLoader = () => (
+  <ContentLoader
+    speed={2}
+    width="100%"
+    height={60}
+    backgroundColor="#f3f4f6"
+    foregroundColor="#e5e7eb"
+  >
+    <rect x="0" y="15" rx="4" ry="4" width="100%" height="30" />
+  </ContentLoader>
+);
 
 const LeagueStandings = () => {
-  const standings = [
-    { pos: 1, club: 'Preah Khan Reach Svay Rieng FC', played: 16, won: 11, drawn: 3, lost: 2, gf: 30, ga: 10, gd: 20, pts: 36, form: ['W', 'W', 'W', 'W', 'W'], next: 'Angkor Tiger FC' },
-    { pos: 2, club: 'Angkor Tiger FC', played: 16, won: 11, drawn: 1, lost: 4, gf: 38, ga: 16, gd: 22, pts: 34, form: ['W', 'W', 'W', 'W', 'W'], next: 'Phnom Penh Crown FC' },
-    { pos: 3, club: 'Phnom Penh Crown FC', played: 16, won: 10, drawn: 3, lost: 3, gf: 25, ga: 17, gd: 8, pts: 33, form: ['W', 'W', 'W', 'W', 'W'], next: 'Boeung Ket FC' },
-    { pos: 4, club: 'Boeung Ket FC', played: 16, won: 8, drawn: 4, lost: 4, gf: 27, ga: 15, gd: 12, pts: 28, form: ['W', 'W', 'D', 'D', 'W'], next: 'Visakha FC' },
-    { pos: 5, club: 'NagaWorld FC', played: 16, won: 7, drawn: 5, lost: 4, gf: 20, ga: 15, gd: 5, pts: 26, form: ['W', 'W', 'W', 'W', 'L'], next: 'Asia Pacific FC' },
-    { pos: 6, club: 'Royal Cambodian Armed Forces FC', played: 16, won: 8, drawn: 2, lost: 6, gf: 26, ga: 24, gd: 2, pts: 26, form: ['W', 'W', 'D', 'D', 'W'], next: 'Preah Khan Reach FC' },
-    { pos: 7, club: 'Visakha FC', played: 16, won: 7, drawn: 5, lost: 4, gf: 19, ga: 17, gd: 2, pts: 26, form: ['W', 'W', 'D', 'D', 'W'], next: 'Boeung Ket FC' },
-    { pos: 8, club: 'Kirivong Sok Sen Chey FC', played: 16, won: 7, drawn: 4, lost: 5, gf: 26, ga: 22, gd: 4, pts: 25, form: ['W', 'W', 'W', 'D', 'W'], next: 'MDI Kampong Dewa FC' },
-    { pos: 9, club: 'MDI Kampong Dewa FC', played: 15, won: 7, drawn: 4, lost: 4, gf: 26, ga: 22, gd: 4, pts: 25, form: ['W', 'W', 'W', 'D', 'W'], next: 'Kirivong FC' },
-    { pos: 10, club: 'Asia Pacific FC', played: 15, won: 3, drawn: 2, lost: 10, gf: 14, ga: 28, gd: -14, pts: 11, form: ['L', 'L', 'L', 'D', 'L'], next: 'NagaWorld FC' },
-    { pos: 11, club: 'Soltilo Angkor FC', played: 16, won: 2, drawn: 3, lost: 11, gf: 12, ga: 35, gd: -23, pts: 9, form: ['L', 'L', 'D', 'L', 'L'], next: 'Royal Armed Forces FC' }
-  ];
+  const [standings, setStandings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const LEAGUE_ID = 152;
+
+  useEffect(() => {
+    const fetchStandings = async () => {
+      try {
+        setLoading(true);
+        const response = await footballApi.getStandings(LEAGUE_ID);
+        console.log(response.result);
+        if (response?.result?.total) {
+          const transformedStandings = response.result.total.map((team, index) => ({
+            pos: team.standing_place || index + 1,
+            logo: team.team_logo,
+            club: team.standing_team || `Team ${index + 1}`,
+            played: team.standing_P || 0,
+            won: team.standing_W || 0,
+            drawn: team.standing_D || 0,
+            lost: team.standing_L || 0,
+            gf: team.standing_GF || 0,
+            ga: team.standing_GA || 0,
+            gd: (team.standing_GF || 0) - (team.standing_GA || 0),
+            pts: team.standing_PTS || 0,
+            form: team.team_form?.split(',').slice(-5) || ['D', 'D', 'D', 'D', 'D'],
+          }));
+          setStandings(transformedStandings);
+        } 
+      } catch (error) {
+        console.error('Error fetching standings:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStandings();
+  }, []);
 
   const getFormColor = (result) => {
     if (result === 'W') return 'bg-green-500';
@@ -27,15 +64,6 @@ const LeagueStandings = () => {
     if (gd > 0) return 'text-green-600';
     if (gd < 0) return 'text-red-600';
     return 'text-gray-700';
-  };
-
-  const getTeamColor = (index) => {
-    const colors = [
-      'bg-red-500', 'bg-blue-400', 'bg-blue-300', 'bg-blue-600',
-      'bg-blue-700', 'bg-red-600', 'bg-red-600', 'bg-red-500',
-      'bg-purple-400', 'bg-teal-400', 'bg-orange-400'
-    ];
-    return colors[index];
   };
 
   return (
@@ -50,10 +78,10 @@ const LeagueStandings = () => {
         </div>
 
         {/* Table Card */}
-        <div className="bg-white rounded-xl shadow-md overflow-hidden">
+        <div className="bg-white rounded-xl shadow-md overflow-x-auto">
           {/* Table Header */}
-          <div className="bg-white border-b-2 border-gray-200">
-            <div className="grid grid-cols-[50px_minmax(220px,1fr)_repeat(8,70px)_180px_120px] gap-3 px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <div className="bg-white border-b-2 border-gray-200 min-w-[1000px]">
+            <div className="grid grid-cols-[50px_minmax(200px,1fr)_repeat(8,60px)_150px] gap-2 md:gap-3 px-4 md:px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               <div className="text-center">Pos</div>
               <div>Team</div>
               <div className="text-center">Pl</div>
@@ -65,16 +93,31 @@ const LeagueStandings = () => {
               <div className="text-center">GD</div>
               <div className="text-center">Pts</div>
               <div className="text-center">Form</div>
-              <div className="text-center">Next</div>
             </div>
           </div>
 
           {/* Table Body */}
-          <div className="divide-y divide-gray-100">
-            {standings.map((team, idx) => (
+          <div className="divide-y divide-gray-100 min-w-[1000px]">
+            {loading ? (
+              <>
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+                <StandingRowLoader />
+              </>
+            ) : standings.length === 0 ? (
+              <div className="text-center py-20 text-gray-500">
+                <p className="text-xl">No standings data available</p>
+              </div>
+            ) : (
+              standings.map((team, idx) => (
               <div
                 key={idx}
-                className="grid grid-cols-[50px_minmax(220px,1fr)_repeat(8,70px)_180px_120px] gap-3 px-6 py-4 hover:bg-gray-50 transition-colors"
+                className="grid grid-cols-[50px_minmax(200px,1fr)_repeat(8,60px)_150px] gap-2 md:gap-3 px-4 md:px-6 py-4 hover:bg-gray-50 transition-colors"
               >
                 {/* Position */}
                 <div className="flex items-center justify-center">
@@ -82,11 +125,11 @@ const LeagueStandings = () => {
                 </div>
 
                 {/* Club */}
-                <div className="flex items-center gap-3">
-                  <div className={`w-9 h-9 ${getTeamColor(idx)} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm flex-shrink-0`}>
-                    {team.club.substring(0, 3).toUpperCase()}
+                <div className="flex items-center gap-2 md:gap-3">
+                  <div className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm shrink-0`}>
+                    <img src={team.logo} alt={team.club} className="w-5 h-5 md:w-6 md:h-6 object-contain" />
                   </div>
-                  <span className="text-sm font-medium text-gray-800 truncate">{team.club}</span>
+                  <span className="text-xs md:text-sm font-medium text-gray-800 truncate">{team.club}</span>
                 </div>
 
                 {/* Stats */}
@@ -106,30 +149,23 @@ const LeagueStandings = () => {
                 </div>
 
                 {/* Form */}
-                <div className="flex items-center justify-center gap-1">
+                <div className="flex items-center justify-center gap-0.5 md:gap-1">
                   {team.form.map((result, i) => (
                     <div
                       key={i}
-                      className={`w-7 h-7 ${getFormColor(result)} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm`}
+                      className={`w-6 h-6 md:w-7 md:h-7 ${getFormColor(result)} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm`}
                     >
                       {result}
                     </div>
                   ))}
                 </div>
-
-                {/* Next */}
-                <div className="flex items-center justify-center">
-                  <div className={`w-9 h-9 ${getTeamColor((idx + 1) % 11)} rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm`}>
-                    {team.next.substring(0, 3).toUpperCase()}
-                  </div>
-                </div>
               </div>
-            ))}
+            ))
+            )}
           </div>
         </div>
-
         {/* Legend */}
-        <div className="mt-6 flex items-center justify-center gap-8 text-sm">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-xs md:text-sm">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm">W</div>
             <span className="text-gray-600 font-medium">Win</span>

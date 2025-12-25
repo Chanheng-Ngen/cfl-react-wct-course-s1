@@ -4,7 +4,7 @@ import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { heroBanner, upcomingMatches , aboutData, videoHighlights, topScorers, latestNews, leagueStandings } from '../services/mockData';
+import { heroBanner, upcomingMatches, aboutData, videoHighlights, topScorers, latestNews, leagueStandings } from '../services/mockData';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -18,7 +18,7 @@ const Home = () => {
   const [standings, setStandings] = useState([]);
   const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
-  const aboutSwiperRef = useRef(null); 
+  const aboutSwiperRef = useRef(null);
 
   useEffect(() => {
     const landingFetch = async () => {
@@ -63,7 +63,7 @@ const Home = () => {
         else {
           throw new Error('Not found fixtures data');
         }
-        if(getStandingsData && getStandingsData.result.total.length > 0) {
+        if (getStandingsData && getStandingsData.result.total.length > 0) {
           const transformStandings = getStandingsData.result.total.slice(0, 8).map((team, index) => ({
             id: team.standing_team_id || index + 1,
             rank: team.standing_place,
@@ -78,7 +78,7 @@ const Home = () => {
         else {
           throw new Error('Not found standings data');
         }
-        if(getTopScorersData && getTopScorersData.result.length > 0) {
+        if (getTopScorersData && getTopScorersData.result.length > 0) {
           const transformTopScorers = getTopScorersData.result.slice(0, 7).map((player, index) => ({
             id: index + 1,
             rank: player.player_place,
@@ -515,9 +515,9 @@ const Home = () => {
                   ))}
                 </div>
                 <Link to='/standing'>
-                <button className="w-full mt-6 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition">
-                  View Full Standing
-                </button>
+                  <button className="w-full mt-6 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-600 hover:text-white transition">
+                    View Full Standing
+                  </button>
                 </Link>
               </div>
             </div>
@@ -572,31 +572,31 @@ const Home = () => {
               </div>
             </div>
             {/* Top Scorers */}
-              <div className="bg-blue-800 rounded-xl p-6 text-white">
-                <h3 className="text-xl font-bold mb-6">Top Scorers</h3>
-                <div className="space-y-4">
-                  {(topScorerList.length > 0 ? topScorerList : topScorers).map((player) => (
-                    <div key={player.id} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
-                      <div className="text-white font-bold w-6 text-center">
-                        {player.rank}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold">{player.name}</div>
-                        <div className="text-sm text-gray-400">{player.team}</div>
-                      </div>
-                      <div className="text-right">
-                        <div className="font-bold text-lg">{player.goals} goals</div>
-                        <div className="text-sm text-gray-400">{player.assists} assists</div>
-                      </div>
+            <div className="bg-blue-800 rounded-xl p-6 text-white">
+              <h3 className="text-xl font-bold mb-6">Top Scorers</h3>
+              <div className="space-y-4">
+                {(topScorerList.length > 0 ? topScorerList : topScorers).map((player) => (
+                  <div key={player.id} className="flex items-center gap-4 p-3 bg-white/5 rounded-lg hover:bg-white/10 transition">
+                    <div className="text-white font-bold w-6 text-center">
+                      {player.rank}
                     </div>
-                  ))}
-                </div>
-                <Link to='/'>
+                    <div className="flex-1">
+                      <div className="font-semibold">{player.name}</div>
+                      <div className="text-sm text-gray-400">{player.team}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-lg">{player.goals} goals</div>
+                      <div className="text-sm text-gray-400">{player.assists} assists</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Link to='/'>
                 <button className="w-full mt-6 py-3 border  text-white font-semibold rounded-lg hover:bg-gray-700 hover:border-none transition">
                   View Full Top List
                 </button>
-                </Link>
-              </div>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -661,9 +661,8 @@ const Home = () => {
                       setAboutSlide(index);
                       aboutSwiperRef.current?.slideTo(index);
                     }}
-                    className={`h-2 rounded-full transition-all ${
-                      aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
-                    }`}
+                    className={`h-2 rounded-full transition-all ${aboutSlide === index ? 'bg-blue-600 w-12' : 'bg-gray-300 w-2'
+                      }`}
                   />
                 ))}
               </div>
