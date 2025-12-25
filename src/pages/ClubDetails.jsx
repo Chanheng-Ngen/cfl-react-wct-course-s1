@@ -1,10 +1,11 @@
-import React from 'react';
 import { Calendar, MapPin, ChevronRight, ArrowLeft } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
-import { Link } from 'react-router';
+import { Link, useParams} from 'react-router';
 
-const App = () => {
+const ClubDetails = () => {
+  const { id } = useParams();
+  console.log("id:", id);
   return (
     <>
     <Header />
@@ -271,4 +272,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default ClubDetails;

@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
 import { auth } from '../firebase/firebaseClient';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import CFLLogo from '../assets/images/CFL-title-icon.png';
 import './Header.css';
 
 export const Header = () => {
@@ -176,7 +177,7 @@ export const Header = () => {
           {/* Logo */}
           <Link to="/">
           <div className="flex items-center gap-3">
-            <img src="CFL-title-icon.png" alt="CFL Logo" className="h-16 w-16"/>
+            <img src={CFLLogo} alt="CFL Logo" className="h-16 w-16"/>
           </div>
           </Link>
 

@@ -44,11 +44,11 @@ export function RoutesApp() {
           <Route path="/results" element={<Results />} />
           <Route path="/results/:id" element={<ResultDetailPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/club" element={<Club />} />
           <Route path="/stat-one" element={<StatOne />} />
           <Route path="/standing" element={<StandingPage />} />
           <Route path="/about-us" element={<AboutUs />} />
-          <Route path="/club-details" element={<ClubDetails />} />
+          <Route path="/club" element={<Club />} />
+          <Route path="/club/:id" element={<ClubDetails />} />
           <Route path="/last-starting" element={<LastStarting  />} />
           <Route path="/coach-and-squad" element={<CoachPlayers />} />
           <Route path="/legend-players" element={<LegendPlayers />} />

@@ -26,27 +26,11 @@ function ClubsShowcase() {
           setLoading(false);
           return;
         }
-
-        console.log(standingsData);
-        const teamIds = standingsData.result.total.map(team => team.team_key);
-  
-        // Fetch all teams
-        const allTeamsData = [];
-        for (const teamId of teamIds) {
-          try {
-            const teamData = await footballApi.getTeams(teamId);
-            if (teamData?.result) {
-              allTeamsData.push(...teamData.result);
-            }
-          } catch (error) {
-            console.error(`Failed to fetch team ${teamId}:`, error);
-          }
-        }
-
         // Format teams
-        const formattedTeams = allTeamsData.map((team, index) => ({
-          id: team.team_key || `team-${index}`,
-          team_name: team.team_name || 'Unknown',
+        console.log(standingsData.result.total);
+        const formattedTeams = standingsData.result.total.map((team, index) => ({
+          id: team.team_key,
+          team_name: team.standing_team || 'Unknown',
           team_logo: team.team_logo || clubs[index]?.team_logo,
           est: team.team_founded || clubs[index]?.est,
           stadium: team.venue?.name || clubs[index]?.stadium,
@@ -141,7 +125,7 @@ function ClubsShowcase() {
               {/* Clubs Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {displayedClubs.map((team, index) => (
-                  <Link to="/club-details" key={team.id || index}>
+                  <Link to={`/club/${team.id}`} key={team.id || index}>
                     <div className="group bg-white rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer border border-gray-100">
                       <div className="p-6">
                         <div className="flex flex-col items-center text-center">
