@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, Link, useParams } from "react-router";
+import { useNavigate, Link } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";

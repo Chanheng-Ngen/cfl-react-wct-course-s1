@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useNavigate, Link } from "react-router";
+import { useParams, Link } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Logo1 from "../assets/images/Logo1.png";
@@ -34,7 +34,6 @@ const fixturesData = [
 
 const FixtureDetailPage = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const match = fixturesData.find((item) => item.id === Number(id));
 

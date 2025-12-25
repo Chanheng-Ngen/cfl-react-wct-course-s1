@@ -50,7 +50,7 @@ export function RoutesApp() {
           <Route path="/club" element={<Club />} />
           <Route path="/club/:id" element={<ClubDetails />} />
           <Route path="/last-starting" element={<LastStarting  />} />
-          <Route path="/coach-and-squad" element={<CoachPlayers />} />
+          <Route path="/club/:id/current" element={<CoachPlayers />} />
           <Route path="/legend-players" element={<LegendPlayers />} />
           <Route path="/table-standings" element={<TableDetails />} />
           <Route path="/stat-two" element={<StatTwo />} />

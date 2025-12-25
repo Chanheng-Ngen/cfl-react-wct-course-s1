@@ -2,10 +2,43 @@ import { Calendar, MapPin, ChevronRight, ArrowLeft } from 'lucide-react';
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 import { Link, useParams} from 'react-router';
+import { useEffect, useState } from 'react';
+import { footballApi } from '../services/API.js';
 
 const ClubDetails = () => {
   const { id } = useParams();
-  console.log("id:", id);
+  const [manager, setManager] = useState({});
+  const [player, setPlayer] = useState([]);
+  useEffect(() => {
+    const getClubDetails = async () => {
+      try{
+        const  club = await footballApi.getTeams(id);
+        console.log(club.result);
+        if(!club?.result) return;
+        // manater info
+        const managerFormatted = {
+          name: club.result[0].coaches[0].coach_name || 'Unknown',
+          country: club.result[0].coaches[0].coach_country || 'Unknown',
+          age: club.result[0].coaches[0].coach_age || 'Unknown',
+          image: club.result[0].coaches[0].coach_image || null
+        };
+        setManager(managerFormatted);
+        
+        // player info
+        const playerFormatted = club.result[0].players.slice(21, 28).map((player) => ({
+          player_key: player.player_key,
+          name: player.player_name || 'Unknown',
+          position: player.player_type || 'Unknown',
+          number: player.player_number || 'Unknown',
+          image: player.player_image || null
+        }));
+        setPlayer(playerFormatted);
+      }catch(error){
+        console.error('Error fetching club details:', error);
+      }
+    }
+    getClubDetails();
+  }, [id]);
   return (
     <>
     <Header />
@@ -106,7 +139,7 @@ const ClubDetails = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Manager & Squad</h2>
-                <Link to = "/coach-and-squad">
+                <Link to = {`/club/${id}/current`}>
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
@@ -117,12 +150,13 @@ const ClubDetails = () => {
                 <h3 className="text-sm font-semibold text-gray-700 mb-4">Manager</h3>
                 <div className="flex items-center gap-4">
                   <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-gray-400 to-gray-500"></div>
+                      <img src={manager.image} alt={manager.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 text-lg">Erik ten Hag</div>
-                    <div className="text-sm text-gray-600">Netherlands</div>
-                    <div className="text-sm text-gray-500">52 years • Manager</div>
+                    <div className="font-semibold text-gray-900 text-lg">{manager.name}</div>
+                    <div className="text-sm text-gray-600">{manager.country}</div>
+                    <div className="text-sm text-gray-500">{manager.age} years </div>
                   </div>
                 </div>
               </div>
@@ -130,19 +164,14 @@ const ClubDetails = () => {
               <div>
                 <h3 className="text-sm font-semibold text-gray-700 mb-4">Current Squad</h3>
                 <div className="flex gap-4">
-                  {[
-                    { pos: 'MR', name: 'Rashford', num: '10' },
-                    { pos: 'BF', name: 'Fernandes', num: '8' },
-                    { pos: 'CA', name: 'Casemiro', num: '18' },
-                    { pos: 'LM', name: 'Martinez', num: '6' },
-                    { pos: 'AO', name: 'Onana', num: '24' }
-                  ].map((player, idx) => (
-                    <div key={idx} className="flex flex-col items-center">
-                      <div className="w-16 h-16 bg-yellow-400 rounded-full flex items-center justify-center text-sm font-bold text-gray-900 mb-2">
-                        {player.pos}
+                  {player.map((player, key) => (
+                    <div key={key} className="flex flex-col items-center">
+                      <img src={player.image} alt={player.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                      <div className=" text-gray-600 mb-1">{player.number}</div>
+                      <div className="text-sm text-gray-900 font-bold">{player.name}</div>
+                      <div className="text-blue-800 flex items-center justify-center text-sm mb-2">
+                        {player.position}
                       </div>
-                      <div className="text-xs text-gray-600 mb-1">{player.num}</div>
-                      <div className="text-sm text-gray-900 font-medium">{player.name}</div>
                     </div>
                   ))}
                 </div>
