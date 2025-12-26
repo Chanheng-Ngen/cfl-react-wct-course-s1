@@ -1,44 +1,29 @@
 import { Calendar, MapPin, ChevronRight, ArrowLeft } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header.jsx';
 import Footer from '../components/Footer.jsx';
 import { Link, useParams} from 'react-router';
-import { useEffect, useState } from 'react';
-import { footballApi } from '../services/API.js';
+import { useEffect } from 'react';
+import { fetchTeamDetails } from '../store/slices/footballSlice.js';
 
 const ClubDetails = () => {
   const { id } = useParams();
-  const [manager, setManager] = useState({});
-  const [player, setPlayer] = useState([]);
+  const dispatch = useDispatch();
+  const { teamDetails, teamDetailsLoading, clubs } = useSelector((state) => state.football);
+  
+  const teamData = teamDetails[id];
+  const isLoading = teamDetailsLoading[id];
+  const currentClub = clubs.find(club => club.id == id);
+  
   useEffect(() => {
-    const getClubDetails = async () => {
-      try{
-        const  club = await footballApi.getTeams(id);
-        console.log(club.result);
-        if(!club?.result) return;
-        // manater info
-        const managerFormatted = {
-          name: club.result[0].coaches[0].coach_name || 'Unknown',
-          country: club.result[0].coaches[0].coach_country || 'Unknown',
-          age: club.result[0].coaches[0].coach_age || 'Unknown',
-          image: club.result[0].coaches[0].coach_image || null
-        };
-        setManager(managerFormatted);
-        
-        // player info
-        const playerFormatted = club.result[0].players.slice(21, 28).map((player) => ({
-          player_key: player.player_key,
-          name: player.player_name || 'Unknown',
-          position: player.player_type || 'Unknown',
-          number: player.player_number || 'Unknown',
-          image: player.player_image || null
-        }));
-        setPlayer(playerFormatted);
-      }catch(error){
-        console.error('Error fetching club details:', error);
-      }
+    // Fetch team details if not cached or stale (> 5 minutes)
+    const isCached = teamData?.lastFetched;
+    const isStale = isCached && (new Date() - new Date(teamData.lastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchTeamDetails(id));
     }
-    getClubDetails();
-  }, [id]);
+  }, [dispatch, id, teamData]);
   return (
     <>
     <Header />
@@ -47,27 +32,38 @@ const ClubDetails = () => {
       <div className=" h-48 bg-gradient-to-br from-black mb-8">
            
         <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
-          <Link to = "/club">
-          <button className="mt-5 w-10 h-10 bg-blue-900/40 hover:bg-blue-900/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          </Link>
+          <ol className="flex items-center gap-2 text-sm text-white py-6">
+            <li className="cursor-pointer hover:underline">
+              <Link to="/club">Club</Link>
+            </li>
+            <li>/</li>
+            <li className="font-semibold">
+              {currentClub?.team_name || 'Loading...'}
+            </li>
+          </ol>
           <div className="flex items-center gap-5">
-            <div className="w-20 h-20 bg-red-700 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-              <span className="text-white text-3xl font-bold">MU</span>
+            <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center border-4 border-white shadow-lg overflow-hidden">
+              {currentClub?.team_logo ? (
+                <img src={currentClub.team_logo} alt={currentClub.team_name} className="w-full h-full object-contain" />
+              ) : (
+                <span className="text-gray-400 text-3xl font-bold">?</span>
+              )}
             </div>
             <div className="text-white">
-              <h1 className="text-3xl font-bold mb-2">Manchester United</h1>
+              <h1 className="text-3xl font-bold mb-2">{currentClub?.team_name || 'Loading...'}</h1>
               <div className="flex items-center gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>Founded 1878</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>Old Trafford</span>
-                </div>
-                <span>Manchester, England</span>
+                {currentClub?.est && (
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    <span>Founded {currentClub.est}</span>
+                  </div>
+                )}
+                {currentClub?.stadium && (
+                  <div className="flex items-center gap-2">
+                    <MapPin className="w-4 h-4" />
+                    <span>{currentClub.stadium}</span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -148,33 +144,44 @@ const ClubDetails = () => {
               
               <div className="mb-6">
                 <h3 className="text-sm font-semibold text-gray-700 mb-4">Manager</h3>
-                <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
-                      <img src={manager.image} alt={manager.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
-
+                {isLoading ? (
+                  <p className="text-gray-500">Loading manager info...</p>
+                ) : teamData?.manager ? (
+                  <div className="flex items-center gap-4">
+                    <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
+                      <img src={teamData.manager.image} alt={teamData.manager.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                    </div>
+                    <div>
+                      <div className="font-semibold text-gray-900 text-lg">{teamData.manager.name}</div>
+                      <div className="text-sm text-gray-600">{teamData.manager.country}</div>
+                      <div className="text-sm text-gray-500">{teamData.manager.age} years </div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-gray-900 text-lg">{manager.name}</div>
-                    <div className="text-sm text-gray-600">{manager.country}</div>
-                    <div className="text-sm text-gray-500">{manager.age} years </div>
-                  </div>
-                </div>
+                ) : (
+                  <p className="text-gray-500">No manager information available</p>
+                )}
               </div>
 
               <div>
                 <h3 className="text-sm font-semibold text-gray-700 mb-4">Current Squad</h3>
-                <div className="flex gap-4">
-                  {player.map((player, key) => (
-                    <div key={key} className="flex flex-col items-center">
-                      <img src={player.image} alt={player.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
-                      <div className=" text-gray-600 mb-1">{player.number}</div>
-                      <div className="text-sm text-gray-900 font-bold">{player.name}</div>
-                      <div className="text-blue-800 flex items-center justify-center text-sm mb-2">
-                        {player.position}
+                {isLoading ? (
+                  <p className="text-gray-500">Loading players...</p>
+                ) : teamData?.players && teamData.players.length > 0 ? (
+                  <div className="flex gap-4">
+                    {teamData.players.slice(0, 7).map((player, key) => (
+                      <div key={key} className="flex flex-col items-center">
+                        <img src={player.image} alt={player.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                        <div className=" text-gray-600 mb-1">{player.number}</div>
+                        <div className="text-sm text-gray-900 font-bold">{player.name}</div>
+                        <div className="text-blue-800 flex items-center justify-center text-sm mb-2">
+                          {player.position}
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500">No players available</p>
+                )}
               </div>
             </div>
 

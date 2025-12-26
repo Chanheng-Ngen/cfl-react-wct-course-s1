@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import ContentLoader from "react-content-loader";
 import AwayLogo from "../assets/images/Johor.png";
@@ -6,56 +7,23 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
 import ResultHero from "../assets/images/ResultBanner1.jpg";
-import { footballApi } from "../services/API";
+import { fetchResults } from "../store/slices/footballSlice";
+
 const ResultsPage = () => {
-  const [visibleCount, setVisibleCount] = useState(6);
-  const [results, setResults] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { results, resultsLoading, resultsLastFetched } = useSelector((state) => state.football);
+  const [visibleCount, setVisibleCount] = useState(6);
 
   useEffect(() => {
-    const fetchResults = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const fromDate = "2025-12-12";
-        const toDate = "2025-12-21";
-
-        console.log('Fetching results from', fromDate, 'to', toDate);
-        const data = await footballApi.getFixtures(fromDate, toDate);
-
-        console.log('API Response:', data);
-
-        if (data.result && Array.isArray(data.result)) {
-          const finishedMatches = data.result
-            .filter(match => {
-              const status = match.event_status?.toLowerCase();
-              return status === "finished" ||
-                (match.match_hometeam_score !== "" && match.match_awayteam_score !== "");
-            })
-            .sort((a, b) => new Date(b.match_date) - new Date(a.match_date))
-            .slice(0, 20);
-
-          console.log('Finished matches:', finishedMatches.length);
-
-          if (finishedMatches.length > 0) {
-            setResults(finishedMatches);
-          } else {
-            console.log('No finished matches found, using mock data');
-          }
-        } else {
-          console.log('No results in API response, using mock data');
-        }
-      } catch (err) {
-        console.error("Error fetching results:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchResults();
-  }, []);
+    // Fetch from Redux if not cached or stale (> 5 minutes)
+    const isCached = resultsLastFetched && results.length > 0;
+    const isStale = resultsLastFetched && (new Date() - new Date(resultsLastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchResults());
+    }
+  }, [dispatch, resultsLastFetched, results.length]);
 
   return (
     <>
@@ -71,7 +39,7 @@ const ResultsPage = () => {
       <div className="w-full min-h-screen bg-white pb-20 mt-5">
 
         {/* LOADING STATE */}
-        {loading && (
+        {resultsLoading && (
           <div className="container mx-auto px-4 pb-16 space-y-6">
             {[...Array(6)].map((_, index) => (
               <ContentLoader
@@ -89,17 +57,8 @@ const ResultsPage = () => {
           </div>
         )}
 
-        {/* ERROR STATE */}
-        {error && (
-          <div className="max-w-6xl mx-auto px-4">
-            <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
-              {error}
-            </div>
-          </div>
-        )}
-
         {/* RESULTS LIST */}
-        {!loading && !error && (
+        {!resultsLoading && (
           <div className="container mx-auto px-4 pb-16 space-y-6">
             {results.length === 0 ? (
               <div className="text-center py-20 text-gray-500">

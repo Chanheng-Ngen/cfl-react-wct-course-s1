@@ -1,43 +1,30 @@
 import React from 'react';
 import { ArrowLeft, Camera } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Link } from 'react-router';
 import { useParams } from 'react-router';
-import { useEffect, useState } from 'react';
-import { footballApi } from '../services/API';
+import { useEffect } from 'react';
+import { fetchTeamDetails } from '../store/slices/footballSlice';
 
 const CoachPlayers = () => {
   const { id } = useParams();
-  const [managerCurrent, setManagerCurrent] = useState({});
-  const [playerCurrent, setPlayerCurrent] = useState([]);
+  const dispatch = useDispatch();
+  const { teamDetails, teamDetailsLoading } = useSelector((state) => state.football);
+  
+  const teamData = teamDetails[id];
+  const isLoading = teamDetailsLoading[id];
+  
   useEffect(() => {
-    const getClubDetails = async () => {
-      try {
-        const club = await footballApi.getTeams(id);
-        console.log(club.result);
-        if (!club?.result) return;
-        const managerFormatted = {
-          name: club.result[0].coaches[0].coach_name || 'Unknown',
-          country: club.result[0].coaches[0].coach_country || 'Unknown',
-          age: club.result[0].coaches[0].coach_age || 'Unknown',
-          image: club.result[0].coaches[0].coach_image || null
-        };
-        setManagerCurrent(managerFormatted);
-        const playerFormatted = club.result[0].players.map((player) => ({
-          player_key: player.player_key,
-          name: player.player_name || 'Unknown',
-          position: player.player_type || 'Unknown',
-          number: player.player_number || 'Unknown',
-          image: player.player_image || null
-        }));
-        setPlayerCurrent(playerFormatted);
-      } catch (error) {
-        console.error('Error fetching club details:', error);
-      }
+    // Fetch team details if not cached or stale (> 5 minutes)
+    const isCached = teamData?.lastFetched;
+    const isStale = isCached && (new Date() - new Date(teamData.lastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchTeamDetails(id));
     }
-    getClubDetails();
-  }, []);
+  }, [dispatch, id, teamData]);
 
   return (
     <>
@@ -52,22 +39,31 @@ const CoachPlayers = () => {
           </ol>
           <div className="mb-8">
             <h2 className="text-sm font-semibold text-gray-700 mb-4">Manager</h2>
-            <div className="bg-blue-50 rounded-xl p-4 inline-block">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
-                  <img src={managerCurrent.image} alt={managerCurrent.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
-                </div>
-                <div>
-                  <div className="font-semibold text-gray-900 text-base">{managerCurrent.name}</div>
-                  <div className="text-sm text-gray-600">{managerCurrent.country}</div>
+            {isLoading ? (
+              <p className="text-gray-500">Loading manager info...</p>
+            ) : teamData?.manager ? (
+              <div className="bg-blue-50 rounded-xl p-4 inline-block">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
+                    <img src={teamData.manager.image} alt={teamData.manager.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-900 text-base">{teamData.manager.name}</div>
+                    <div className="text-sm text-gray-600">{teamData.manager.country}</div>
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <p className="text-gray-500">No manager information available</p>
+            )}
           </div>
           <div>
             <h2 className="text-sm font-semibold text-gray-700 mb-4">Current Squad</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {playerCurrent.map((player, idx) => (
+              {isLoading ? (
+                <p className="text-gray-500">Loading players...</p>
+              ) : teamData?.players && teamData.players.length > 0 ? (
+                teamData.players.map((player, idx) => (
                 <div key={idx} className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex flex-col items-center">
                     <div className="relative mb-3">
@@ -82,7 +78,10 @@ const CoachPlayers = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              ))
+              ) : (
+                <p className="text-gray-500">No players available</p>
+              )}
             </div>
           </div>
         </div>

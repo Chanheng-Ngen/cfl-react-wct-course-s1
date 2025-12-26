@@ -1,55 +1,36 @@
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Trophy, MapPin, Calendar } from 'lucide-react';
 import { Link } from 'react-router';
 import ContentLoader from 'react-content-loader';
-import { footballApi } from '../services/API';
-import { clubs } from '../services/mockData';
+import { fetchClubs } from '../store/slices/footballSlice';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import premierLeagueCover from '../assets/video/premier_league_vdo_cover.mp4';
 
 function ClubsShowcase() {
-  const [allClubs, setAllClubs] = useState([]);
+  const dispatch = useDispatch();
+  const { clubs, clubsLoading, clubsLastFetched } = useSelector((state) => state.football);
   const [displayedClubs, setDisplayedClubs] = useState([]); 
   const [visibleCount, setVisibleCount] = useState(8);  
-  const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
-    const clubsFetch = async () => {
-      try {
-        setLoading(true);
-        const leagueId = 152;
-        // Fetch standings
-        const standingsData = await footballApi.getStandings(leagueId);
-        if (!standingsData?.result?.total) {
-          setLoading(false);
-          return;
-        }
-        // Format teams
-        console.log(standingsData.result.total);
-        const formattedTeams = standingsData.result.total.map((team, index) => ({
-          id: team.team_key,
-          team_name: team.standing_team || 'Unknown',
-          team_logo: team.team_logo || clubs[index]?.team_logo,
-          est: team.team_founded || clubs[index]?.est,
-          stadium: team.venue?.name || clubs[index]?.stadium,
-          capacity: team.venue?.capacity || clubs[index]?.capacity,
-          championships: team.team_championships || clubs[index]?.championships,
-        }));
+    // Fetch from Redux if not cached or stale (> 5 minutes)
+    const isCached = clubsLastFetched && clubs.length > 0;
+    const isStale = clubsLastFetched && (new Date() - new Date(clubsLastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchClubs());
+    }
+  }, [dispatch, clubsLastFetched, clubs.length]);
 
-        setAllClubs(formattedTeams);
-        setDisplayedClubs(formattedTeams.slice(0, 8)); 
-        setLoading(false);
-
-      } catch (error) {
-        console.error('Error fetching clubs:', error);
-        setLoading(false);
-      }
-    };
-
-    clubsFetch();
-  }, []);
+  useEffect(() => {
+    // Update displayed clubs when Redux data changes
+    if (clubs.length > 0) {
+      setDisplayedClubs(clubs.slice(0, visibleCount));
+    }
+  }, [clubs, visibleCount]);
 
   // Load 4 more clubs
   const loadMore = () => {
@@ -57,13 +38,12 @@ function ClubsShowcase() {
     
     setTimeout(() => {
       const newCount = visibleCount + 4;
-      setDisplayedClubs(allClubs.slice(0, newCount));
       setVisibleCount(newCount);
       setLoadingMore(false);
     }, 300); 
   };
 
-  const hasMore = visibleCount < allClubs.length;
+  const hasMore = visibleCount < clubs.length;
 
   // Club Card Skeleton Loader
   const ClubCardSkeleton = () => (
@@ -114,7 +94,7 @@ function ClubsShowcase() {
       <div className="min-h-screen bg-gray-50 py-12 px-4">
         <div className="container mx-auto px-4">
           {/* Loading State */}
-          {loading ? (
+          {clubsLoading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, index) => (
                 <ClubCardSkeleton key={index} />
@@ -175,7 +155,7 @@ function ClubsShowcase() {
                 </div>
               )}
               <div className="text-center mt-6 text-gray-600 font-medium">
-                Showing {displayedClubs.length} of {allClubs.length} clubs
+                Showing {displayedClubs.length} of {clubs.length} clubs
               </div>
             </>
           )}

@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router';
-import { footballApi } from '../services/API';
+import { fetchLandingData } from '../store/slices/footballSlice';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { heroBanner, upcomingMatches, aboutData, videoHighlights, topScorers, latestNews, leagueStandings } from '../services/mockData';
+import { heroBanner, aboutData, videoHighlights, topScorers, latestNews, leagueStandings } from '../services/mockData';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -12,98 +13,24 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination'
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { fixtures, standings, topScorers: topScorerList, isLoading, lastFetched } = useSelector(
+    (state) => state.football
+  );
   const [aboutSlide, setAboutSlide] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
-  const [fixtures, setFixtures] = useState([]);
-  const [standings, setStandings] = useState([]);
-  const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
   const aboutSwiperRef = useRef(null);
 
   useEffect(() => {
-    const landingFetch = async () => {
-      try {
-        setIsLoading(true);
-        const fromDate = '2025-12-12';
-        const toDate = '2025-12-21';
-        const standingLeagueId = 152; //khmer league id 493
-        const topScorersLeagueId = 152;
-        // fetch 
-        const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
-        const getStandingsData = await footballApi.getStandings(standingLeagueId);
-        const getTopScorersData = await footballApi.getTopScorers(topScorersLeagueId);
-        // debug
-        // console.log('Fixtures data:', getFixturesData);
-        // console.log('Standings data:', getStandingsData);
-        // console.log('Top Scorers data:', getTopScorersData);
-
-        if (getFixturesData && getFixturesData.result.length > 0) {
-          const transformedMatches = getFixturesData.result.slice(0, 6).map((match, index) => ({
-            id: match.event_key || index + 1,
-            league: match.league_name,
-            team1: {
-              name: match.event_home_team,
-              logo: match.home_team_logo
-            },
-            team2: {
-              name: match.event_away_team,
-              logo: match.away_team_logo,
-            },
-            date: match.event_date ? new Date(match.event_date).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric'
-            }) : 'TBD',
-            time: match.event_time,
-            venue: match.event_stadium,
-            matchNumber: `Match ${index + 1} of 6`
-          }));
-          setFixtures(transformedMatches);
-        }
-        else {
-          throw new Error('Not found fixtures data');
-        }
-        if (getStandingsData && getStandingsData.result.total.length > 0) {
-          const transformStandings = getStandingsData.result.total.slice(0, 8).map((team, index) => ({
-            id: team.standing_team_id || index + 1,
-            rank: team.standing_place,
-            team: team.standing_team,
-            played: team.standing_P,
-            points: team.standing_PTS,
-            team_logo: team.team_logo,
-            trend: team.standing_GD > 0 ? 'up' : team.standing_GD < 0 ? 'down' : 'same'
-          }));
-          setStandings(transformStandings);
-        }
-        else {
-          throw new Error('Not found standings data');
-        }
-        if (getTopScorersData && getTopScorersData.result.length > 0) {
-          const transformTopScorers = getTopScorersData.result.slice(0, 7).map((player, index) => ({
-            id: index + 1,
-            rank: player.player_place,
-            name: player.player_name,
-            team: player.team_name,
-            goals: player.goals,
-            assists: player.assists ? player.assists : 0
-          }));
-          setTopScorerList(transformTopScorers);
-        }
-        else {
-          throw new Error('Not found top scorers data');
-        }
-      } catch (error) {
-        console.error('Error fetching:', error);
-        //mock data
-        setFixtures(upcomingMatches);
-        setStandings(leagueStandings);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    landingFetch();
-  }, []);
+    // Check if data is cached and not stale (older than 5 minutes)
+    const isCached = lastFetched && fixtures.length > 0;
+    const isStale = lastFetched && (new Date() - new Date(lastFetched)) > 5 * 60 * 1000;
+    
+    // Only fetch if data is not cached or is stale
+    if (!isCached || isStale) {
+      dispatch(fetchLandingData());
+    }
+  }, [dispatch, lastFetched, fixtures.length]);
 
   // Skeleton 
   const HeroSkeleton = () => (
@@ -533,12 +460,12 @@ const Home = () => {
             <div className="lg:col-span-2">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-bold text-gray-800">Video Highlights</h2>
-                <a href="#" className="text-blue-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
+                <Link to="/videos" className="text-blue-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
                   View All
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
-                </a>
+                </Link>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

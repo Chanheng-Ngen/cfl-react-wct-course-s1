@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import ContentLoader from "react-content-loader";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
 import FixturesHero from "../assets/images/FixturesBanner.jpg";
-import { footballApi } from "../services/API";
+import { fetchAllFixtures } from "../store/slices/footballSlice";
 
 const FixtureCardLoader = () => (
   <ContentLoader
@@ -20,71 +21,47 @@ const FixtureCardLoader = () => (
 );
 
 const FixturesPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [fixtures, setFixtures] = useState([]);
+  const { allFixtures, allFixturesLoading, allFixturesLastFetched } = useSelector((state) => state.football);
   const [page, setPage] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [displayedFixtures, setDisplayedFixtures] = useState([]);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const ITEMS_PER_PAGE = 4;
 
-  const fetchFixtures = async (pageNum) => {
-    try {
-      const isInitial = pageNum === 0;
-      if (isInitial) {
-        setLoading(true);
-      } else {
-        setLoadingMore(true);
-      }
-      const fromDate = '2025-12-12';
-      const toDate = '2025-12-21';
-      const response = await footballApi.getFixtures(fromDate, toDate);
-      
-      if (response?.result) {
-        const transformedMatches = response.result.map((match, index) => ({
-          id: match.event_key || index + 1,
-          date: match.event_date ? new Date(match.event_date).toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-          }) : 'TBD',
-          league: match.league_name,
-          homeTeam: match.event_home_team,
-          awayTeam: match.event_away_team,
-          time: match.event_time,
-          stadium: match.event_stadium,
-          homeLogo: match.home_team_logo,
-          awayLogo: match.away_team_logo,
-        }));
-
-        const start = pageNum * ITEMS_PER_PAGE;
-        const end = start + ITEMS_PER_PAGE;
-        const pageFixtures = transformedMatches.slice(start, end);
-        
-        if (isInitial) {
-          setFixtures(pageFixtures);
-        } else {
-          setFixtures(prev => [...prev, ...pageFixtures]);
-        }
-        setHasMore(end < transformedMatches.length);
-      } 
-    } catch (error) {
-      console.error('Error fetching fixtures:', error);
-    } finally {
-      setLoading(false);
-      setLoadingMore(false);
+  useEffect(() => {
+    // Fetch from Redux if not cached or stale (> 5 minutes)
+    const isCached = allFixturesLastFetched && allFixtures.length > 0;
+    const isStale = allFixturesLastFetched && (new Date() - new Date(allFixturesLastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchAllFixtures());
     }
-  };
+  }, [dispatch, allFixturesLastFetched, allFixtures.length]);
 
   useEffect(() => {
-    fetchFixtures(0);
-  }, []);
+    // Update displayed fixtures when Redux data changes
+    if (allFixtures.length > 0) {
+      const start = 0;
+      const end = ITEMS_PER_PAGE;
+      setDisplayedFixtures(allFixtures.slice(start, end));
+      setHasMore(end < allFixtures.length);
+      setPage(0);
+    }
+  }, [allFixtures]);
 
   const handleLoadMore = () => {
+    setLoadingMore(true);
     const nextPage = page + 1;
+    const start = nextPage * ITEMS_PER_PAGE;
+    const end = start + ITEMS_PER_PAGE;
+    const newFixtures = allFixtures.slice(start, end);
+    
+    setDisplayedFixtures(prev => [...prev, ...newFixtures]);
+    setHasMore(end < allFixtures.length);
     setPage(nextPage);
-    fetchFixtures(nextPage);
+    setLoadingMore(false);
   };
 
   return (
@@ -97,20 +74,20 @@ const FixturesPage = () => {
       />
 
       <div className="container mx-auto px-4 pt-16 pb-16 space-y-6">
-        {loading ? (
+        {allFixturesLoading ? (
           <div className="space-y-6">
             <FixtureCardLoader />
             <FixtureCardLoader />
             <FixtureCardLoader />
             <FixtureCardLoader />
           </div>
-        ) : fixtures.length === 0 ? (
+        ) : displayedFixtures.length === 0 ? (
           <div className="text-center py-20 text-gray-500">
             <p className="text-xl">No upcoming fixtures available</p>
           </div>
         ) : (
           <>
-            {fixtures.map((match) => (
+            {displayedFixtures.map((match) => (
               <div
                 key={match.id}
                 onClick={() => navigate(`/fixtures/${match.id}`)}

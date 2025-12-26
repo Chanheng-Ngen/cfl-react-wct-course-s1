@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { footballApi } from '../services/API';
+import { fetchFullStandings } from '../store/slices/footballSlice';
 
 const StandingRowLoader = () => (
   <ContentLoader
@@ -17,41 +18,18 @@ const StandingRowLoader = () => (
 );
 
 const LeagueStandings = () => {
-  const [standings, setStandings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const LEAGUE_ID = 152;
+  const dispatch = useDispatch();
+  const { fullStandings, fullStandingsLoading, fullStandingsLastFetched } = useSelector((state) => state.football);
 
   useEffect(() => {
-    const fetchStandings = async () => {
-      try {
-        setLoading(true);
-        const response = await footballApi.getStandings(LEAGUE_ID);
-        console.log(response.result);
-        if (response?.result?.total) {
-          const transformedStandings = response.result.total.slice(0, 20).map((team, index) => ({
-            pos: team.standing_place || index + 1,
-            logo: team.team_logo,
-            club: team.standing_team || `Team ${index + 1}`,
-            played: team.standing_P || 0,
-            won: team.standing_W || 0,
-            drawn: team.standing_D || 0,
-            lost: team.standing_L || 0,
-            gf: team.standing_F || 0,
-            ga: team.standing_A || 0,
-            gd: team.standing_GD || 0,
-            pts: team.standing_PTS || 0,
-          }));
-          setStandings(transformedStandings);
-        } 
-      } catch (error) {
-        console.error('Error fetching standings:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStandings();
-  }, []);
+    // Fetch from Redux if not cached or stale (> 5 minutes)
+    const isCached = fullStandingsLastFetched && fullStandings.length > 0;
+    const isStale = fullStandingsLastFetched && (new Date() - new Date(fullStandingsLastFetched)) > 5 * 60 * 1000;
+    
+    if (!isCached || isStale) {
+      dispatch(fetchFullStandings());
+    }
+  }, [dispatch, fullStandingsLastFetched, fullStandings.length]);
 
   const getGdColor = (gd) => {
     if (gd > 0) return 'text-green-600';
@@ -90,7 +68,7 @@ const LeagueStandings = () => {
 
           {/* Table Body */}
           <div className="divide-y divide-gray-100 min-w-[1000px]">
-            {loading ? (
+            {fullStandingsLoading ? (
               <>
                 <StandingRowLoader />
                 <StandingRowLoader />
@@ -101,12 +79,12 @@ const LeagueStandings = () => {
                 <StandingRowLoader />
                 <StandingRowLoader />
               </>
-            ) : standings.length === 0 ? (
+            ) : fullStandings.length === 0 ? (
               <div className="text-center py-20 text-gray-500">
                 <p className="text-xl">No standings data available</p>
               </div>
             ) : (
-              standings.map((team, idx) => (
+              fullStandings.map((team, idx) => (
               <div
                 key={idx}
                 className="grid grid-cols-[50px_minmax(200px,1fr)_repeat(7,60px)_150px] gap-2 md:gap-3 px-4 md:px-6 py-4 hover:bg-gray-50 transition-colors"
