@@ -5,11 +5,12 @@
 This project is a **learning-focused web development course project** designed to help students understand and practice modern web technologies. It's a full-featured football club management website that serves as a practical platform to learn:
 
 - **Frontend Development**: Building interactive user interfaces with React
-- **State Management**: Managing application state and data flow
+- **State Management**: Managing application state with Redux Toolkit
+- **Data Caching**: Implementing smart caching strategies to optimize performance
 - **Routing**: Creating multi-page applications with React Router
 - **Styling**: Responsive design with Tailwind CSS
 - **Backend Integration**: Connecting to Firebase for authentication and data management
-- **API Integration**: Fetching and displaying data from external sources
+- **API Integration**: Fetching and displaying data from external football APIs
 - **Build Tools**: Using modern development tools like Vite
 - **Version Control**: Working with Git and collaborative development
 
@@ -19,6 +20,8 @@ This project incorporates a modern web development stack:
 
 ### Core Technologies
 - **React 19** - Frontend JavaScript library for building user interfaces
+- **Redux Toolkit 2** - Official Redux toolset for efficient state management
+- **React-Redux** - Official React bindings for Redux
 - **Vite 7** - Next-generation build tool for faster development
 - **Tailwind CSS 4** - Utility-first CSS framework for styling
 - **React Router 7** - Client-side routing for navigation
@@ -38,17 +41,24 @@ This project incorporates a modern web development stack:
 
 This football club website includes:
 
-- **Home Page**: Landing page with hero banner and highlights
+- **Home Page**: Landing page with hero banner and highlights (with Redux caching)
 - **News Section**: Browse and read club news articles
-- **Fixtures & Results**: View upcoming matches and past game results
-- **Standings**: League table and team rankings
-- **Club Information**: About the club, history, and details
-- **Players & Coaches**: Team roster with player statistics
+- **Fixtures & Results**: View upcoming matches and past game results (cached with Redux)
+- **Standings**: League table and team rankings (smart data caching)
+- **Club Information**: Browse all clubs in the league (optimized loading)
+- **Club Details**: Detailed club information with breadcrumb navigation
+- **Players & Coaches**: Team roster with player and manager information (cached data)
 - **Legend Players**: Hall of fame section
 - **Videos**: Multimedia content gallery
 - **User Authentication**: Login, Register, and Password Recovery
 - **User Profiles**: Personal user account management
 - **Admin Dashboard**: Administrative panel for content management
+
+### ⚡ Performance Features
+- **Smart Caching**: Data cached in Redux store to prevent unnecessary API calls
+- **Stale Data Detection**: Automatic re-fetch after 5 minutes
+- **Optimized Navigation**: No loading screens when revisiting pages with cached data
+- **Loading States**: Skeleton loaders for better UX during initial data fetch
 
 ## 📋 Prerequisites
 
@@ -104,25 +114,100 @@ The application will start at `http://localhost:5173` (default Vite port).
 ## 📁 Project Structure
 
 ```
-src/
-├── assets/          # Static assets (images, videos)
-├── components/      # Reusable React components
-│   ├── Header.jsx   # Navigation header
-│   ├── Footer.jsx   # Page footer
-│   └── ...
-├── pages/           # Page components
-│   ├── Landing.jsx  # Home page
+src/ (Redux integrated)
+│   ├── FixturesPage.jsx # Fixtures listing (Redux cached)
+│   ├── ResultsPage.jsx  # Results listing (Redux cached)
+│   ├── StandingPage.jsx # League standings (Redux cached)
+│   ├── Club.jsx         # Clubs listing (Redux cached)
+│   ├── ClubDetails.jsx  # Club details page (Redux cached)
+│   ├── CoachPlayers.jsx # Team squad page (Redux cached)
 │   ├── NewsPage.jsx # News listing
 │   ├── Login.jsx    # Authentication pages
 │   └── admin/       # Admin-specific pages
 ├── routes/          # Route configuration
 ├── services/        # API services and mock data
+│   ├── API.js       # Football API integration
+│   └── mockData.js  # Fallback mock data
+├── store/           # Redux store configuration
+│   ├── store.js     # Redux store setup
+│   └── slices/      # Redux slices
+│       └── footballSlice.js  # Football data state management
 ├── firebase/        # Firebase configuration
 ├── App.jsx          # Main application component
-└── main.jsx         # Application entry point
-```
+└── main.jsx         # Application entry point (Redux Provider)
+│   ├── Login.jsx    # Authentication pages
+│   └── admin/       # Admin-specific pages
+├── routes/          # Route configuratiouseDispatch, useSelector, and custom hooks
+3. **Redux State Management**: Centralized state with Redux Toolkit
+   - Creating slices and reducers
+   - Async operations with createAsyncThunk
+   - Selecting data from the store with useSelector
+   - Dispatching actions with useDispatch
+4. **Smart Caching Strategies**: Implementing time-based cache invalidation
+5. **Routing & Navigation**: Multi-page application with React Router
+6. **Responsive Design**: Mobile-first approach with Tailwind CSS
+7. **Authentication**: User login/register with Firebase
+8. **Data Fetching**: Async operations and API integration with caching
+9. **Performance Optimization**: Reducing unnecessary API calls and re-renders
+10. **Form Handling**: Input validation and submission
+11. **Deployment**: Building and deploying a production application
+and Redux DevTools browser extensions
+- **Console**: Check browser console for errors and warnings
+- **Redux DevTools**: Install the extension to inspect state changes and time-travel debug
+- **Cache Strategy**: Data is cached for 5 minutes - clear localStorage if testing fresh fetches
+- **API Rate Limits**: Be mindful of API rate limits when testing
 
-## 🎓 Learning Objectives
+## 📊 Redux DevTools
+
+To inspect Redux state and actions:
+
+1. Install [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools)
+2. Open your browser's developer tools
+3. Navigate to the Redux tab
+4. Inspect state, actions, and time-travel through state change
+
+This project uses **Redux Toolkit** for state management with the following benefits:
+
+### Why Redux?
+- ✅ **Prevents re-fetching**: Data persists across page navigation
+- ✅ **Centralized state**: Single source of truth for all football data
+- ✅ **Smart caching**: Automatic stale data detection (5-minute cache)
+- ✅ **Better UX**: Instant page loads when data is cached
+- ✅ **Scalable**: Easy to add new data slices as the app grows
+
+### Redux Store Structure
+```javascript
+state = {
+  football: {
+    // Landing page data
+    fixtures: [],
+    standings: [],
+    topScorers: [],
+    lastFetched: timestamp,
+    
+    // Full fixtures data
+    allFixtures: [],
+    allFixturesLastFetched: timestamp,
+    
+    // Results data
+    results: [],
+    resultsLastFetched: timestamp,
+    
+    // Full standings
+    fullStandings: [],
+    fullStandingsLastFetched: timestamp,
+    
+    // Clubs data
+    clubs: [],
+    clubsLastFetched: timestamp,
+    
+    // Team details (cached by team ID)
+    teamDetails: {
+      [teamId]: { manager, players, lastFetched }
+    }
+  }
+}
+```
 
 By working on this project, you will learn:
 
