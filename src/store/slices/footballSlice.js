@@ -9,7 +9,7 @@ export const fetchLandingData = createAsyncThunk(
     try {
       const fromDate = '2025-12-12';
       const toDate = '2025-12-21';
-      const standingLeagueId = 493;
+      const standingLeagueId = 152;
       const topScorersLeagueId = 152;
 
       const [getFixturesData, getStandingsData, getTopScorersData] = await Promise.all([
