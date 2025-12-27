@@ -24,11 +24,12 @@ const App = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
+        {/*
         <Link to = "/club-details">
         <button className="w-8 h-8 flex items-center justify-center mb-4">
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </button>
-        </Link>
+        </Link>*/}
         <div className="flex items-center gap-5">
           <div className="w-12 h-12 bg-red-700 rounded-lg flex items-center justify-center shadow">
             <span className="text-white text-sm font-bold">MU</span>

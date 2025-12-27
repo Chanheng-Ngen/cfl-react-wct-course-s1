@@ -8,39 +8,39 @@ const PlayerStats = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const topScorers = [
-    { rank: 1, name: "Keo Sokpheng", team: "Preah Khan Reach F", goals: 18, avatar: "KS", color: "bg-orange-500" },
-    { rank: 2, name: "Lim Pisoth", team: "Angkor Tiger FC", goals: 15, avatar: "LP", color: "bg-orange-500" },
-    { rank: 3, name: "Sieng Chanthea", team: "Phnom Penh Crown Ft", goals: 12, avatar: "SC", color: "bg-orange-500" },
-    { rank: 4, name: "Yudai Ogawa", team: "Angkor Tiger FC", goals: 11, avatar: "YO", color: "bg-orange-500" },
-    { rank: 5, name: "Chanrasmey Hok", team: "Boeung Ket Fc", goals: 9, avatar: "CH", color: "bg-orange-500" },
-    { rank: 6, name: "Prak Mony Udom", team: "NagaWorld FC", goals: 8, avatar: "PM", color: "bg-orange-500" }
+    { rank: 1, name: "Keo Sokpheng", team: "Preah Khan Reach F", goals: 18, avatar: "KS", color: "bg-red-500" },
+    { rank: 2, name: "Lim Pisoth", team: "Angkor Tiger FC", goals: 15, avatar: "LP", color: "bg-red-500" },
+    { rank: 3, name: "Sieng Chanthea", team: "Phnom Penh Crown Ft", goals: 12, avatar: "SC", color: "bg-red-500" },
+    { rank: 4, name: "Yudai Ogawa", team: "Angkor Tiger FC", goals: 11, avatar: "YO", color: "bg-red-500" },
+    { rank: 5, name: "Chanrasmey Hok", team: "Boeung Ket Fc", goals: 9, avatar: "CH", color: "bg-red-500" },
+    { rank: 6, name: "Prak Mony Udom", team: "NagaWorld FC", goals: 8, avatar: "PM", color: "bg-red-500" }
   ];
 
   const assists = [
-    { rank: 1, name: "Keo Sokpheng", team: "Preah Khan Reach F", assists: 12, avatar: "KS", color: "bg-orange-500" },
-    { rank: 2, name: "Prak Mony Udom", team: "NagaWorld FC", assists: 10, avatar: "PM", color: "bg-orange-500" },
-    { rank: 3, name: "Yudai Ogawa", team: "Angkor Tiger FC", assists: 9, avatar: "YO", color: "bg-orange-500" },
-    { rank: 4, name: "Chanrasmey Hok", team: "Boeung Ket Fc", assists: 8, avatar: "CH", color: "bg-orange-500" },
-    { rank: 5, name: "Sieng Chanthea", team: "Phnom Penh Crown Ft", assists: 7, avatar: "SC", color: "bg-orange-500" },
-    { rank: 6, name: "Lim Pisoth", team: "Angkor Tiger FC", assists: 6, avatar: "LP", color: "bg-orange-500" }
+    { rank: 1, name: "Keo Sokpheng", team: "Preah Khan Reach F", assists: 12, avatar: "KS", color: "bg-red-500" },
+    { rank: 2, name: "Prak Mony Udom", team: "NagaWorld FC", assists: 10, avatar: "PM", color: "bg-red-500" },
+    { rank: 3, name: "Yudai Ogawa", team: "Angkor Tiger FC", assists: 9, avatar: "YO", color: "bg-red-500" },
+    { rank: 4, name: "Chanrasmey Hok", team: "Boeung Ket Fc", assists: 8, avatar: "CH", color: "bg-red-500" },
+    { rank: 5, name: "Sieng Chanthea", team: "Phnom Penh Crown Ft", assists: 7, avatar: "SC", color: "bg-red-500" },
+    { rank: 6, name: "Lim Pisoth", team: "Angkor Tiger FC", assists: 6, avatar: "LP", color: "bg-red-500" }
   ];
 
   const totalPasses = [
-    { rank: 1, name: "Preah Khan Reach Svay Rieng FC", passes: 4827, avatar: "PKR", color: "bg-orange-500" },
-    { rank: 2, name: "Angkor Tiger FC", passes: 4721, avatar: "AT", color: "bg-orange-500" },
-    { rank: 3, name: "Phnom Penh Crown FC", passes: 4589, avatar: "PPC", color: "bg-orange-500" },
-    { rank: 4, name: "NagaWorld FC", passes: 4386, avatar: "NW", color: "bg-blue-500" },
-    { rank: 5, name: "Boeung Ket FC", passes: 4208, avatar: "BK", color: "bg-orange-500" },
-    { rank: 6, name: "Visakha FC", passes: 4106, avatar: "VS", color: "bg-orange-500" }
+    { rank: 1, name: "Preah Khan Reach Svay Rieng FC", passes: 4827, avatar: "PKR", color: "bg-red-500" },
+    { rank: 2, name: "Angkor Tiger FC", passes: 4721, avatar: "AT", color: "bg-red-500" },
+    { rank: 3, name: "Phnom Penh Crown FC", passes: 4589, avatar: "PPC", color: "bg-red-500" },
+    { rank: 4, name: "NagaWorld FC", passes: 4386, avatar: "NW", color: "bg-red-500" },
+    { rank: 5, name: "Boeung Ket FC", passes: 4208, avatar: "BK", color: "bg-red-500" },
+    { rank: 6, name: "Visakha FC", passes: 4106, avatar: "VS", color: "bg-red-500" }
   ];
 
   const cleanSheets = [
-    { rank: 1, name: "Sou Yaty", team: "Preah Khan Reach F", sheets: 7, avatar: "SY", color: "bg-orange-500" },
-    { rank: 2, name: "Vireak Dara", team: "Phnom Penh Crown Ft", sheets: 5, avatar: "VD", color: "bg-orange-500" },
-    { rank: 3, name: "Keo Soksela", team: "Angkor Tiger FC", sheets: 5, avatar: "KS", color: "bg-orange-500" },
-    { rank: 4, name: "Lim Sereyroth", team: "NagaWorld FC", sheets: 5, avatar: "LS", color: "bg-orange-500" },
-    { rank: 5, name: "Hul Kimhuy", team: "Boeung Ket Fc", sheets: 4, avatar: "HK", color: "bg-orange-500" },
-    { rank: 6, name: "Rath Pollin", team: "Visakha FC", sheets: 4, avatar: "RP", color: "bg-orange-500" }
+    { rank: 1, name: "Sou Yaty", team: "Preah Khan Reach F", sheets: 7, avatar: "SY", color: "bg-red-500" },
+    { rank: 2, name: "Vireak Dara", team: "Phnom Penh Crown Ft", sheets: 5, avatar: "VD", color: "bg-red-500" },
+    { rank: 3, name: "Keo Soksela", team: "Angkor Tiger FC", sheets: 5, avatar: "KS", color: "bg-red-500" },
+    { rank: 4, name: "Lim Sereyroth", team: "NagaWorld FC", sheets: 5, avatar: "LS", color: "bg-red-500" },
+    { rank: 5, name: "Hul Kimhuy", team: "Boeung Ket Fc", sheets: 4, avatar: "HK", color: "bg-red-500" },
+    { rank: 6, name: "Rath Pollin", team: "Visakha FC", sheets: 4, avatar: "RP", color: "bg-red-500" }
   ];
 
   const StatCard = ({ title, data, valueKey, showArrow = true }) => (
