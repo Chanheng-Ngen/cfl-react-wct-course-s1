@@ -8,37 +8,37 @@ const PlayerStats = () => {
   const [currentPage, setCurrentPage] = useState(2);
 
   const minutesPlayed = [
-    { rank: 1, name: "Kouch Sokumpheak", team: "Visakha Fc", minutes: 900, avatar: "KS", color: "bg-orange-500" },
-    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", minutes: 900, avatar: "SC", color: "bg-orange-500" },
-    { rank: 3, name: "Chanrasmey Hok", team: "Boeung Ket Fc", minutes: 900, avatar: "CH", color: "bg-orange-500" },
-    { rank: 4, name: "Yudai Ogawa", team: "Angkor Tiger FC", minutes: 810, avatar: "YO", color: "bg-orange-500" },
-    { rank: 5, name: "Prak Mony Udom", team: "NagaWorld FC", minutes: 810, avatar: "PM", color: "bg-orange-500" },
-    { rank: 6, name: "Keo Sokpheng", team: "Preah Khan Reach F", minutes: 720, avatar: "KS", color: "bg-orange-500" }
+    { rank: 1, name: "Kouch Sokumpheak", team: "Visakha Fc", minutes: 900, avatar: "KS", color: "bg-red-500" },
+    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", minutes: 900, avatar: "SC", color: "bg-red-500" },
+    { rank: 3, name: "Chanrasmey Hok", team: "Boeung Ket Fc", minutes: 900, avatar: "CH", color: "bg-red-500" },
+    { rank: 4, name: "Yudai Ogawa", team: "Angkor Tiger FC", minutes: 810, avatar: "YO", color: "bg-red-500" },
+    { rank: 5, name: "Prak Mony Udom", team: "NagaWorld FC", minutes: 810, avatar: "PM", color: "bg-red-500" },
+    { rank: 6, name: "Keo Sokpheng", team: "Preah Khan Reach F", minutes: 720, avatar: "KS", color: "bg-red-500" }
   ];
 
   const yellowCards = [
-    { rank: 1, name: "Seyha Choun", team: "Royal Armed Forces Ft", cards: 8, avatar: "SC", color: "bg-orange-500" },
-    { rank: 2, name: "Kouch Sokumpheak", team: "Visakha Fc", cards: 7, avatar: "KS", color: "bg-orange-500" },
-    { rank: 3, name: "Tiny Uy", team: "Boeung Ket Fc", cards: 6, avatar: "TU", color: "bg-orange-500" },
-    { rank: 4, name: "Reung Bunheng", team: "Kirivong FC", cards: 6, avatar: "RB", color: "bg-orange-500" },
-    { rank: 5, name: "Sokriy Geum", team: "Asia Pacific Ft", cards: 5, avatar: "SG", color: "bg-orange-500" },
-    { rank: 6, name: "Virak Sarath", team: "Soltilo Angkor FC", cards: 5, avatar: "VS", color: "bg-orange-500" }
+    { rank: 1, name: "Seyha Choun", team: "Royal Armed Forces Ft", cards: 8, avatar: "SC", color: "bg-red-500" },
+    { rank: 2, name: "Kouch Sokumpheak", team: "Visakha Fc", cards: 7, avatar: "KS", color: "bg-red-500" },
+    { rank: 3, name: "Tiny Uy", team: "Boeung Ket Fc", cards: 6, avatar: "TU", color: "bg-red-500" },
+    { rank: 4, name: "Reung Bunheng", team: "Kirivong FC", cards: 6, avatar: "RB", color: "bg-red-500" },
+    { rank: 5, name: "Sokriy Geum", team: "Asia Pacific Ft", cards: 5, avatar: "SG", color: "bg-red-500" },
+    { rank: 6, name: "Virak Sarath", team: "Soltilo Angkor FC", cards: 5, avatar: "VS", color: "bg-red-500" }
   ];
 
   const redCards = [
-    { rank: 1, name: "Tiny Uy", team: "Boeung Ket Fc", cards: 2, avatar: "TU", color: "bg-orange-500" },
-    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", cards: 1, avatar: "SC", color: "bg-orange-500" },
-    { rank: 3, name: "Reung Bunheng", team: "Kirivong FC", cards: 1, avatar: "RB", color: "bg-orange-500" },
-    { rank: 4, name: "Sokriy Geum", team: "Asia Pacific Ft", cards: 1, avatar: "SG", color: "bg-orange-500" }
+    { rank: 1, name: "Tiny Uy", team: "Boeung Ket Fc", cards: 2, avatar: "TU", color: "bg-red-500" },
+    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", cards: 1, avatar: "SC", color: "bg-red-500" },
+    { rank: 3, name: "Reung Bunheng", team: "Kirivong FC", cards: 1, avatar: "RB", color: "bg-red-500" },
+    { rank: 4, name: "Sokriy Geum", team: "Asia Pacific Ft", cards: 1, avatar: "SG", color: "bg-red-500" }
   ];
 
   const blocks = [
-    { rank: 1, name: "Sou Yaty", team: "Preah Khan Reach F", blocks: 45, avatar: "SY", color: "bg-orange-500" },
-    { rank: 2, name: "Vireak Dara", team: "Phnom Penh Crown Ft", blocks: 38, avatar: "VD", color: "bg-orange-500" },
-    { rank: 3, name: "Keo Soksela", team: "Angkor Tiger FC", blocks: 36, avatar: "KS", color: "bg-orange-500" },
-    { rank: 4, name: "Lim Sereyroth", team: "NagaWorld FC", blocks: 33, avatar: "LS", color: "bg-orange-500" },
-    { rank: 5, name: "Hul Kimhuy", team: "Boeung Ket Fc", blocks: 31, avatar: "HK", color: "bg-orange-500" },
-    { rank: 6, name: "Rath Pollin", team: "Visakha FC", blocks: 29, avatar: "RP", color: "bg-orange-500" }
+    { rank: 1, name: "Sou Yaty", team: "Preah Khan Reach F", blocks: 45, avatar: "SY", color: "bg-red-500" },
+    { rank: 2, name: "Vireak Dara", team: "Phnom Penh Crown Ft", blocks: 38, avatar: "VD", color: "bg-red-500" },
+    { rank: 3, name: "Keo Soksela", team: "Angkor Tiger FC", blocks: 36, avatar: "KS", color: "bg-red-500" },
+    { rank: 4, name: "Lim Sereyroth", team: "NagaWorld FC", blocks: 33, avatar: "LS", color: "bg-red-500" },
+    { rank: 5, name: "Hul Kimhuy", team: "Boeung Ket Fc", blocks: 31, avatar: "HK", color: "bg-red-500" },
+    { rank: 6, name: "Rath Pollin", team: "Visakha FC", blocks: 29, avatar: "RP", color: "bg-red-500" }
   ];
 
   const StatCard = ({ title, data, valueKey, showArrow = true }) => (

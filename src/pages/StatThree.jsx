@@ -8,12 +8,12 @@ const PlayerStats = () => {
   const [currentPage, setCurrentPage] = useState(3);
 
   const tackles = [
-    { rank: 1, name: "Chanrasmey Hok", team: "Boeung Ket Fc", tackles: 52, avatar: "CH", color: "bg-orange-500" },
-    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", tackles: 48, avatar: "SC", color: "bg-orange-500" },
-    { rank: 3, name: "Kouch Sokumpheak", team: "Visakha Fc", tackles: 45, avatar: "KS", color: "bg-orange-500" },
-    { rank: 4, name: "Tiny Uy", team: "Boeung Ket Fc", tackles: 42, avatar: "TU", color: "bg-orange-500" },
-    { rank: 5, name: "Reung Bunheng", team: "Kirivong FC", tackles: 39, avatar: "RB", color: "bg-orange-500" },
-    { rank: 6, name: "Prak Mony Udom", team: "NagaWorld FC", tackles: 37, avatar: "PM", color: "bg-orange-500" }
+    { rank: 1, name: "Chanrasmey Hok", team: "Boeung Ket Fc", tackles: 52, avatar: "CH", color: "bg-red-500" },
+    { rank: 2, name: "Seyha Choun", team: "Royal Armed Forces Ft", tackles: 48, avatar: "SC", color: "bg-red-500" },
+    { rank: 3, name: "Kouch Sokumpheak", team: "Visakha Fc", tackles: 45, avatar: "KS", color: "bg-red-500" },
+    { rank: 4, name: "Tiny Uy", team: "Boeung Ket Fc", tackles: 42, avatar: "TU", color: "bg-red-500" },
+    { rank: 5, name: "Reung Bunheng", team: "Kirivong FC", tackles: 39, avatar: "RB", color: "bg-red-500" },
+    { rank: 6, name: "Prak Mony Udom", team: "NagaWorld FC", tackles: 37, avatar: "PM", color: "bg-red-500" }
   ];
 
   const StatCard = ({ title, data, valueKey, showArrow = true }) => (

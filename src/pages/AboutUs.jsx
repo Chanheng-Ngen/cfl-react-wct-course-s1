@@ -80,7 +80,7 @@ const CambodiaFootballLeague = () => {
               </div>
               <div>
                 <div className="text-xs font-semibold text-blue-200 uppercase tracking-wider">Est. 2009</div>
-                <div className="text-xs text-blue-300">Professional Football League</div>
+                <div className="text-xs text-blue-300">Cambodia Football League</div>
               </div>
             </div>
             
@@ -89,7 +89,7 @@ const CambodiaFootballLeague = () => {
             </h1>
             
             <p className="text-lg sm:text-xl text-blue-100 max-w-3xl mb-8 leading-relaxed">
-              The premier professional football competition in Cambodia, dedicated to developing local talent, promoting the beautiful game, and bringing communities together through the passion of football.
+              The Cambodia football competition in Cambodia, dedicated to developing local talent, promoting the beautiful game, and bringing communities together through the passion of football.
             </p>
             
             <div className="flex flex-wrap gap-4">

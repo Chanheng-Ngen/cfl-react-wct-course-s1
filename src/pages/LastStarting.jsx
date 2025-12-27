@@ -114,12 +114,12 @@ const App = () => {
     <Header />
     <div className="min-h-screen bg-gradient-to-b from-gray-100 to-gray-200 p-6">
       <div className="container mx-auto">
-        {/* Back Button */}
+        {/* Back Button 
         <Link to ="/club-details">
         <button className="mb-6 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-105">
           <ArrowLeft className="w-6 h-6 text-gray-700" />
         </button>
-        </Link>
+        </Link>*/}
 
         {/* Match Result Header */}
         <div className="bg-gradient-to-r from-red-600 to-red-700 rounded-2xl shadow-2xl p-8 mb-8 relative overflow-hidden">
