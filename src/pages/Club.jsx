@@ -27,7 +27,7 @@ function ClubsShowcase() {
           return;
         }
         // Format teams
-        console.log(standingsData.result.total);
+        // console.log(standingsData.result.total);
         const formattedTeams = standingsData.result.total.map((team, index) => ({
           id: team.team_key,
           team_name: team.standing_team || 'Unknown',

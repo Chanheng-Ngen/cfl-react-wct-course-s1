@@ -9,13 +9,32 @@ const ClubDetails = () => {
   const { id } = useParams();
   const [manager, setManager] = useState({});
   const [player, setPlayer] = useState([]);
+  const [club, setClub] = useState({});
+  const [lastMatch, setLastMatch] = useState({});
   useEffect(() => {
+    const fromDate = '2025-12-12';
+    const toDate = '2025-12-21';
+    const standingLeagueId = 152;
+
     const getClubDetails = async () => {
       try{
-        const  club = await footballApi.getTeams(id);
+        const club = await footballApi.getTeams(id);
+        const fixtures = await footballApi.getFixtures(fromDate, toDate, standingLeagueId);
+        const lastMatch = fixtures.result.find(match => 
+          match.away_team_key === parseInt(id) || match.home_team_key === parseInt(id)
+        );
+        console.log(fixtures.result);
         console.log(club.result);
+        console.log(lastMatch);
         if(!club?.result) return;
-        // manater info
+        // club
+        setClub({
+          name: club.result[0].team_name,
+          logo: club.result[0].team_logo
+        });
+        // last match
+        setLastMatch(lastMatch);
+        // manager info
         const managerFormatted = {
           name: club.result[0].coaches[0].coach_name || 'Unknown',
           country: club.result[0].coaches[0].coach_country || 'Unknown',
@@ -44,20 +63,20 @@ const ClubDetails = () => {
     <Header />
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className=" h-48 bg-gradient-to-br from-black mb-8">
+      <div className=" h-48 bg-gradient-to-br from-black to-gray-500 mb-8">
            
         <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
-          <Link to = "/club">
-          <button className="mt-5 w-10 h-10 bg-blue-900/40 hover:bg-blue-900/60 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-colors">
-            <ArrowLeft className="w-5 h-5" />
-          </button>
-          </Link>
+          <ol className="flex items-center gap-2 text-sm text-white mt-4">
+            <li className='underline hover:text-blue-500'><Link to="/club">All Club</Link></li>
+            <li>/</li>
+            <li className='text-gray-200'>{club.name}</li>
+            <li>/</li>
+            <li className='underline hover:text-blue-500'><Link to = {`/club/${id}/current`}>Club Details</Link></li>
+          </ol>
           <div className="flex items-center gap-5">
-            <div className="w-20 h-20 bg-red-700 rounded-full flex items-center justify-center border-4 border-white shadow-lg">
-              <span className="text-white text-3xl font-bold">MU</span>
-            </div>
+            <img src={club.logo} alt={club.name} className="w-20 h-20 object-contain" />
             <div className="text-white">
-              <h1 className="text-3xl font-bold mb-2">Manchester United</h1>
+              <h1 className="text-3xl font-bold mb-2">{club.name}</h1>
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center gap-2">
                   <Calendar className="w-4 h-4" />
@@ -85,10 +104,9 @@ const ClubDetails = () => {
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-red-700 rounded flex items-center justify-center text-white text-sm font-bold">
-                    MU
-                  </div>
-                  <span className="font-semibold text-gray-900 text-lg">Manchester United</span>
+                  <img src={club.logo} alt={club.name} className="w-12 h-12 object-contain" />
+
+                  <span className="font-semibold text-gray-900 text-lg">{club.name}</span>
                 </div>
                 <div className="text-center px-6">
                   <div className="text-3xl font-bold text-gray-900">16:30</div>
@@ -106,8 +124,8 @@ const ClubDetails = () => {
             {/* Last Starting 11 */}
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
-                <h2 className="text-xl font-semibold text-gray-900">Last Starting 11</h2>
-                <Link to = "/last-starting">
+                <h2 className="text-xl font-semibold text-gray-900">Last Starting</h2>
+                <Link to = {`/club/${id}/last-starting`}>
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
@@ -116,21 +134,17 @@ const ClubDetails = () => {
               <div className="bg-gray-50 rounded-lg p-5">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 bg-red-700 rounded flex items-center justify-center text-white text-sm font-bold">
-                      MU
-                    </div>
-                    <span className="font-semibold text-gray-900 text-lg">Manchester United</span>
+                    <img src={lastMatch.home_team_logo} alt={lastMatch.home_team_name} className="w-12 h-12 object-contain" />
+                    <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_home_team}</span>
                   </div>
-                  <div className="text-4xl font-bold text-gray-900">2 - 2</div>
+                  <div className="text-4xl font-bold text-gray-900">{lastMatch.event_final_result}</div>
                   <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-900 text-lg">Arsenal</span>
-                    <div className="w-12 h-12 bg-red-700 rounded flex items-center justify-center text-white text-sm font-bold">
-                      ARS
-                    </div>
+                    <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_away_team}</span>
+                    <img src={lastMatch.away_team_logo} alt={lastMatch.away_team_name} className="w-12 h-12 object-contain" />
                   </div>
                 </div>
                 <div className="text-sm text-gray-500 text-center mt-3">
-                  ET • Matchweek 11 • Sat 08 Nov
+                  {lastMatch.event_date} at {lastMatch.event_time}
                 </div>
               </div>
             </div>

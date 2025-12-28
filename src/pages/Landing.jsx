@@ -29,7 +29,7 @@ const Home = () => {
         const standingLeagueId = 152; //khmer league id 493
         const topScorersLeagueId = 152;
         // fetch 
-        const getFixturesData = await footballApi.getFixtures(fromDate, toDate);
+        const getFixturesData = await footballApi.getFixtures(fromDate, toDate, standingLeagueId);
         const getStandingsData = await footballApi.getStandings(standingLeagueId);
         const getTopScorersData = await footballApi.getTopScorers(topScorersLeagueId);
         // debug

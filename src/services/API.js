@@ -3,9 +3,9 @@ const API_KEY = import.meta.env.VITE_FOOTBALL_API_KEY;
 const BASE_URL = 'https://apiv2.allsportsapi.com/football/';
 
 export const footballApi = {
-  getFixtures: async (fromDate, toDate) => {
+  getFixtures: async (fromDate, toDate, leagueId) => {
     try {
-      const url = `${BASE_URL}?met=Fixtures&APIkey=${API_KEY}&from=${fromDate}&to=${toDate}`;
+      const url = `${BASE_URL}?met=Fixtures&APIkey=${API_KEY}&from=${fromDate}&to=${toDate}&leagueId=${leagueId}`;
       const response = await axios.get(url);
       return response.data;
     } catch (error) {
