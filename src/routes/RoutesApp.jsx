@@ -48,9 +48,9 @@ export function RoutesApp() {
           <Route path="/standing" element={<StandingPage />} />
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/club" element={<Club />} />
-          <Route path="/club/:id" element={<ClubDetails />} />
+          <Route path="/club/:club-id" element={<ClubDetails />} />
           <Route path="/last-starting" element={<LastStarting  />} />
-          <Route path="/club/:id/current" element={<CoachPlayers />} />
+          <Route path="/club/:club-id/all-players" element={<CoachPlayers />} />
           <Route path="/legend-players" element={<LegendPlayers />} />
           <Route path="/table-standings" element={<TableDetails />} />
           <Route path="/stat-two" element={<StatTwo />} />

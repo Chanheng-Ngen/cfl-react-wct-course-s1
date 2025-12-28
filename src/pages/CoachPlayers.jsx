@@ -9,7 +9,8 @@ import { useEffect } from 'react';
 import { fetchTeamDetails } from '../store/slices/footballSlice';
 
 const CoachPlayers = () => {
-  const { id } = useParams();
+  const { 'club-id': id } = useParams();
+  console.log(id);
   const dispatch = useDispatch();
   const { teamDetails, teamDetailsLoading } = useSelector((state) => state.football);
   

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { footballApi } from '../../services/API';
 import { upcomingMatches, leagueStandings, topScorers, clubs } from '../../services/mockData';
 
-// Async thunk for fetching landing page data
 export const fetchLandingData = createAsyncThunk(
   'football/fetchLandingData',
   async () => {
@@ -89,7 +88,6 @@ export const fetchLandingData = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching all fixtures (FixturesPage)
 export const fetchAllFixtures = createAsyncThunk(
   'football/fetchAllFixtures',
   async () => {
@@ -119,7 +117,6 @@ export const fetchAllFixtures = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching results (ResultsPage)
 export const fetchResults = createAsyncThunk(
   'football/fetchResults',
   async () => {
@@ -143,7 +140,6 @@ export const fetchResults = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching full standings (StandingPage)
 export const fetchFullStandings = createAsyncThunk(
   'football/fetchFullStandings',
   async () => {
@@ -169,7 +165,6 @@ export const fetchFullStandings = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching clubs (Club page)
 export const fetchClubs = createAsyncThunk(
   'football/fetchClubs',
   async () => {
@@ -192,7 +187,6 @@ export const fetchClubs = createAsyncThunk(
   }
 );
 
-// Async thunk for fetching team details (ClubDetails & CoachPlayers)
 export const fetchTeamDetails = createAsyncThunk(
   'football/fetchTeamDetails',
   async (teamId) => {

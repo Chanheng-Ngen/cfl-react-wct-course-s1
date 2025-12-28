@@ -7,16 +7,17 @@ import { useEffect } from 'react';
 import { fetchTeamDetails } from '../store/slices/footballSlice.js';
 
 const ClubDetails = () => {
-  const { id } = useParams();
+  const { 'club-id': id } = useParams();
   const dispatch = useDispatch();
   const { teamDetails, teamDetailsLoading, clubs } = useSelector((state) => state.football);
   
   const teamData = teamDetails[id];
   const isLoading = teamDetailsLoading[id];
   const currentClub = clubs.find(club => club.id == id);
-  
+  console.log('teamDetails:', teamDetails);
+  console.log('teamDetailsLoading:', teamDetailsLoading);
+  console.log('clubs:', clubs);
   useEffect(() => {
-    // Fetch team details if not cached or stale (> 5 minutes)
     const isCached = teamData?.lastFetched;
     const isStale = isCached && (new Date() - new Date(teamData.lastFetched)) > 5 * 60 * 1000;
     
@@ -29,12 +30,12 @@ const ClubDetails = () => {
     <Header />
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className=" h-48 bg-gradient-to-br from-black mb-8">
+      <div className=" h-48 bg-gradient-to-br from-black/80 to-white mb-8">
            
         <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
           <ol className="flex items-center gap-2 text-sm text-white py-6">
             <li className="cursor-pointer hover:underline">
-              <Link to="/club">Club</Link>
+              <Link to="/club">All-Club</Link>
             </li>
             <li>/</li>
             <li className="font-semibold">
@@ -135,7 +136,7 @@ const ClubDetails = () => {
             <div className="bg-white rounded-xl shadow-sm p-6">
               <div className="flex justify-between items-center mb-5">
                 <h2 className="text-xl font-semibold text-gray-900">Manager & Squad</h2>
-                <Link to = {`/club/${id}/current`}>
+                <Link to = {`/club/${id}/all-players`}>
                 <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                   See all <ChevronRight className="w-4 h-4" />
                 </button>
