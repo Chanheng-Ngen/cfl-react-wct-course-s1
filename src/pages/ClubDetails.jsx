@@ -272,17 +272,15 @@ const ClubDetails = () => {
                 </div>
                 <div className="space-y-3">
                   {[
-                    { match: 'MV 12', team: 'Manchester United', score: '3-1', result: 'W' },
-                    { match: 'MV 10', team: 'Manchester United', score: '2-0', result: 'L' },
-                    { match: 'MV 9', team: 'Manchester United', score: '1-1', result: 'W' },
-                    { match: 'MV 8', team: 'Manchester United', score: '0-2', result: 'D' },
-                    { match: 'MV 7', team: 'Manchester United', score: '4-1', result: 'W' }
+                    { match: 'MV 12', team: tableStandings.club, score: '3-1', result: 'W' },
+                    { match: 'MV 10', team: tableStandings.club, score: '2-0', result: 'L' },
+                    { match: 'MV 9', team: tableStandings.club, score: '1-1', result: 'W' },
+                    { match: 'MV 8', team: tableStandings.club, score: '0-2', result: 'D' },
+                    { match: 'MV 7', team: tableStandings.club, score: '4-1', result: 'W' }
                   ].map((form, idx) => (
                     <div key={idx} className="flex items-center justify-between">
                       <div className="flex items-center gap-3 flex-1">
-                        <div className="w-10 h-10 bg-red-700 rounded flex items-center justify-center text-white text-xs font-bold">
-                          MU
-                        </div>
+                        <img src={tableStandings.logo} alt={tableStandings.club} className="w-8 h-8 object-contain" />
                         <div>
                           <div className="text-sm font-semibold text-gray-900">{form.match}</div>
                           <div className="text-xs text-gray-500">{form.team}</div>

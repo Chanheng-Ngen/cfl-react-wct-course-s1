@@ -112,7 +112,7 @@ const CambodiaFootballLeague = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="container mx-auto px-4 ">
+      <div className="container mx-auto px-4 mt-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
           {stats.map((stat, index) => {
             const Icon = stat.icon;
@@ -154,7 +154,7 @@ const CambodiaFootballLeague = () => {
           </div>
 
           <div className="relative rounded-3xl overflow-hidden shadow-xl group">
-            <div className="absolute inset-0 bg-gradient-to-br from-red-500 via-red-600 to-rose-700"></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-red-200 to-gray-700"></div>
             <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity">
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(255,255,255,0.4),transparent)]"></div>
               <div className="absolute top-0 left-0 w-full h-full">
@@ -193,7 +193,7 @@ const CambodiaFootballLeague = () => {
         {/* Mission & Vision */}
         <div className="mb-20">
           <div className="text-center mb-14">
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Mission & Vision</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">Mission & Vision</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Building the future of Cambodian football through excellence, integrity, and community engagement
             </p>
@@ -233,14 +233,14 @@ const CambodiaFootballLeague = () => {
         {/* Competition Format Section */}
         <div className="mb-16">
           <div className="text-center mb-14">
-            <h2 className="text-4xl sm:text-5xl font-extrabold text-gray-900 mb-4">Competition Format</h2>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">Competition Format</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Understanding how the Cambodia Football League operates
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="group bg-gradient-to-br from-blue-500 to-blue-600 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-blue-700 to-blue-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
                 <Users className="w-8 h-8 text-white" />
               </div>
@@ -250,7 +250,7 @@ const CambodiaFootballLeague = () => {
               </p>
             </div>
 
-            <div className="group bg-gradient-to-br from-blue-600 to-indigo-600 rounded-3xl p-10 text-white shadow-2xl hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-blue-600 to-indigo-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
                 <Calendar className="w-8 h-8 text-white" />
               </div>
@@ -260,7 +260,7 @@ const CambodiaFootballLeague = () => {
               </p>
             </div>
 
-            <div className="group bg-gradient-to-br from-indigo-600 to-blue-700 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group bg-gradient-to-br from-indigo-600 to-blue-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
                 <Trophy className="w-8 h-8 text-white" />
               </div>
@@ -273,7 +273,7 @@ const CambodiaFootballLeague = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="relative overflow-hidden bg-gradient-to-r from-red-600 via-red-500 to-rose-600 rounded-3xl p-10 sm:p-12 text-center text-white shadow-xl mb-20">
+        <div className="relative overflow-hidden bg-gradient-to-r from-gray-600 via-blue-500 to-gray-600 rounded-3xl p-10 sm:p-12 text-center text-white shadow-xl mb-20">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.15),transparent)]"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,100,100,0.3),transparent)]"></div>
           
@@ -305,7 +305,7 @@ const CambodiaFootballLeague = () => {
             </p>
             
             <div className="flex flex-wrap justify-center gap-4">
-              <button className="group px-8 py-3.5 bg-white text-red-600 rounded-xl font-bold hover:bg-red-50 transition-all shadow-xl hover:shadow-white/50 transform hover:-translate-y-0.5">
+              <button className="group px-8 py-3.5 bg-white text-black rounded-xl font-bold hover:bg-red-50 transition-all shadow-xl hover:shadow-white/50 transform hover:-translate-y-0.5">
                 <span className="flex items-center gap-2 text-base">
                   <Trophy className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                   View All Teams

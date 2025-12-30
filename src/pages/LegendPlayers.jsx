@@ -48,9 +48,9 @@ const LegendPlayers = () => {
       {/* Header */}
       <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
         <ol className='flex gap-2 items-center mt-5'>
-          <li className="cursor-pointer text-blue-500 underline"><Link to={`/club/${id}`}>Club</Link></li>
+          <li className="cursor-pointer hover:text-blue-500 underline"><Link to={`/club/${id}`}>Club</Link></li>
           <span>/</span>
-          <li>Legendary Players</li>
+          <li className='text-gray-500'>Legendary Players</li>
         </ol>
         <div className="flex  mx-auto justify-center items-center gap-5">
           <img src={clubInfo.team_logo} alt={clubInfo.team_name} className="w-16 h-16 object-contain" />
@@ -85,8 +85,7 @@ const LegendPlayers = () => {
                   
                   <div className="flex flex-col items-end gap-1">
                     <div className="text-right">
-                      <div className="text-xl font-bold text-gray-900">{legend.goals}</div>
-                      <div className="text-xs text-gray-500">goals</div>
+                      <div className="text-xl font-bold text-gray-900">{legend.goals} <span className='text-xs text-gray-500'>goals</span></div>
                     </div>
                     <div className="flex gap-4 text-xs text-gray-600 mt-1">
                       <div>

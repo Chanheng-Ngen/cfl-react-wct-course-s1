@@ -37,7 +37,7 @@ export function RoutesApp() {
           <Route path="/forget-password" element={<ForgetPassword />} />
           <Route path="/user-profile" element={<UserProfile />} /> 
           <Route path="/fixtures" element={<Fixtures />} />
-          <Route path="/fixtures/:id" element={<FixturesDetailPage />} />
+          <Route path="/fixtures/:id" element={<ResultDetailPage />} />
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetailPage />} />        
           <Route path="/videos" element={<Videos />} />

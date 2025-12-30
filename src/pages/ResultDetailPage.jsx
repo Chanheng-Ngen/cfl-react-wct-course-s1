@@ -1,29 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HomeLogo from "../assets/images/Svr_logo.png";
 import AwayLogo from "../assets/images/Johor.png";
-
-const resultsData = [
-  {
-    id: 1,
-    homeTeam: "Preah Khan Reach Svay Rieng FC",
-    awayTeam: "Johor Darul Ta'zim FC",
-    score: "2 - 1",
-    date: "Thursday, 04 Dec 2025",
-    stadium: "Morodok Techo National Stadium",
-    homeLogo: HomeLogo,
-    awayLogo: AwayLogo,
-    goals: [
-      { team: "home", player: "Chan Vathanaka", minute: "23'" },
-      { team: "away", player: "Bergson", minute: "55'" },
-      { team: "home", player: "Saret Krya", minute: "78'" },
-    ],
-  },
-];
+import { footballApi } from "../services/API";
+import { useParams } from "react-router";
 
 const ResultDetailPage = () => {
   const [activeTab, setActiveTab] = useState("summary");
+  const [results, setResults] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      try {
+        const fromDate = "2025-12-12";
+        const toDate = "2025-12-21";
+        const data = await footballApi.getFixtures(fromDate, toDate, 152);
+        const resultById = data.result.filter(match => match.event_key.toString() === id);
+        console.log(resultById);
+        setResults({
+          id: resultById[0]?.event_key,
+          homeTeam: resultById[0]?.event_home_team,
+          awayTeam: resultById[0]?.event_away_team,
+          score: resultById[0]?.event_final_result,
+          date: resultById[0]?.event_date ? new Date(resultById[0].event_date).toLocaleDateString('en-US', {
+            weekday: 'long',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+          }) : 'TBD',
+          stadium: resultById[0]?.event_stadium,
+          homeLogo: resultById[0]?.home_team_logo,
+          awayLogo: resultById[0]?.away_team_logo,
+          goals: resultById[0]?.goalscorers || [],
+          lineups: resultById[0]?.lineups || [],
+          substitutes: resultById[0]?.substitutes || [],
+        });
+        console.log(resultById[0].goalscorers);
+      } catch (error) {
+        console.error("Error fetching match details:", error);
+      }
+    };
+    fetchResults();
+  }, [id]);
+
 
   return (
     <>
@@ -34,22 +55,22 @@ const ResultDetailPage = () => {
         <div className="container mx-auto px-4 mt-16">
           <div className="bg-blue-50 rounded-2xl shadow p-6">
             <p className="text-center text-sm text-gray-500 mb-4">
-              {resultsData[0].date} · {resultsData[0].stadium}
+              {results.date} · {results.stadium}
             </p>
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-6">
               {/* HOME */}
               <div className="flex flex-col items-center text-center">
-                <img src={resultsData[0].homeLogo} className="w-14 h-14 mb-2" />
+                <img src={results.homeLogo} className="w-14 h-14 mb-2" />
                 <p className="font-semibold text-gray-800 text-sm max-w-[160px]">
-                  {resultsData[0].homeTeam}
+                  {results.homeTeam}
                 </p>
               </div>
 
               {/* SCORE */}
               <div className="text-center">
                 <div className="bg-white border rounded-xl px-6 py-2 text-2xl font-bold shadow">
-                  {resultsData[0].score}
+                  {results.score}
                 </div>
                 <p className="text-xs text-green-600 font-semibold mt-1">
                   Full Time
@@ -58,9 +79,9 @@ const ResultDetailPage = () => {
 
               {/* AWAY */}
               <div className="flex flex-col items-center text-center">
-                <img src={resultsData[0].awayLogo} className="w-14 h-14 mb-2" />
+                <img src={results.awayLogo} className="w-14 h-14 mb-2" />
                 <p className="font-semibold text-gray-800 text-sm max-w-[160px]">
-                  {resultsData[0].awayTeam}
+                  {results.awayTeam}
                 </p>
               </div>
             </div>
@@ -70,15 +91,14 @@ const ResultDetailPage = () => {
         {/* TABS */}
         <div className="container mx-auto px-4 mt-10">
           <div className="flex gap-6 border-b text-sm font-semibold">
-            {["summary", "lineups", "report"].map((tab) => (
+            {["summary", "lineups"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-3 capitalize ${
-                  activeTab === tab
-                    ? "border-b-2 border-blue-600 text-blue-600"
-                    : "text-gray-500"
-                }`}
+                className={`pb-3 capitalize ${activeTab === tab
+                  ? "border-b-2 border-blue-600 text-blue-600"
+                  : "text-gray-500"
+                  }`}
               >
                 {tab}
               </button>
@@ -89,43 +109,111 @@ const ResultDetailPage = () => {
           <div className="mt-6">
             {/* SUMMARY */}
             {activeTab === "summary" && (
-              <div className="bg-white rounded-xl shadow p-6 space-y-4">
-                <h3 className="font-semibold text-lg">Goals</h3>
-                {resultsData[0].goals.map((goal, index) => (
-                  <div
-                    key={index}
-                    className={`flex justify-between items-center ${
-                      goal.team === "home" ? "text-left" : "text-right"
-                    }`}
-                  >
-                    <span className="font-medium">
-                      {goal.team === "home"
-                        ? `${goal.player}`
-                        : `${goal.player}`}
-                    </span>
-                    <span className="text-sm text-gray-500">{goal.minute}</span>
-                  </div>
-                ))}
+              <div className="bg-white rounded-xl shadow p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-200 text-left text-sm text-gray-500">
+                        <th className="py-2">Scorer</th>
+                        <th className="py-2 text-center">Score</th>
+                        <th className="py-2 text-right">Time</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      {results?.goals?.map((goal, index) => (
+                        <tr
+                          key={index}
+                          className="border-b border-gray-100 last:border-b-0"
+                        >
+                          <td className="py-3 font-medium">
+                            {goal.home_scorer || goal.away_scorer}
+                          </td>
+
+                          <td className="py-3 text-center font-medium">
+                            {goal.score}
+                          </td>
+
+                          <td className="py-3 text-right text-sm text-gray-500">
+                            {goal.time}'
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
+
             )}
 
             {/* LINEUPS */}
             {activeTab === "lineups" && (
               <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-700">
-                <p className="font-semibold mb-2">Lineups</p>
-                <p>Lineup data will be added here.</p>
-              </div>
-            )}
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b border-gray-200 text-left text-lg font-medium bg-blue-200">
+                        <th className="py-3 text-center">{results.homeTeam}</th>
+                        <th className="py-3 text-center">{results.awayTeam}</th>
+                      </tr>
+                    </thead>
 
-            {/* REPORT */}
-            {activeTab === "report" && (
-              <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-700">
-                <p className="font-semibold mb-2">resultsData[0] Report</p>
-                <p>
-                  Preah Khan Reach Svay Rieng FC secured an important victory
-                  after a strong second-half performance in front of their home
-                  supporters.
-                </p>
+                    <tbody>
+                      {results?.lineups?.home_team?.starting_lineups?.map((homePlayer, index) => {
+                        const awayPlayer = results?.lineups?.away_team?.starting_lineups?.[index];
+
+                        return (
+                          <tr key={index} className="border-b border-gray-100 last:border-b-0">
+                            <td className="py-8 font-medium border-r border-gray-200 px-5">
+                              <div className="flex justify-between items-center">
+                                <span>{homePlayer?.player}</span>
+                                <span className="text-end">{homePlayer?.player_number}</span>
+                              </div>
+                            </td>
+                            <td className="py-8 font-medium px-5">
+                              <div className="flex justify-between items-center">
+                                <span>{awayPlayer?.player}</span>
+                                <span className="text-end">{awayPlayer?.player_number}</span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                  {/* Substitutes Table */}
+                  <div className="mt-12">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="text-lg font-semibold border-b border-gray-200 bg-blue-200 rounded overflow-hidden">
+                          <th colSpan={2} className="text-start py-3 ps-5">  Substitutes</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {results?.lineups?.home_team?.substitutes?.map((homeSub, index) => {
+                          const awaySub = results?.lineups?.away_team?.substitutes?.[index];
+
+                          return (
+                            <tr key={index} className="border-b border-gray-100 last:border-b-0">
+                              <td className="py-8 font-medium border-r border-gray-200 px-5">
+                                <div className="flex justify-between items-center">
+                                  <span>{homeSub?.player}</span>
+                                  <span className="text-end">{homeSub?.player_number}</span>
+                                </div>
+                              </td>
+                              <td className="py-8 font-medium px-5">
+                                <div className="flex justify-between items-center">
+                                  <span>{awaySub?.player}</span>
+                                  <span className="text-end">{awaySub?.player_number}</span>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             )}
           </div>

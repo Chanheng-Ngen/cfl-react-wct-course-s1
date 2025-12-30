@@ -113,7 +113,7 @@ const FixturesPage = () => {
             {fixtures.map((match) => (
               <div
                 key={match.id}
-                onClick={() => navigate(`/fixtures/${match.id}`)}
+                onClick={() => navigate(`/results/${match.id}`)}
                 className="
                   cursor-pointer
                   bg-white
