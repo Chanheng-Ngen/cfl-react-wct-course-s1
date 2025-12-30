@@ -21,7 +21,8 @@ const CoachPlayers = () => {
           name: club.result[0].coaches[0].coach_name || 'Unknown',
           country: club.result[0].coaches[0].coach_country || 'Unknown',
           age: club.result[0].coaches[0].coach_age || 'Unknown',
-          image: club.result[0].coaches[0].coach_image || null
+          image: club.result[0].coaches[0].coach_image || null,
+          initials: club.result[0].coaches[0].coach_name ? club.result[0].coaches[0].coach_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
         };
         setManagerCurrent(managerFormatted);
         const playerFormatted = club.result[0].players.map((player) => ({
@@ -29,7 +30,8 @@ const CoachPlayers = () => {
           name: player.player_name || 'Unknown',
           position: player.player_type || 'Unknown',
           number: player.player_number || 'Unknown',
-          image: player.player_image || null
+          image: player.player_image || null,
+          initials: player.player_name ? player.player_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
         }));
         setPlayerCurrent(playerFormatted);
       } catch (error) {
@@ -55,7 +57,7 @@ const CoachPlayers = () => {
             <div className="bg-blue-50 rounded-xl p-4 inline-block">
               <div className="flex items-center gap-4">
                 <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
-                  <img src={managerCurrent.image} alt={managerCurrent.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                  <img src={managerCurrent.image} alt={managerCurrent.name?.initials} className="w-16 h-16 rounded-full mb-2 object-cover shadow flex justify-center items-center" />
                 </div>
                 <div>
                   <div className="font-semibold text-gray-900 text-base">{managerCurrent.name}</div>
@@ -71,7 +73,7 @@ const CoachPlayers = () => {
                 <div key={idx} className="bg-white rounded-lg p-4 hover:shadow-md transition-shadow">
                   <div className="flex flex-col items-center">
                     <div className="relative mb-3">
-                      <img src={player.image} alt={player.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                      <img src={player.image} alt={player?.initials} className="w-16 h-16 rounded-full mb-2 object-cover shadow flex justify-center items-center" />
                       <div className="absolute -bottom-5 left-1/2 transform -translate-x-1/2 bg-white border border-gray-200 rounded px-1.5 py-0.5 shadow-sm">
                         <span className="text-xs font-semibold text-gray-700">{player.number}</span>
                       </div>

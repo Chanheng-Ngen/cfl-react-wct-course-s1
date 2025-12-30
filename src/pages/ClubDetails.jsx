@@ -12,6 +12,8 @@ const ClubDetails = () => {
   const [club, setClub] = useState({});
   const [lastMatch, setLastMatch] = useState({});
   const [nextMatch, setNextMatch] = useState({});
+  const [legendPlayers, setLegendPlayers] = useState([]);
+  const [tableStandings, setTableStandings] = useState({});
 
   useEffect(() => {
     const fromDate = '2025-12-12';
@@ -22,14 +24,14 @@ const ClubDetails = () => {
       try {
         const club = await footballApi.getTeams(id);
         const fixtures = await footballApi.getFixtures(fromDate, toDate, standingLeagueId);
+        const standings = await footballApi.getStandings(standingLeagueId);
 
         const allMatchs = fixtures.result.filter(match =>
           match.away_team_key === parseInt(id) || match.home_team_key === parseInt(id)
         );
+        const yourPos = standings?.result?.total?.find(team => team.team_key === parseInt(id));
 
         if (!club?.result) return;
-
-        // Sort all matches by date
         const sortedMatches = allMatchs.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
 
         if (sortedMatches.length >= 2) {
@@ -52,7 +54,8 @@ const ClubDetails = () => {
           name: club.result[0].coaches[0].coach_name || 'Unknown',
           country: club.result[0].coaches[0].coach_country || 'Unknown',
           age: club.result[0].coaches[0].coach_age || 'Unknown',
-          image: club.result[0].coaches[0].coach_image || null
+          image: club.result[0].coaches[0].coach_image || null,
+          initials: club.result[0].coaches[0].coach_name ? club.result[0].coaches[0].coach_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
         };
         setManager(managerFormatted);
 
@@ -62,9 +65,34 @@ const ClubDetails = () => {
           name: player.player_name || 'Unknown',
           position: player.player_type || 'Unknown',
           number: player.player_number || 'Unknown',
-          image: player.player_image || null
+          image: player.player_image || null,
+          initials: player.player_name ? player.player_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
         }));
         setPlayer(playerFormatted);
+
+        // set legend players
+        const legendsFormatted = club.result[0]?.players
+          .sort((a, b) => (b.player_goals || 0) - (a.player_goals || 0)) // Sort by goals descending
+          .slice(0, 3) 
+          .map((player) => ({
+            name: player.player_name || 'Unknown',
+            pos: player.player_type || 'Unknown',
+            goals: player.player_goals || 0,
+            assists: player.player_assists || 0,
+            initials: player.player_name ? player.player_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
+          }));
+        setLegendPlayers(legendsFormatted);
+
+        // set table standings
+        setTableStandings({
+          standing_place: yourPos?.standing_place,
+          logo: yourPos?.team_logo,
+          club: yourPos?.standing_team,
+          won: yourPos?.standing_W || 0,
+          dg: yourPos?.standing_GD || 0,
+          pts: yourPos?.standing_PTS || 0,
+        });
+
       } catch (error) {
         console.error('Error fetching club details:', error);
       }
@@ -177,7 +205,7 @@ const ClubDetails = () => {
                   <h3 className="text-sm font-semibold text-gray-700 mb-4">Manager</h3>
                   <div className="flex items-center gap-4">
                     <div className="w-14 h-14 bg-gray-400 rounded-full overflow-hidden">
-                      <img src={manager.image} alt={manager.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                      <img src={manager.image} alt={manager.initials} className="w-16 h-16 rounded-full mb-2 object-cover shadow flex justify-center items-center" />
 
                     </div>
                     <div>
@@ -193,7 +221,7 @@ const ClubDetails = () => {
                   <div className="flex gap-4">
                     {player.map((player, key) => (
                       <div key={key} className="flex flex-col items-center">
-                        <img src={player.image} alt={player.name} className="w-16 h-16 rounded-full mb-2 object-cover shadow" />
+                        <img src={player.image} alt={player.initials} className="w-16 h-16 rounded-full mb-2 object-cover shadow flex justify-center items-center" />
                         <div className=" text-gray-600 mb-1">{player.number}</div>
                         <div className="text-sm text-gray-900 font-bold">{player.name}</div>
                         <div className="text-blue-800 flex items-center justify-center text-sm mb-2">
@@ -209,26 +237,20 @@ const ClubDetails = () => {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="flex justify-between items-center mb-5">
                   <h2 className="text-xl font-semibold text-gray-900">Club Legends</h2>
-                  <Link to="/legend-players">
+                  <Link to={`/club/${id}/legend-players`}>
                     <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                       See all <ChevronRight className="w-4 h-4" />
                     </button>
                   </Link>
                 </div>
                 <div className="space-y-4">
-                  {[
-                    { name: 'Cristiano Ronaldo', role: 'Forward', period: '2003-2009', goals: 118, assists: 50, abbr: 'CR' },
-                    { name: 'Wayne Rooney', role: 'Forward', period: '2004-2017', goals: 130, assists: 102, abbr: 'WR' },
-                    { name: 'Ryan Giggs', role: 'Midfielder', period: '1990-2014', goals: 90, assists: 76, abbr: 'RG' }
-                  ].map((legend, idx) => (
+                  {legendPlayers.map((legend, idx) => (
                     <div key={idx} className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                          {legend.abbr}
-                        </div>
-                        <div>
+                        <img src={legend.image} alt={legend.initials} className="w-14 h-14 rounded-full object-cover shadow flex justify-center items-center" />
+                        <div className='ms-4'>
                           <div className="font-semibold text-gray-900 text-base">{legend.name}</div>
-                          <div className="text-sm text-gray-500">{legend.role} • {legend.period}</div>
+                          <div className="text-sm text-gray-500">{legend.pos}</div>
                         </div>
                       </div>
                       <div className="text-right">
@@ -284,7 +306,7 @@ const ClubDetails = () => {
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <div className="flex justify-between items-center mb-5">
                   <h2 className="text-xl font-semibold text-gray-900">Table</h2>
-                  <Link to="/table-standings">
+                  <Link to="/standing">
                     <button className="text-blue-600 text-sm font-semibold flex items-center gap-1 hover:text-blue-700">
                       See all <ChevronRight className="w-4 h-4" />
                     </button>
@@ -292,28 +314,26 @@ const ClubDetails = () => {
                 </div>
                 <div className="text-center py-4">
                   <div className="mb-3">
-                    <span className="text-6xl font-bold text-blue-600">3</span>
+                    <span className="text-6xl font-bold text-blue-600">{tableStandings.standing_place}</span>
                     <span className="text-3xl font-bold text-blue-600 align-super">st</span>
                   </div>
                   <div className="text-sm text-gray-500 mb-4">Some season in MW</div>
                   <div className="flex items-center gap-3 justify-center mb-4">
-                    <div className="w-10 h-10 bg-red-700 rounded flex items-center justify-center text-white text-sm font-bold">
-                      MU
-                    </div>
-                    <span className="font-semibold text-gray-900">Manchester United</span>
+                    <img src={tableStandings.logo} alt={tableStandings.club} className="w-10 h-10 object-contain" />
+                    <span className="font-semibold text-gray-900">{tableStandings.club}</span>
                   </div>
                   <div className="flex justify-center gap-8 text-sm pt-3 border-t border-gray-200">
                     <div className="text-center">
                       <div className="text-gray-500 text-xs mb-1">W</div>
-                      <div className="font-bold text-gray-900">7</div>
+                      <div className="font-bold text-gray-900">{tableStandings.won}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-gray-500 text-xs mb-1">GD</div>
-                      <div className="font-bold text-gray-900">+12</div>
+                      <div className="font-bold text-gray-900">{tableStandings.dg}</div>
                     </div>
                     <div className="text-center">
                       <div className="text-gray-500 text-xs mb-1">Pts</div>
-                      <div className="font-bold text-gray-900">23</div>
+                      <div className="font-bold text-gray-900">{tableStandings.pts}</div>
                     </div>
                   </div>
                 </div>

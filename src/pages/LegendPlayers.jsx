@@ -2,19 +2,42 @@ import React from 'react';
 import { ArrowLeft, Trophy } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { Link } from 'react-router';
+import { Link, useParams } from 'react-router';
+import { useEffect, useState } from 'react';
+import { footballApi } from '../services/API';
 
-const App = () => {
-  const legends = [
-    { name: 'Cristiano Ronaldo', pos: 'Forward', period: '2003-2009', country: 'Portugal', goals: 118, assists: 69, matches: 292, initials: 'CR' },
-    { name: 'Wayne Rooney', pos: 'Forward', period: '2004-2017', country: 'England', goals: 253, assists: 145, matches: 559, initials: 'WR' },
-    { name: 'Ryan Giggs', pos: 'Midfielder', period: '1990-2014', country: 'Wales', goals: 168, assists: 263, matches: 963, initials: 'RG' },
-    { name: 'Paul Scholes', pos: 'Midfielder', period: '1993-2013', country: 'England', goals: 155, assists: 82, matches: 718, initials: 'PS' },
-    { name: 'Eric Cantona', pos: 'Forward', period: '1992-1997', country: 'France', goals: 82, assists: 62, matches: 185, initials: 'EC' },
-    { name: 'George Best', pos: 'Forward', period: '1963-1974', country: 'N. Ireland', goals: 179, assists: 111, matches: 470, initials: 'GB' },
-    { name: 'Bobby Charlton', pos: 'Midfielder', period: '1956-1973', country: 'England', goals: 249, assists: 88, matches: 758, initials: 'BC' },
-    { name: 'Roy Keane', pos: 'Midfielder', period: '1993-2005', country: 'Ireland', goals: 51, assists: 41, matches: 480, initials: 'RK' }
-  ];
+const LegendPlayers = () => {
+  const { id } = useParams();
+  const [legendPlayers, setLegendPlayers] = useState([]);
+  const [clubInfo, setClubInfo] = useState({});
+  useEffect(() => {
+    const getlegendPlayers = async () => {
+      try {
+        const club = await footballApi.getTeams(id);
+        console.log(club.result[0]);
+        if (!club?.result) return;
+        // For demonstration, using hardcoded legends data
+        setLegendPlayers(club.result[0]?.players
+          ?.filter(player => (player.player_goals || 0) > 0)
+          .sort((a, b) => (b.player_goals || 0) - (a.player_goals || 0))
+          .map((player) => ({
+          name: player.player_name || 'Unknown',
+          pos: player.player_type || 'Unknown',
+          country: player.player_country || 'Unknown',
+          goals: player.player_goals || 0,
+          assists: player.player_assists || 0,
+          matches: player.player_match_played || 0,
+          initials: player.player_name ? player.player_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'UK',
+          image: player.player_image || null
+        })));
+        setClubInfo(club.result[0]);
+        console.log(clubInfo);
+      } catch (error) {
+        console.error('Error fetching legend players:', error);
+      }
+    }
+    getlegendPlayers(); 
+  }, [id]);
 
   const championships = ['2023', '2021', '2019', '2018', '2015', '2013', '2011', '2009', '2008', '2007'];
 
@@ -24,16 +47,14 @@ const App = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="z-10 flex flex-col gap-6 items-start h-full px-4 container mx-auto">
-        <Link to = "/club-details">
-        <button className="w-8 h-8 flex items-center justify-center mb-4">
-          <ArrowLeft className="w-5 h-5 text-gray-700" />
-        </button>
-        </Link>
-        <div className="flex items-center gap-5">
-          <div className="w-12 h-12 bg-red-700 rounded-lg flex items-center justify-center shadow">
-            <span className="text-white text-sm font-bold">MU</span>
-          </div>
-          <h1 className="text-xl font-bold text-gray-900">Manchester United Legends</h1>
+        <ol className='flex gap-2 items-center mt-5'>
+          <li className="cursor-pointer text-blue-500 underline"><Link to={`/club/${id}`}>Club</Link></li>
+          <span>/</span>
+          <li>Legendary Players</li>
+        </ol>
+        <div className="flex  mx-auto justify-center items-center gap-5">
+          <img src={clubInfo.team_logo} alt={clubInfo.team_name} className="w-16 h-16 object-contain" />
+          <h1 className="text-xl font-bold text-gray-900">{clubInfo.team_name}</h1>
         </div>
       </div>
 
@@ -43,25 +64,22 @@ const App = () => {
           <div className="flex items-center gap-2 mb-4">
             <Trophy className="w-5 h-5 text-yellow-500" />
             <h2 className="text-base font-semibold text-gray-900">All Legendary Players</h2>
-            <span className="text-sm text-gray-500">({legends.length})</span>
+            <span className="text-sm text-gray-500">({legendPlayers.length})</span>
           </div>
 
           <div className="space-y-3">
-            {legends.map((legend, idx) => (
+            {legendPlayers.map((legend, idx) => (
               <div key={idx} className="bg-white rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 flex-1">
-                    <div className="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white font-bold text-lg">{legend.initials}</span>
-                    </div>
+                    <img src={legend.image} alt={legend.initials} className="w-14 h-14 rounded-full object-cover shadow flex justify-center items-center" />
                     <div className="flex-1">
                       <div className="font-semibold text-gray-900 text-base">{legend.name}</div>
                       <div className="flex items-center gap-3 text-sm text-gray-600 mt-1">
                         <span>{legend.pos}</span>
                         <span>•</span>
-                        <span>{legend.period}</span>
+                        <span>{legend.country}</span>
                       </div>
-                      <div className="text-xs text-gray-500 mt-0.5">{legend.country}</div>
                     </div>
                   </div>
                   
@@ -105,4 +123,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default LegendPlayers;
