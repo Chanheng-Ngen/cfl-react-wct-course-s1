@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HomeLogo from "../assets/images/Svr_logo.png";
@@ -24,41 +23,33 @@ const resultsData = [
 ];
 
 const ResultDetailPage = () => {
-  const { id } = useParams();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("summary");
-
-  const match = resultsData.find((m) => m.id === Number(id));
-
-  if (!match) {
-    return <div className="text-center py-20">Match not found</div>;
-  }
 
   return (
     <>
       <Header />
 
       <div className="bg-white min-h-screen">
-        {/* MATCH HEADER */}
+        {/* resultsData[0] HEADER */}
         <div className="container mx-auto px-4 mt-16">
           <div className="bg-blue-50 rounded-2xl shadow p-6">
             <p className="text-center text-sm text-gray-500 mb-4">
-              {match.date} · {match.stadium}
+              {resultsData[0].date} · {resultsData[0].stadium}
             </p>
 
             <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-6">
               {/* HOME */}
               <div className="flex flex-col items-center text-center">
-                <img src={match.homeLogo} className="w-14 h-14 mb-2" />
+                <img src={resultsData[0].homeLogo} className="w-14 h-14 mb-2" />
                 <p className="font-semibold text-gray-800 text-sm max-w-[160px]">
-                  {match.homeTeam}
+                  {resultsData[0].homeTeam}
                 </p>
               </div>
 
               {/* SCORE */}
               <div className="text-center">
                 <div className="bg-white border rounded-xl px-6 py-2 text-2xl font-bold shadow">
-                  {match.score}
+                  {resultsData[0].score}
                 </div>
                 <p className="text-xs text-green-600 font-semibold mt-1">
                   Full Time
@@ -67,9 +58,9 @@ const ResultDetailPage = () => {
 
               {/* AWAY */}
               <div className="flex flex-col items-center text-center">
-                <img src={match.awayLogo} className="w-14 h-14 mb-2" />
+                <img src={resultsData[0].awayLogo} className="w-14 h-14 mb-2" />
                 <p className="font-semibold text-gray-800 text-sm max-w-[160px]">
-                  {match.awayTeam}
+                  {resultsData[0].awayTeam}
                 </p>
               </div>
             </div>
@@ -100,7 +91,7 @@ const ResultDetailPage = () => {
             {activeTab === "summary" && (
               <div className="bg-white rounded-xl shadow p-6 space-y-4">
                 <h3 className="font-semibold text-lg">Goals</h3>
-                {match.goals.map((goal, index) => (
+                {resultsData[0].goals.map((goal, index) => (
                   <div
                     key={index}
                     className={`flex justify-between items-center ${
@@ -129,7 +120,7 @@ const ResultDetailPage = () => {
             {/* REPORT */}
             {activeTab === "report" && (
               <div className="bg-white rounded-xl shadow p-6 text-sm text-gray-700">
-                <p className="font-semibold mb-2">Match Report</p>
+                <p className="font-semibold mb-2">resultsData[0] Report</p>
                 <p>
                   Preah Khan Reach Svay Rieng FC secured an important victory
                   after a strong second-half performance in front of their home

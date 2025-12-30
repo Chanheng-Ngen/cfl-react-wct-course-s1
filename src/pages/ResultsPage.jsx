@@ -23,7 +23,7 @@ const ResultsPage = () => {
         const toDate = "2025-12-21";
 
         console.log('Fetching results from', fromDate, 'to', toDate);
-        const data = await footballApi.getFixtures(fromDate, toDate);
+        const data = await footballApi.getFixtures(fromDate, toDate, 152);
 
         console.log('API Response:', data);
 

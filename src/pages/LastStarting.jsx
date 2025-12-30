@@ -39,11 +39,6 @@ const LastStarting = () => {
     { name: 'Anthony Martial', pos: 'ST', num: '9', rating: null }
   ];
 
-  const getInitials = (name) => {
-    const parts = name.split(' ');
-    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  };
 
   useEffect(() => {
 
@@ -64,8 +59,21 @@ const LastStarting = () => {
         );
 
         if (lastMatch) {
-          setLastMatch(lastMatch);
-          console.log(teamId, lastMatch.home_team_key, typeof teamId, typeof lastMatch.home_team_key);
+          const lastMatchformatted = {
+            home_team_key: lastMatch.home_team_key,
+            away_team_key: lastMatch.away_team_key,
+            event_home_team: lastMatch.event_home_team,
+            event_away_team: lastMatch.event_away_team,
+            home_team_logo: lastMatch.home_team_logo,
+            away_team_logo: lastMatch.away_team_logo,
+            event_final_result: lastMatch.event_final_result,
+            event_date: lastMatch.event_date,
+            event_time: lastMatch.event_time,
+            coach: lastMatch.lineups?.[teamId === lastMatch.home_team_key ? 'home_team' : 'away_team']?.coaches[0]?.coache,
+            lineups: lastMatch.lineups?.[teamId === lastMatch.home_team_key ? 'home_team' : 'away_team']?.starting_lineups,
+            substitutes: lastMatch.lineups?.[teamId === lastMatch.home_team_key ? 'home_team' : 'away_team']?.substitutes,
+          }
+          setLastMatch(lastMatchformatted);
           console.log(lastMatch);
         }
       } catch (error) {
@@ -187,7 +195,7 @@ const LastStarting = () => {
                 </div>
                 <div>
                   <span className="text-sm text-gray-600 block">Manager</span>
-                  <span className="text-xl font-bold text-gray-900">   {lastMatch?.lineups?.home_team?.coaches?.[0]?.coache || 'Loading...'}</span>
+                  <span className="text-xl font-bold text-gray-900">   {lastMatch.coach || 'Loading...'}</span>
                 </div>
               </div> 
               <div className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
@@ -275,7 +283,7 @@ const LastStarting = () => {
                 <div key={idx} className="flex flex-col items-center group">
                   <div className="relative mb-3">
                     <div className="w-16 h-16 bg-gradient-to-br from-gray-400 to-gray-500 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-lg group-hover:shadow-xl transition-shadow">
-                      {getInitials(player.name)}
+                      {player.name}
                     </div>
                     <div className="absolute -top-1 -right-1 w-6 h-6 bg-white rounded-full shadow-md flex items-center justify-center">
                       <span className="text-xs font-bold text-gray-700">{player.num}</span>

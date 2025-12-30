@@ -38,7 +38,7 @@ const FixturesPage = () => {
       }
       const fromDate = '2025-12-12';
       const toDate = '2025-12-21';
-      const response = await footballApi.getFixtures(fromDate, toDate);
+      const response = await footballApi.getFixtures(fromDate, toDate, 152);
       
       if (response?.result) {
         const transformedMatches = response.result.map((match, index) => ({
