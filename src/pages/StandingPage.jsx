@@ -26,7 +26,7 @@ const LeagueStandings = () => {
       try {
         setLoading(true);
         const response = await footballApi.getStandings(LEAGUE_ID);
-        console.log(response.result);
+        // console.log(response.result);
         if (response?.result?.total) {
           const transformedStandings = response.result.total.slice(0, 20).map((team, index) => ({
             pos: team.standing_place || index + 1,

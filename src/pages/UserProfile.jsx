@@ -78,7 +78,7 @@ const UserProfile = () => {
   const handleProfileSubmit = (e) => {
     e.preventDefault();
     if (validateProfile()) {
-      console.log('Profile updated:', profileData);
+      // console.log('Profile updated:', profileData);
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
     }
@@ -109,7 +109,7 @@ const UserProfile = () => {
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
     if (validatePassword()) {
-      console.log('Password changed');
+      // console.log('Password changed');
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       setShowSuccessMessage(true);
       setTimeout(() => setShowSuccessMessage(false), 3000);
@@ -123,7 +123,7 @@ const UserProfile = () => {
 
   // Handle Account Deletion
   const handleDeleteAccount = () => {
-    console.log('Account deleted');
+    // console.log(' deleted');
     setShowDeleteModal(false);
     // Redirect to home or login page
   };

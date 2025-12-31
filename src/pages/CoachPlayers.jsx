@@ -15,7 +15,7 @@ const CoachPlayers = () => {
     const getClubDetails = async () => {
       try {
         const club = await footballApi.getTeams(id);
-        console.log(club.result);
+        // console.log(club.result);
         if (!club?.result) return;
         const managerFormatted = {
           name: club.result[0].coaches[0].coach_name || 'Unknown',

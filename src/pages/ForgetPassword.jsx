@@ -30,7 +30,7 @@ const ForgetPassword = () => {
 
     // Simulate API call
     setTimeout(() => {
-      console.log('Password reset email sent to:', email);
+      // console.log('Password reset email sent to:', email);
       setIsLoading(false);
       setIsSubmitted(true);
     }, 2000);
@@ -39,7 +39,7 @@ const ForgetPassword = () => {
   const handleResend = () => {
     setIsLoading(true);
     setTimeout(() => {
-      console.log('Resending password reset email to:', email);
+      // console.log('Resending password reset email to:', email);
       setIsLoading(false);
     }, 2000);
   };

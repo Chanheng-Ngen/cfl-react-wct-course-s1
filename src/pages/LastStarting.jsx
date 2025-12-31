@@ -74,7 +74,7 @@ const LastStarting = () => {
             substitutes: lastMatch.lineups?.[teamId === lastMatch.home_team_key ? 'home_team' : 'away_team']?.substitutes,
           }
           setLastMatch(lastMatchformatted);
-          console.log(lastMatch);
+          // console.log(lastMatch);
         }
       } catch (error) {
         console.error('Error fetching last match data:', error);

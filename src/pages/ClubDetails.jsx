@@ -38,8 +38,8 @@ const ClubDetails = () => {
           setLastMatch(sortedMatches[0]);
           setNextMatch(sortedMatches[1]);
 
-          console.log("last match (past)", sortedMatches[0]);
-          console.log("next match (future)", sortedMatches[1]);
+          // console.log("last match (past)", sortedMatches[0]);
+          // console.log("next match (future)", sortedMatches[1]);
         } else if (sortedMatches.length === 1) {
           setNextMatch(sortedMatches[0]);
           console.log("only one match found", sortedMatches[0]);

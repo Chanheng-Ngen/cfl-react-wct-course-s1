@@ -22,10 +22,10 @@ const ResultsPage = () => {
         const fromDate = "2025-12-12";
         const toDate = "2025-12-21";
 
-        console.log('Fetching results from', fromDate, 'to', toDate);
+        // console.log('Fetching results from', fromDate, 'to', toDate);
         const data = await footballApi.getFixtures(fromDate, toDate, 152);
 
-        console.log('API Response:', data);
+        // console.log('API Response:', data);
 
         if (data.result && Array.isArray(data.result)) {
           const finishedMatches = data.result
@@ -37,7 +37,7 @@ const ResultsPage = () => {
             .sort((a, b) => new Date(b.match_date) - new Date(a.match_date))
             .slice(0, 20);
 
-          console.log('Finished matches:', finishedMatches.length);
+          // console.log('Finished matches:', finishedMatches.length);
 
           if (finishedMatches.length > 0) {
             setResults(finishedMatches);

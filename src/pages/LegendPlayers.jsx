@@ -14,7 +14,7 @@ const LegendPlayers = () => {
     const getlegendPlayers = async () => {
       try {
         const club = await footballApi.getTeams(id);
-        console.log(club.result[0]);
+        // console.log(club.result[0]);
         if (!club?.result) return;
         // For demonstration, using hardcoded legends data
         setLegendPlayers(club.result[0]?.players
@@ -31,7 +31,7 @@ const LegendPlayers = () => {
           image: player.player_image || null
         })));
         setClubInfo(club.result[0]);
-        console.log(clubInfo);
+        // console.log(clubInfo);
       } catch (error) {
         console.error('Error fetching legend players:', error);
       }

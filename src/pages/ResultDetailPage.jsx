@@ -21,7 +21,7 @@ const ResultDetailPage = () => {
         const probabilities = await footballApi.getProbabilities(fromDate, toDate, 152, id);
         const resultById = data.result.filter(match => match.event_key.toString() === id);
         const probabilitiesById = probabilities.result.find(prob => prob.event_key.toString() === id);
-        console.log(resultById);
+        // console.log(resultById);
         setResults({
           id: resultById[0]?.event_key,
           homeTeam: resultById[0]?.event_home_team,
@@ -41,8 +41,8 @@ const ResultDetailPage = () => {
           substitutes: resultById[0]?.substitutes || [],
           cards: resultById[0]?.cards || [],
         });
-        console.log(resultById[0].goalscorers);
-        console.log("pro", probabilitiesById);
+        // console.log(resultById[0].goalscorers);
+        // console.log("pro", probabilitiesById);
         setProbabilities({
           home_formation: probabilitiesById?.event_home_formation,
           away_formation: probabilitiesById?.event_away_formation,

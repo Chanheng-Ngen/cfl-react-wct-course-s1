@@ -114,7 +114,7 @@ const Login = () => {
         }
 
         // Successful login
-        console.log('Login successful:', userCredential.user);
+        // console.log('Login successful:', userCredential.user);
         setLoginSuccess(true);
         
         // Store remember me preference

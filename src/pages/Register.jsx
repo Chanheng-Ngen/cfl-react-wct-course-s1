@@ -128,7 +128,7 @@ const Register = () => {
         // The account exists in Firebase Auth but not in Firestore until verified
 
         // Successful registration and verification email sent
-        console.log('Registration successful. Verification email sent to:', formData.email);
+        // console.log('Registration successful. Verification email sent to:', formData.email);
         setRegisterSuccess(true);
         setVerificationEmailSent(true);
         
