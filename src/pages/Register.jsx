@@ -28,7 +28,6 @@ const Register = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -103,36 +102,27 @@ const Register = () => {
     
     if (validateForm()) {
       setIsLoading(true);
-      setErrors({}); // Clear any previous errors
+      setErrors({}); 
       
       try {
-        // Create user with Firebase Authentication (this validates the email)
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           formData.email,
           formData.password
         );
 
-        // Update user profile with display name
         await updateProfile(userCredential.user, {
           displayName: formData.fullName
         });
 
-        // Send email verification and wait for it to complete
         await sendEmailVerification(userCredential.user, {
           url: `${window.location.origin}/login`,
           handleCodeInApp: false
         });
 
-        // Note: User data will be stored in Firestore only after email verification
-        // The account exists in Firebase Auth but not in Firestore until verified
-
-        // Successful registration and verification email sent
-        // console.log('Registration successful. Verification email sent to:', formData.email);
         setRegisterSuccess(true);
         setVerificationEmailSent(true);
         
-        // Navigate immediately to login page after verification email is sent
         navigate('/login', { 
           state: { 
             message: `Verification email sent to ${formData.email}.` 

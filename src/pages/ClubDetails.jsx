@@ -146,18 +146,18 @@ const ClubDetails = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <img src={nextMatch.home_team_logo} alt={nextMatch.home_team_name} className="w-12 h-12 object-contain" />
-                    <span className="font-semibold text-gray-900 text-lg">{nextMatch.event_home_team}</span>
+                    <img src={nextMatch.home_team_logo} alt={nextMatch.home_team_name} className="md:w-12 md:h-12 w-9 h-9 object-contain" />
+                    <span className="font-semibold text-gray-900 text-[16px] md:text-lg">{nextMatch.event_home_team}</span>
                   </div>
                   <div className="text-center">
-                    <div className="lg:text-3xl md:text-2xl sm:text-xl  font-bold text-gray-900 mb-3">
+                    <div className="lg:text-3xl md:text-2xl sm:text-[16px] font-bold text-gray-900 mb-3">
                       {nextMatch.event_date}
                     </div>
                     <h3 className='text-sm text-gray-500 text-center'> at {nextMatch.event_time}</h3>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="font-semibold text-gray-900 text-lg">{nextMatch.event_away_team}</span>
-                    <img src={nextMatch.away_team_logo} alt={nextMatch.away_team_name} className="w-12 h-12 object-contain" />
+                    <span className="font-semibold text-gray-900 text-[16px] md:text-lg">{nextMatch.event_away_team}</span>
+                    <img src={nextMatch.away_team_logo} alt={nextMatch.away_team_name} className="md:w-12 md:h-12 w-9 h-9 object-contain" />
                   </div>
                 </div>
               </div>
@@ -175,13 +175,13 @@ const ClubDetails = () => {
                 <div className="bg-gray-50 rounded-lg p-5">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <img src={lastMatch.home_team_logo} alt={lastMatch.home_team_name} className="w-12 h-12 object-contain" />
-                      <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_home_team}</span>
+                      <img src={lastMatch.home_team_logo} alt={lastMatch.home_team_name} className="md:w-12 md:h-12 w-9 h-9 object-contain" />
+                      <span className="font-semibold text-gray-900 text-[16px] md:text-lg">{lastMatch.event_home_team}</span>
                     </div>
                     <div className="lg:text-4xl md:text-2xl sm:text-xl font-bold text-gray-900">{lastMatch.event_final_result}</div>
                     <div className="flex items-center gap-4">
-                      <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_away_team}</span>
-                      <img src={lastMatch.away_team_logo} alt={lastMatch.away_team_name} className="w-12 h-12 object-contain" />
+                      <span className="font-semibold text-gray-900 text-[16px] md:text-lg">{lastMatch.event_away_team}</span>
+                      <img src={lastMatch.away_team_logo} alt={lastMatch.away_team_name} className="md:w-12 md:h-12 w-9 h-9 object-contain" />
                     </div>
                   </div>
                   <div className="text-sm text-gray-500 text-center mt-3">
