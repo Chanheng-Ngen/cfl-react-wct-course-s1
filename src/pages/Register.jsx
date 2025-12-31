@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import cfl_logo from '../assets/images/cfl_logo.jpg';
+import clf_logo from '../assets/images/CFL-title-icon.png'
 import { auth } from '../firebase/firebaseClient';
 import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 
@@ -11,7 +11,6 @@ const Register = () => {
     email: '',
     password: '',
     confirmPassword: '',
-    phoneNumber: '',
     dateOfBirth: ''
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -53,13 +52,6 @@ const Register = () => {
       newErrors.email = 'Email is invalid';
     }
 
-    // Phone Number validation
-    if (!formData.phoneNumber) {
-      newErrors.phoneNumber = 'Phone number is required';
-    } else if (!/^[0-9]{9,15}$/.test(formData.phoneNumber.replace(/[\s-]/g, ''))) {
-      newErrors.phoneNumber = 'Phone number is invalid';
-    }
-
     // Date of Birth validation
     if (!formData.dateOfBirth) {
       newErrors.dateOfBirth = 'Date of birth is required';
@@ -99,16 +91,17 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validateForm()) {
       setIsLoading(true);
-      setErrors({}); 
-      
+      setErrors({});
+
       try {
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           formData.email,
-          formData.password
+          formData.password,
+          formData.dateOfBirth
         );
 
         await updateProfile(userCredential.user, {
@@ -122,19 +115,19 @@ const Register = () => {
 
         setRegisterSuccess(true);
         setVerificationEmailSent(true);
-        
-        navigate('/login', { 
-          state: { 
-            message: `Verification email sent to ${formData.email}.` 
-          } 
+
+        navigate('/login', {
+          state: {
+            message: `Verification email sent to ${formData.email}.`
+          }
         });
 
       } catch (error) {
         console.error('Registration error:', error);
-        
+
         // Handle Firebase-specific errors
         let errorMessage = 'An unexpected error occurred. Please try again.';
-        
+
         if (error.code === 'auth/email-already-in-use') {
           errorMessage = 'This email is already registered. Please sign in instead.';
         } else if (error.code === 'auth/invalid-email') {
@@ -148,7 +141,7 @@ const Register = () => {
         } else if (error.message?.includes('email')) {
           errorMessage = 'Failed to send verification email. The email address may not exist or is unreachable.';
         }
-        
+
         setErrors({ submit: errorMessage });
         setIsLoading(false);
       }
@@ -161,9 +154,9 @@ const Register = () => {
         {/* Register Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+          <div className="bg-linear-to-r from-blue-500  to-blue-900 px-8 py-10 text-center">
             <div className="flex justify-center mb-4">
-              <img src={cfl_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
+              <img src={clf_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
             </div>
             <h2 className="text-3xl font-bold text-white mb-2">Create Account</h2>
             <p className="text-blue-100">Join the Cambodia Football League community</p>
@@ -189,9 +182,8 @@ const Register = () => {
                     type="text"
                     value={formData.fullName}
                     onChange={handleChange}
-                    className={`block w-full pl-10 pr-3 py-3 border ${
-                      errors.fullName ? 'border-red-500' : 'border-gray-300'
-                    } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+                    className={`block w-full pl-10 pr-3 py-3 border ${errors.fullName ? 'border-red-500' : 'border-gray-300'
+                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                     placeholder="John Doe"
                   />
                 </div>
@@ -204,8 +196,6 @@ const Register = () => {
                   </p>
                 )}
               </div>
-
-              {/* Email & Phone Number Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Email Field */}
                 <div>
@@ -224,9 +214,8 @@ const Register = () => {
                       type="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-3 py-3 border ${
-                        errors.email ? 'border-red-500' : 'border-gray-300'
-                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+                      className={`block w-full pl-10 pr-3 py-3 border ${errors.email ? 'border-red-500' : 'border-gray-300'
+                        } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                       placeholder="you@example.com"
                     />
                   </div>
@@ -239,74 +228,37 @@ const Register = () => {
                     </p>
                   )}
                 </div>
-
-                {/* Phone Number Field */}
+                {/* Date of Birth Field */}
                 <div>
-                  <label htmlFor="phoneNumber" className="block text-sm font-semibold text-gray-700 mb-2">
-                    Phone Number
+                  <label htmlFor="dateOfBirth" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Date of Birth
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
                     </div>
                     <input
-                      id="phoneNumber"
-                      name="phoneNumber"
-                      type="tel"
-                      value={formData.phoneNumber}
+                      id="dateOfBirth"
+                      name="dateOfBirth"
+                      type="date"
+                      value={formData.dateOfBirth}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-3 py-3 border ${
-                        errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
-                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
-                      placeholder="+855 12 345 678"
+                      className={`block w-full pl-10 pr-3 py-3 border ${errors.dateOfBirth ? 'border-red-500' : 'border-gray-300'
+                        } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                     />
                   </div>
-                  {errors.phoneNumber && (
+                  {errors.dateOfBirth && (
                     <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                      {errors.phoneNumber}
+                      {errors.dateOfBirth}
                     </p>
                   )}
                 </div>
               </div>
-
-              {/* Date of Birth Field */}
-              <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-semibold text-gray-700 mb-2">
-                  Date of Birth
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <input
-                    id="dateOfBirth"
-                    name="dateOfBirth"
-                    type="date"
-                    value={formData.dateOfBirth}
-                    onChange={handleChange}
-                    className={`block w-full pl-10 pr-3 py-3 border ${
-                      errors.dateOfBirth ? 'border-red-500' : 'border-gray-300'
-                    } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
-                  />
-                </div>from
-                {errors.dateOfBirth && (
-                  <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    {errors.dateOfBirth}
-                  </p>
-                )}
-              </div>
-
-              {/* Password Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Password Field */}
                 <div>
@@ -325,9 +277,8 @@ const Register = () => {
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-10 py-3 border ${
-                        errors.password ? 'border-red-500' : 'border-gray-300'
-                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+                      className={`block w-full pl-10 pr-10 py-3 border ${errors.password ? 'border-red-500' : 'border-gray-300'
+                        } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                       placeholder="••••••••"
                     />
                     <button
@@ -374,9 +325,8 @@ const Register = () => {
                       type={showConfirmPassword ? 'text' : 'password'}
                       value={formData.confirmPassword}
                       onChange={handleChange}
-                      className={`block w-full pl-10 pr-10 py-3 border ${
-                        errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
-                      } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
+                      className={`block w-full pl-10 pr-10 py-3 border ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'
+                        } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition`}
                       placeholder="••••••••"
                     />
                     <button
@@ -443,11 +393,10 @@ const Register = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform ${
-                  isLoading 
-                    ? 'opacity-70 cursor-not-allowed' 
+                className={`w-full bg-linear-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 transform ${isLoading
+                    ? 'opacity-70 cursor-not-allowed'
                     : 'hover:from-blue-700 hover:to-blue-800 hover:scale-[1.02] active:scale-[0.98]'
-                }`}
+                  }`}
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -519,17 +468,17 @@ const Register = () => {
               <div className="mt-6 grid grid-cols-2 gap-3">
                 <button className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
                   <svg className="w-5 h-5" viewBox="0 0 24 24">
-                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
                   </svg>
                   Google
                 </button>
 
                 <button className="w-full inline-flex justify-center items-center gap-2 py-2.5 px-4 border border-gray-300 rounded-lg bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
                   <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                   Facebook
                 </button>

@@ -3,7 +3,7 @@ import { CheckCircle, Trophy, Users, Calendar, MapPin, Star, Target, TrendingUp,
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-const CambodiaFootballLeague = () => {
+const AboutUs = () => {
   const stats = [
     { icon: Trophy, value: "15+", label: "Seasons", color: "from-yellow-400 to-yellow-600" },
     { icon: Users, value: "11", label: "Clubs", color: "from-blue-500 to-blue-700" },
@@ -240,32 +240,32 @@ const CambodiaFootballLeague = () => {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="group bg-gradient-to-br from-blue-700 to-blue-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
-                <Users className="w-8 h-8 text-white" />
+                <Users className="w-8 h-8 text-indigo-500" />
               </div>
-              <h3 className="text-3xl font-bold mb-4 drop-shadow-md">11 Teams</h3>
-              <p className="text-white/95 leading-relaxed text-lg drop-shadow-sm">
+              <h3 className="text-3xl font-bold mb-4 drop-shadow-md text-gray-700">11 Teams</h3>
+              <p className="leading-relaxed text-lg  text-gray-500">
                 The league consists of 11 professional football clubs from across Cambodia, competing for the championship title each season.
               </p>
             </div>
 
-            <div className="group bg-gradient-to-br from-blue-600 to-indigo-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group rounded-3xl p-10 text-white shadow-2xl hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
-                <Calendar className="w-8 h-8 text-white" />
+                <Calendar className="w-8 h-8 text-indigo-500" />
               </div>
-              <h3 className="text-3xl font-bold mb-4 drop-shadow-md">Round Robin</h3>
-              <p className="text-white/95 leading-relaxed text-lg drop-shadow-sm">
+              <h3 className="text-3xl font-bold mb-4 drop-shadow-md text-gray-700">Round Robin</h3>
+              <p className="leading-relaxed text-lg  text-gray-500">
                 Teams play each other twice (home and away) in a double round-robin format, ensuring fair competition and exciting matchups.
               </p>
             </div>
 
-            <div className="group bg-gradient-to-br from-indigo-600 to-blue-200 rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
+            <div className="group rounded-3xl p-10 text-white shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-2">
               <div className="w-16 h-16 bg-white/30 backdrop-blur-sm rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-xl border border-white/40">
-                <Trophy className="w-8 h-8 text-white" />
+                <Trophy className="w-8 h-8 text-indigo-500" />
               </div>
-              <h3 className="text-3xl font-bold mb-4 drop-shadow-md">Points System</h3>
-              <p className="text-white/95 leading-relaxed text-lg drop-shadow-sm">
+              <h3 className="text-3xl font-bold mb-4 drop-shadow-md text-gray-700">Points System</h3>
+              <p className="leading-relaxed text-lg  text-gray-500">
                 Standard 3 points for a win, 1 point for a draw. The team with the most points at the end of the season is crowned champion.
               </p>
             </div>
@@ -330,4 +330,4 @@ const CambodiaFootballLeague = () => {
   );
 };
 
-export default CambodiaFootballLeague;
+export default AboutUs;

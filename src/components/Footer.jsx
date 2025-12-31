@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import cfl_logo from '../assets/images/cfl_logo.jpg';
+import cfl_logo from '../assets/images/CFL-title-icon.png';
 import facebookIcon from '../assets/images/icons/facebook.png';
 import instagramIcon from '../assets/images/icons/instagram.png';
 import youtubeIcon from '../assets/images/icons/youtube.png';

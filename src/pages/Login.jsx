@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
-import cfl_logo from '../assets/images/cfl_logo.jpg';
+import cfl_logo from '../assets/images/CFL-title-icon.png';
 import { auth, db } from '../firebase/firebaseClient';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
@@ -19,11 +19,9 @@ const Login = () => {
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
 
-  // Check for verification message from registration
   useEffect(() => {
     if (location.state?.message) {
       setVerificationMessage(location.state.message);
-      // Clear the message from location state
       window.history.replaceState({}, document.title);
     }
   }, [location]);
@@ -34,7 +32,6 @@ const Login = () => {
       ...prev,
       [name]: value
     }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -67,33 +64,28 @@ const Login = () => {
     
     if (validateForm()) {
       setIsLoading(true);
-      setErrors({}); // Clear any previous errors
+      setErrors({});
       
       try {
-        // Sign in with Firebase
         const userCredential = await signInWithEmailAndPassword(
           auth,
           formData.email,
           formData.password
         );
 
-        // Check if email is verified
         if (!userCredential.user.emailVerified) {
           setErrors({ 
             submit: 'Please verify your email before logging in. Check your inbox for the verification link.' 
           });
-          // Sign out the user
           await auth.signOut();
           setIsLoading(false);
           return;
         }
 
-        // Check if user data exists in Firestore
         try {
           const userDocRef = doc(db, 'users', userCredential.user.uid);
           const userDoc = await getDoc(userDocRef);
 
-          // If user data doesn't exist in Firestore, create it (first verified login)
           if (!userDoc.exists()) {
             await setDoc(userDocRef, {
               email: userCredential.user.email,
@@ -103,26 +95,20 @@ const Login = () => {
               lastLogin: new Date().toISOString()
             });
           } else {
-            // Update last login time
             await setDoc(userDocRef, {
               lastLogin: new Date().toISOString()
             }, { merge: true });
           }
         } catch (firestoreError) {
-          // If Firestore fails (offline, permission denied, etc.), continue with login
           console.warn('Firestore operation failed, continuing with login:', firestoreError);
         }
 
-        // Successful login
-        // console.log('Login successful:', userCredential.user);
         setLoginSuccess(true);
         
-        // Store remember me preference
         if (rememberMe) {
           localStorage.setItem('rememberMe', 'true');
         }
         
-        // Navigate to admin dashboard after short delay
         setTimeout(() => {
           navigate('/');
         }, 500);
@@ -143,7 +129,6 @@ const Login = () => {
         } else if (error.code?.includes('firestore') || error.code?.includes('permission-denied')) {
           errorMessage = 'Database error. Please check your Firestore security rules.';
         } else if (error.message) {
-          // Show the actual error message for debugging
           errorMessage = `Error: ${error.message}`;
         }
         
@@ -156,7 +141,6 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-blue-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 animate-fadeIn">
       <div className="max-w-md w-full animate-fadeInUp">
-        {/* Verification Message */}
         {verificationMessage && (
           <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg animate-fadeInUp">
             <div className="flex items-start gap-3">
@@ -179,10 +163,9 @@ const Login = () => {
           </div>
         )}
         
-        {/* Login Card */}
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-linear-to-r from-blue-600 to-blue-700 px-8 py-10 text-center">
+          <div className="bg-linear-to-r from-blue-500 to-blue-900 px-8 py-10 text-center">
             <div className="flex justify-center mb-4">
               <img src={cfl_logo} alt="CFL Logo" className="h-20 w-20 rounded-full bg-white p-2" />
             </div>
@@ -190,7 +173,6 @@ const Login = () => {
             <p className="text-blue-100">Sign in to your account</p>
           </div>
 
-          {/* Form */}
           <div className="px-8 py-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Email Field */}

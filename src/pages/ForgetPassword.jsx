@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import cfl_logo from '../assets/images/cfl_logo.jpg';
+import cfl_logo from '../assets/images/CFL-title-icon.png';
 
 const ForgetPassword = () => {
   const [email, setEmail] = useState('');
