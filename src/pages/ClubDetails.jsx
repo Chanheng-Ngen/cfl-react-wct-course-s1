@@ -60,7 +60,7 @@ const ClubDetails = () => {
         setManager(managerFormatted);
 
         // player info
-        const playerFormatted = club.result[0].players.slice(21, 28).map((player) => ({
+        const playerFormatted = club.result[0].players.slice(0, 5).map((player) => ({
           player_key: player.player_key,
           name: player.player_name || 'Unknown',
           position: player.player_type || 'Unknown',
@@ -150,7 +150,7 @@ const ClubDetails = () => {
                     <span className="font-semibold text-gray-900 text-lg">{nextMatch.event_home_team}</span>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-900 mb-3">
+                    <div className="lg:text-3xl md:text-2xl sm:text-xl  font-bold text-gray-900 mb-3">
                       {nextMatch.event_date}
                     </div>
                     <h3 className='text-sm text-gray-500 text-center'> at {nextMatch.event_time}</h3>
@@ -178,7 +178,7 @@ const ClubDetails = () => {
                       <img src={lastMatch.home_team_logo} alt={lastMatch.home_team_name} className="w-12 h-12 object-contain" />
                       <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_home_team}</span>
                     </div>
-                    <div className="text-4xl font-bold text-gray-900">{lastMatch.event_final_result}</div>
+                    <div className="lg:text-4xl md:text-2xl sm:text-xl font-bold text-gray-900">{lastMatch.event_final_result}</div>
                     <div className="flex items-center gap-4">
                       <span className="font-semibold text-gray-900 text-lg">{lastMatch.event_away_team}</span>
                       <img src={lastMatch.away_team_logo} alt={lastMatch.away_team_name} className="w-12 h-12 object-contain" />
@@ -218,7 +218,7 @@ const ClubDetails = () => {
 
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700 mb-4">Current Squad</h3>
-                  <div className="flex gap-4">
+                  <div className="flex flex-wrap gap-4">
                     {player.map((player, key) => (
                       <div key={key} className="flex flex-col items-center">
                         <img src={player.image} alt={player.initials} className="w-16 h-16 rounded-full mb-2 object-cover shadow flex justify-center items-center" />
