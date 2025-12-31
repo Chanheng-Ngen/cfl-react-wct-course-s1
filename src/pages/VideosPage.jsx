@@ -1,206 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Video1 from "../assets/video/Yamal.mp4";
-import Thumb1 from "../assets/images/thumbnail1.png";
-import Thumb2 from "../assets/images/thumbnail2.png";
 import HeroBanner from "../components/HeroBanner";
-import VideoHero from "../assets/images/VideoBanner1.jpg";
-
-const videosData = [
-  {
-    id: 1,
-    title: "Nagaworld FC vs Svay Rieng FC | WEEK 12 Highlights",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "05:32",
-  },
-  {
-    id: 2,
-    title: "Top Goals of the Week | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "04:18",
-  },
-  {
-    id: 3,
-    title: "Best Saves Compilation | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "06:45",
-  },
-  {
-    id: 4,
-    title: "Best Goals of the Month | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "07:10",
-  },
-  {
-    id: 5,
-    title: "Amazing Goalkeeper Saves",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "04:55",
-  },
-  {
-    id: 6,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 7,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-  {
-    id: 8,
-    title: "Amazing Goalkeeper Saves",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "04:55",
-  },
-  {
-    id: 9,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 10,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-  {
-    id: 11,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 12,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-  {
-    id: 1,
-    title: "Nagaworld FC vs Svay Rieng FC | WEEK 12 Highlights",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "05:32",
-  },
-  {
-    id: 2,
-    title: "Top Goals of the Week | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "04:18",
-  },
-  {
-    id: 3,
-    title: "Best Saves Compilation | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "06:45",
-  },
-  {
-    id: 4,
-    title: "Best Goals of the Month | CPL",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "07:10",
-  },
-  {
-    id: 5,
-    title: "Amazing Goalkeeper Saves",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "04:55",
-  },
-  {
-    id: 6,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 7,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-  {
-    id: 8,
-    title: "Amazing Goalkeeper Saves",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "04:55",
-  },
-  {
-    id: 9,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 10,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-  {
-    id: 11,
-    title: "Match Highlights Week 13",
-    videoUrl: Video1,
-    thumbnail: Thumb2,
-    duration: "06:02",
-  },
-  {
-    id: 12,
-    title: "Top Assists Compilation",
-    videoUrl: Video1,
-    thumbnail: Thumb1,
-    duration: "03:48",
-  },
-];
+import { videoHighlights } from "../services/mockData";
 
 const VideoHighlightsPro = () => {
-  const [activeVideo, setActiveVideo] = useState(null);
-  const [visibleCount, setVisibleCount] = useState(12);
+  const [visibleCount, setVisibleCount] = useState(8);
 
   return (
     <>
       <Header />
-
-      {/* HERO BANNER */}
       <HeroBanner
         title=" Video Highlights"
         subtitle="Official updates, stories, and announcements from Cambodia Football League"
-        background={VideoHero}
+        background={videoHighlights[0].thumbnail}
       />
 
       {/* Video Grid */}
       <div className="w-full min-h-screen bg-white pt-16">
         <div className="container mx-auto px-4 pb-16">
         <div className="max-w-8xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {videosData.slice(0, visibleCount).map((video) => (
-            <div
+          {videoHighlights.slice(0, visibleCount).map((video) => (
+            <a
               key={video.id}
-              onClick={() => setActiveVideo(video)}
+              href={video.videoUrl} target="_blank" rel="noopener noreferrer"
               className="group cursor-pointer"
             >
               {/* Thumbnail */}
@@ -229,12 +52,12 @@ const VideoHighlightsPro = () => {
               <h3 className="mt-3 font-semibold text-gray-900 line-clamp-2">
                 {video.title}
               </h3>
-            </div>
+            </a>
           ))}
         </div>
 
         {/* LOAD MORE BUTTON */}
-        {visibleCount < videosData.length && (
+        {visibleCount < videoHighlights.length && (
           <div className="flex justify-center mt-14 pb-16">
             <button
               onClick={() => setVisibleCount(visibleCount + 4)}
@@ -245,29 +68,7 @@ const VideoHighlightsPro = () => {
           </div>
         )}
       </div>
-
-      {/* VIDEO MODAL */}
-      {activeVideo && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4">
-          <div className="relative w-full max-w-4xl bg-black rounded-xl overflow-hidden">
-            <video
-              src={activeVideo.videoUrl}
-              controls
-              autoPlay
-              className="w-full aspect-video"
-            />
-
-            <button
-              onClick={() => setActiveVideo(null)}
-              className="absolute top-3 right-3 text-white text-3xl font-bold"
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
       </div>
-
       <Footer />
     </>
   );

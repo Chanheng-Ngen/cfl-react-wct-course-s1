@@ -17,19 +17,19 @@ export const Footer = () => {
   };
 
   const quickLinks = [
-    { name: 'Homepage', href: '#homepage' },
-    { name: 'News', href: '#news' },
-    { name: 'Club', href: '#club' },
-    { name: 'Matching', href: '#matching' },
-    { name: 'Result', href: '#result' },
+    { name: 'Homepage', href: '/' },
+    { name: 'News', href: '/news' },
+    { name: 'Club', href: '/club' },
+    { name: 'Matching', href: '/fixtures' },
+    { name: 'Result', href: '/results' },
   ];
 
   const moreLinks = [
-    { name: 'Video', href: '#video' },
-    { name: 'Stats', href: '#stats' },
-    { name: 'Standing', href: '#standing' },
-    { name: 'About Us', href: '#about' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Video', href: '/videos' },
+    { name: 'Stats', href: '/players-stats' },
+    { name: 'Standing', href: '/standing' },
+    { name: 'About Us', href: '/about-us' },
+    { name: 'Contact', href: '/contact' },
   ];
 
   const socialMedia = [

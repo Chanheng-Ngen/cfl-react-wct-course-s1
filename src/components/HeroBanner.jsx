@@ -1,7 +1,7 @@
 const HeroBanner = ({ title, subtitle, background }) => {
   return (
     <div
-      className="relative w-full h-[320px] md:h-[380px] flex items-center justify-center"
+      className="relative w-full h-[270px] md:h-[380px] flex items-center justify-center"
       style={{
         backgroundImage: `url(${background})`,
         backgroundSize: "cover",

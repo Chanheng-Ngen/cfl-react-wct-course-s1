@@ -2,105 +2,11 @@ import React, { useState } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import HeroBanner from "../components/HeroBanner";
-import NewsImg1 from "../assets/images/cfl.jpg";
-import NewsHero from "../assets/images/NewsBanner.jpg";
 import { Link } from "react-router";
-
-const newsData = [
-  {
-    id: 1,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 2,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 3,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 4,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 5,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 6,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 7,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 8,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 9,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-  {
-    id: 10,
-    image: NewsImg1,
-    title: "Cambodian Development League Has Reached Week 5",
-    date: "12 Nov 2025 04:37",
-    author: "Admin",
-    description:
-      "As of November 11, 2025, the Cambodian Development League has reached its fifth week with exciting matches and young talents showing their skills.",
-  },
-];
+import { latestNews } from "../services/mockData";
 
 const NewsPage = () => {
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [visibleCount, setVisibleCount] = useState(8);
 
   return (
     <>
@@ -110,20 +16,20 @@ const NewsPage = () => {
       <HeroBanner
         title="Latest News"
         subtitle="Official updates, stories, and announcements from Cambodia Football League"
-        background={NewsHero}
+        background={latestNews[0].thumbnail}
       />
 
       {/* NEWS LIST */}
       <div className="bg-white pt-16 min-h-screen">
         <div className="container mx-auto px-4 pb-16">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {newsData.slice(0, visibleCount).map((item) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+            {latestNews.slice(0, visibleCount).map((item) => (
               <div
                 key={item.id}
                 className="w-full bg-white shadow-lg rounded-2xl overflow-hidden hover:shadow-2xl transition"
               >
                 <img
-                  src={item.image}
+                  src={item.thumbnail}
                   alt={item.title}
                   className="w-full h-56 sm:h-64 md:h-56 lg:h-60 object-cover"
                 />
@@ -135,7 +41,7 @@ const NewsPage = () => {
                   <h2 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition">
                     {item.title}
                   </h2>
-                  <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                  <p className="text-gray-600 text-sm mb-4 line-clamp-2">
                     {item.description}
                   </p>
                   <Link
@@ -149,10 +55,10 @@ const NewsPage = () => {
             ))}
           </div>
           {/* LOAD MORE BUTTON */}
-          {visibleCount < newsData.length && (
+          {visibleCount < latestNews.length && (
             <div className="flex justify-center mt-14 pb-16">
               <button
-                onClick={() => setVisibleCount(visibleCount + 3)}
+                onClick={() => setVisibleCount(visibleCount + 4)}
                 className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl shadow hover:bg-blue-700 transition"
               >
                 Load More

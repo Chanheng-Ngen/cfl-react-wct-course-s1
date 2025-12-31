@@ -20,7 +20,7 @@ export const Header = () => {
     { name: 'Matching', href: '/fixtures' },
     { name: 'Result', href: '/results' },
     { name: 'Video', href: '/videos' },
-    { name: 'Stats', href: '/stat-one' },
+    { name: 'Stats', href: '/players-stats' },
     { name: 'Standing', href: '/standing' },
     { name: 'About Us', href: '/about-us' }
   ];

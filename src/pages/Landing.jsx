@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { footballApi } from '../services/API';
 import ContentLoader from 'react-content-loader';
 import Header from '../components/Header';
@@ -19,6 +19,7 @@ const Home = () => {
   const [topScorerList, setTopScorerList] = useState([]);
   const swiperRef = useRef(null);
   const aboutSwiperRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const landingFetch = async () => {
@@ -348,13 +349,17 @@ const Home = () => {
               }}
               autoplay={{
                 delay: 3000,
+                pauseOnMouseEnter: true,
                 disableOnInteraction: false,
               }}
               loop={fixtures.length > 3}
               onSwiper={(swiper) => (swiperRef.current = swiper)}
             >
               {fixtures.map((match) => (
-                <SwiperSlide key={match.id}>
+                <SwiperSlide 
+                className="cursor-pointer hover:shadow-xl transition-shadow"
+                onClick={() => navigate(`/fixtures/${match.id}`)}
+                key={match.id}>
                   <div className="bg-white h-full overflow-hidden rounded-[8px] shadow-md">
                     {/* League Badge */}
                     <div className="flex justify-center pt-6 pb-4">
@@ -362,11 +367,8 @@ const Home = () => {
                         {match.league}
                       </span>
                     </div>
-
-                    {/* Teams Section */}
                     <div className="px-6 py-8">
                       <div className="flex items-center justify-between gap-6">
-                        {/* Team 1 */}
                         <div className="flex-1 flex flex-col items-center gap-3">
                           <div className="w-20 h-20 flex items-center justify-center">
                             <img src={match.team1.logo} alt={match.team1.name} className="w-12 h-12 object-contain" />
@@ -375,13 +377,9 @@ const Home = () => {
                             {match.team1.name}
                           </span>
                         </div>
-
-                        {/* VS */}
                         <div className="text-gray-400 font-bold text-lg">
                           VS
                         </div>
-
-                        {/* Team 2 */}
                         <div className="flex-1 flex flex-col items-center gap-3">
                           <div className="w-20 h-20 flex items-center justify-center">
                             <img src={match.team2.logo} alt={match.team2.name} className="w-12 h-12 object-contain" />
@@ -448,7 +446,9 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {latestNews.slice(0, 4).map((news) => (
-                  <div key={news.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer">
+                  <div
+                   onClick={() => navigate(`/news/${news.id}`)}
+                   key={news.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer">
                     <div className="relative">
                       <img src={news.thumbnail} alt={news.title} className="w-full h-48 object-cover" />
                     </div>
@@ -460,6 +460,7 @@ const Home = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <span>{news.timeAgo}</span>
+                        <p>{news.author}</p>
                       </div>
                     </div>
                   </div>
@@ -543,7 +544,9 @@ const Home = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {videoHighlights.slice(0, 4).map((video) => (
-                  <div key={video.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group cursor-pointer">
+                  <a
+                   href={video.videoUrl} target="_blank" rel="noopener noreferrer"
+                   key={video.id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow group cursor-pointer">
                     <div className="relative">
                       <img src={video.thumbnail} alt={video.title} className="w-full h-48 object-cover" />
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition">
@@ -567,7 +570,7 @@ const Home = () => {
                         <span>{video.views}</span>
                       </div>
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
@@ -612,7 +615,6 @@ const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Stadium Image */}
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
               <img src={heroBanner.backgroundImage} alt="Stadium" className="w-full h-[400px] object-cover" />
               <div className="absolute bottom-6 left-6 bg-blue-600/90 text-white px-6 py-3 rounded-lg">
@@ -620,8 +622,6 @@ const Home = () => {
                 <div className="text-3xl font-bold">{aboutData[aboutSlide].statValue}</div>
               </div>
             </div>
-
-            {/* Content with Swiper */}
             <div className="space-y-6">
               <Swiper
                 modules={[Navigation, Pagination, Autoplay]}
@@ -651,8 +651,6 @@ const Home = () => {
                   </SwiperSlide>
                 ))}
               </Swiper>
-
-              {/* Navigation Dots */}
               <div className="flex gap-3 pt-4">
                 {aboutData.map((_, index) => (
                   <button
@@ -666,8 +664,6 @@ const Home = () => {
                   />
                 ))}
               </div>
-
-              {/* Navigation Arrows */}
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={() => aboutSwiperRef.current?.slidePrev()}
@@ -690,8 +686,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-
       <Footer />
     </div>
   );
