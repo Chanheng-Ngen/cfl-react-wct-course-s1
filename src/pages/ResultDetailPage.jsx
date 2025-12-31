@@ -9,6 +9,7 @@ import { useParams } from "react-router";
 const ResultDetailPage = () => {
   const [activeTab, setActiveTab] = useState("summary");
   const [results, setResults] = useState([]);
+  const [probabilities, setProbabilities] = useState({});
   const { id } = useParams();
 
   useEffect(() => {
@@ -17,7 +18,9 @@ const ResultDetailPage = () => {
         const fromDate = "2025-12-12";
         const toDate = "2025-12-21";
         const data = await footballApi.getFixtures(fromDate, toDate, 152);
+        const probabilities = await footballApi.getProbabilities(fromDate, toDate, 152, id);
         const resultById = data.result.filter(match => match.event_key.toString() === id);
+        const probabilitiesById = probabilities.result.find(prob => prob.event_key.toString() === id);
         console.log(resultById);
         setResults({
           id: resultById[0]?.event_key,
@@ -36,8 +39,14 @@ const ResultDetailPage = () => {
           goals: resultById[0]?.goalscorers || [],
           lineups: resultById[0]?.lineups || [],
           substitutes: resultById[0]?.substitutes || [],
+          cards: resultById[0]?.cards || [],
         });
         console.log(resultById[0].goalscorers);
+        console.log("pro", probabilitiesById);
+        setProbabilities({
+          home_formation: probabilitiesById?.event_home_formation,
+          away_formation: probabilitiesById?.event_away_formation,
+        });
       } catch (error) {
         console.error("Error fetching match details:", error);
       }
@@ -91,7 +100,7 @@ const ResultDetailPage = () => {
         {/* TABS */}
         <div className="container mx-auto px-4 mt-10">
           <div className="flex gap-6 border-b text-sm font-semibold">
-            {["summary", "lineups"].map((tab) => (
+            {["summary", "lineups", "cards"].map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -127,6 +136,7 @@ const ResultDetailPage = () => {
                           className="border-b border-gray-100 last:border-b-0"
                         >
                           <td className="py-3 font-medium">
+                            <img src={goal.home_scorer ? results.homeLogo : results.awayLogo} alt="team logo" className=" inline w-6 h-6 object-contain mr-2" />
                             {goal.home_scorer || goal.away_scorer}
                           </td>
 
@@ -153,8 +163,8 @@ const ResultDetailPage = () => {
                   <table className="w-full border-collapse">
                     <thead>
                       <tr className="border-b border-gray-200 text-left text-lg font-medium bg-blue-200">
-                        <th className="py-3 text-center">{results.homeTeam}</th>
-                        <th className="py-3 text-center">{results.awayTeam}</th>
+                        <th className="py-3 text-center"><img src={results.homeLogo} alt="home team logo" className="mx-auto w-8 h-8 object-contain" /> <span className="text-black">{probabilities?.home_formation}</span></th>
+                        <th className="py-3 text-center"><img src={results.awayLogo} alt="away team logo" className="mx-auto w-8 h-8 object-contain" /> <span className="text-black">{probabilities?.away_formation}</span></th>
                       </tr>
                     </thead>
 
@@ -216,6 +226,66 @@ const ResultDetailPage = () => {
                 </div>
               </div>
             )}
+            {/* CARDS */}
+            {activeTab === "cards" ? (
+              <table className="w-full border-collapse">
+                <thead>
+                  <tr className="border-b border-gray-200 text-left text-lg font-medium bg-blue-200">
+                    <th className="py-3 text-center">Team</th>
+                    <th className="py-3 text-center">Fault</th>
+                    <th className="py-3 text-center">Type Card</th>
+                    <th className="py-3 text-center">Time</th>
+                    <th className="py-3 text-center">Info Time</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {results?.cards?.length > 0 ? (
+                    results.cards.map((card, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-gray-100 last:border-b-0 text-center"
+                      >
+                        <td className="py-4 font-medium">
+                          <img
+                            src={card.home_fault ? results.homeLogo : results.awayLogo} alt="team logo" className=" mx-auto w-8 h-8 object-contain"
+                          />
+                        </td>
+
+                        <td className="py-4">
+                          {card.home_fault || card.away_fault}
+                        </td>
+
+                        <td className="py-4 flex justify-center items-center gap-2">
+                          <div
+                            className={`w-4 h-6 ${card.card?.toLowerCase() === "yellow card"
+                                ? "bg-yellow-500"
+                                : "bg-red-500"
+                              }`}
+                          ></div>
+                          {card.card}
+                        </td>
+
+                        <td className="py-4">
+                          {card.time}'
+                        </td>
+
+                        <td className="py-4">
+                          {card.info_time}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="py-6 text-center text-gray-500">
+                        This match doesn't have any cards.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+
+            ) : null}
           </div>
         </div>
       </div>

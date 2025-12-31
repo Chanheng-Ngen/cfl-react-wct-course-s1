@@ -46,5 +46,16 @@ export const footballApi = {
       console.error('Error details:', error.response?.data);
       throw error;
     }
+  },
+  getProbabilities: async (fromDate, toDate,leagueId, eventId) => {
+    try {
+      const url = `${BASE_URL}?met=Probabilities&from=${fromDate}&to=${toDate}&leagueId=${leagueId}&eventId=${eventId}&APIkey=${API_KEY}`;
+      const response = await axios.get(url);
+      return response.data;
+    } catch (error) {
+      console.error('Probabilities Error:', error);
+      console.error('Error details:', error.response?.data);
+      throw error;
+    }
   }
 };
