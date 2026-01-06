@@ -85,8 +85,12 @@ Create a Firebase project and add your configuration:
 2. Create a new project
 3. Get your Firebase config credentials
 4. Update `src/firebase/firebaseClient.js` with your credentials
+### 4. Firebase Configuration
+How to get API Key 
+go to this Web site ( https://allsportsapi.com/soccer-football-api-documentation ) AND 
+Create a account for get API expire around 7-9 days.
 
-### 4. Run the Development Server
+### 5. Run the Development Server
 
 ```bash
 npm run dev

@@ -34,9 +34,9 @@ const Home = () => {
         const getStandingsData = await footballApi.getStandings(standingLeagueId);
         const getTopScorersData = await footballApi.getTopScorers(topScorersLeagueId);
         // debug
-        // console.log('Fixtures data:', getFixturesData);
-        // console.log('Standings data:', getStandingsData);
-        // console.log('Top Scorers data:', getTopScorersData);
+        console.log('Fixtures data:', getFixturesData);
+        console.log('Standings data:', getStandingsData);
+        console.log('Top Scorers data:', getTopScorersData);
 
         if (getFixturesData && getFixturesData.result.length > 0) {
           const transformedMatches = getFixturesData.result.slice(0, 6).map((match, index) => ({
